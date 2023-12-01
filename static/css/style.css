@@ -26,9 +26,10 @@
 body{
     padding:0;
     margin:0;
+    font-family: 'Roboto', sans-serif;
 }
 
-body { /* TODO: Change to dark mode */
+body.dark {
     background-color: var(--current-bg-color);
     color: var(--current-text-color);
 }
