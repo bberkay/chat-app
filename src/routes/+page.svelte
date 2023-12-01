@@ -1,2 +1,17 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script lang ="ts">
+    import Menu from "$lib/components/Menu.svelte";
+    import Sidebar from "$lib/components/Sidebar.svelte";
+</script>
+
+<main>
+    <Menu />
+    <Sidebar />
+</main>
+
+<style>
+    main{
+        display: flex;
+        flex-direction: row;
+        height: 100vh;
+    }
+</style>
