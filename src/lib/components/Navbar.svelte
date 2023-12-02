@@ -3,30 +3,30 @@
     import { page } from '$app/stores';
 
     let isDark = false;
-    let path = '';
+    let currentPath = '';
 
-    // set active link on page render
     onMount(() => {
+        // set active link on navigation
         document.querySelector('a[href="' + $page.url.pathname + '"]').classList.add('active');
     });
 
     // update path on page change
-    $: path = $page.url.pathname;
+    $: currentPath = $page.url.pathname;
 
     /**
      * Toggle dark mode
      */
     function changeTheme() {
-        window.document.body.classList.toggle('dark');
+        window.document.body.classList.toggle('dark')
         isDark = !isDark;
     }
 </script>
 
 <nav>
-    <a href="/" class = {path === "/" ? 'active' : ''}>
+    <a href="/" class = {currentPath === "/" ? 'active' : ''}>
         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 256 256"><path d="M140,128a12,12,0,1,1-12-12A12,12,0,0,1,140,128ZM84,116a12,12,0,1,0,12,12A12,12,0,0,0,84,116Zm88,0a12,12,0,1,0,12,12A12,12,0,0,0,172,116Zm60,12A104,104,0,0,1,79.12,219.82L45.07,231.17a16,16,0,0,1-20.24-20.24l11.35-34.05A104,104,0,1,1,232,128Zm-16,0A88,88,0,1,0,51.81,172.06a8,8,0,0,1,.66,6.54L40,216,77.4,203.53a7.85,7.85,0,0,1,2.53-.42,8,8,0,0,1,4,1.08A88,88,0,0,0,216,128Z"></path></svg>
     </a>
-    <a href="/profiles" class = {path === "/profiles" ? 'active' : ''}>
+    <a href="/profiles" class = {currentPath === "/profiles" ? 'active' : ''}>
         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 256 256"><path d="M230.92,212c-15.23-26.33-38.7-45.21-66.09-54.16a72,72,0,1,0-73.66,0C63.78,166.78,40.31,185.66,25.08,212a8,8,0,1,0,13.85,8c18.84-32.56,52.14-52,89.07-52s70.23,19.44,89.07,52a8,8,0,1,0,13.85-8ZM72,96a56,56,0,1,1,56,56A56.06,56.06,0,0,1,72,96Z"></path></svg>
     </a>
     <button on:click = {changeTheme}>

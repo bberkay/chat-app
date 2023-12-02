@@ -13,7 +13,7 @@
         display:flex;
         justify-content:center;
         align-items:center;
-        padding:10px;
+        padding:1rem;
     }
 
     #search input {

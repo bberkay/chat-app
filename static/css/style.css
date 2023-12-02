@@ -22,7 +22,7 @@
     --current-border-color: var(--border-dark);
 }
 
-/* Body */
+/* General */
 body{
     padding:0;
     margin:0;
@@ -30,8 +30,8 @@ body{
 }
 
 body.dark {
-    background-color: var(--current-bg-color);
-    color: var(--current-text-color);
+    background-color: var(--bg-dark);
+    color: var(--text-dark);
 }
 
 /* Form */
