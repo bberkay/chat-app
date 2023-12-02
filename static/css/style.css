@@ -7,18 +7,21 @@
     --bg-dark: #0F1012;
     --text-dark: #cfcfd2;
     --front-dark: #131517;
+    --front-dark-bright: #373b41;
     --border-dark: #1A1C1F;
 
     /* Light Mode */
     --bg-light: #f5f5f5;
     --text-light: #131517;
     --front-light: #cfcfd2;
+    --front-light-bright: #e6e6e6;
     --border-light: #e6e6e6;
 
     /* Current color of the app */
     --current-bg-color: var(--bg-dark);
     --current-text-color: var(--text-dark);
     --current-front-color: var(--front-dark);
+    --current-front-bright-color: var(--front-dark-bright);
     --current-border-color: var(--border-dark);
 }
 

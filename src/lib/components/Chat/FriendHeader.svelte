@@ -12,7 +12,7 @@
 <style>
     #friend-header{
         width:100%;
-        height:4rem;
+        height:5rem;
         background-color: var(--current-front-color);
         color: var(--current-text-color);
     }
