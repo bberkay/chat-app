@@ -10,7 +10,6 @@
     <FriendCard/>
     <FriendCard/>
     <FriendCard/>
-
     <Profile/>
 </section>
 
@@ -20,5 +19,6 @@
         background-color: var(--current-front-color);
         border-right: 1px solid var(--current-border-color);
         border-left: 1px solid var(--current-border-color);
+        position:relative;
     }
 </style>
