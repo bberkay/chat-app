@@ -6,6 +6,11 @@
 
 <section id="sidebar">
     <Search />
+    <FriendCard/>
+    <FriendCard/>
+    <FriendCard/>
+    <FriendCard/>
+    <Profile/>
 </section>
 
 <style>
