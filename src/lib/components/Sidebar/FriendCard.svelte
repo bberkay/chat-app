@@ -17,6 +17,7 @@
         cursor:pointer;
         margin-top:-3px;
         border-top:2px solid var(--current-border-color);
+        color:var(--current-text-color);
     }
 
     .friend-card:hover{
