@@ -1,5 +1,7 @@
 <script lang="ts">
     import Search from '$lib/components/Sidebar/Search.svelte';
+    import Profile from '$lib/components/Sidebar/Profile.svelte';
+    import FriendCard from '$lib/components/Sidebar/FriendCard.svelte';
 </script>
 
 <section id="sidebar">
