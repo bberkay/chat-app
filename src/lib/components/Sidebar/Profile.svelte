@@ -55,10 +55,10 @@
     }
 
     #profile-card a:hover{
-        filter: brightness(1.1);
+        opacity:0.7;
     }
 
     #profile-card a:active{
-        filter: brightness(0.9);
+        opacity:0.5;
     }
 </style>

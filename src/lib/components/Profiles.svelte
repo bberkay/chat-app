@@ -106,10 +106,10 @@
     }
 
     #profiles .profile-info button:not(.selected):hover{
-        filter: brightness(1.1);
+        opacity:0.9;
     }
 
     #profiles .profile-info button:not(.selected):active{
-        filter: brightness(0.9);
+        opacity:0.8;
     }
 </style>

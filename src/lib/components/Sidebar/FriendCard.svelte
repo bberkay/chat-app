@@ -37,7 +37,7 @@
 
     .friend-card .message-info span:last-child{
         font-size: 0.8rem;
-        color:#ccc;
+        color:var(--current-text-color);
     }
 
     .friend-card .friend-avatar img{
