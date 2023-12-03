@@ -2,9 +2,23 @@
     import Search from '$lib/components/Sidebar/Search.svelte';
     import Profile from '$lib/components/Sidebar/Profile.svelte';
     import FriendCard from '$lib/components/Sidebar/FriendCard.svelte';
+    import {onMount} from "svelte";
+
+    // Listen for window resize
+    let innerWidth;
+    onMount(() => {
+        innerWidth = window.innerWidth;
+    })
+
+    /* Remove hide when the window is resized to a width greater than 768px */
+    $: if (innerWidth > 768) {
+        document.querySelector('#sidebar')?.classList.remove('hide');
+    }
 </script>
 
-<section id="sidebar" class = "show">
+<svelte:window bind:innerWidth/>
+
+<section id="sidebar">
     <Search />
     <FriendCard/>
     <FriendCard/>
@@ -22,12 +36,9 @@
         position:relative;
     }
 
-    #sidebar.show{
-        display: flex;
-        flex-direction: column;
-    }
-
-    .hide{
-        display: none;
+    .hide {
+        width: 0;
+        opacity: 0;
+        border-right: 0 !important; /* remove border right from sidebar */
     }
 </style>
