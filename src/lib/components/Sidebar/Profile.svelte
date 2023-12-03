@@ -1,5 +1,5 @@
-<div class="profile-card">
-    <div class = "profile-info">
+<div id="profile-card">
+    <div id = "profile-info">
         <img src="https://www.w3schools.com/howto/img_avatar.png" alt="">
         <span><b>İsim Soyisim</b><br><small><i>My Profile</i></small></span>
     </div>
@@ -9,7 +9,7 @@
 </div>
 
 <style>
-    .profile-card{
+    #profile-card{
         display:flex;
         align-items:center;
         justify-content: space-between;
@@ -20,36 +20,36 @@
         color:var(--current-text-color);
     }
 
-    .profile-card .profile-info{
+    #profile-card #profile-info{
         display:flex;
         align-items:center;
     }
 
-    .profile-card img{
+    #profile-card img{
         margin-right:1rem;
         border-radius: 50%;
         width:3em;
         height:3em;
     }
 
-    .profile-card a{
+    #profile-card a{
         padding:0.4rem 0.4rem 0.2rem 0.4rem;
         border:1px solid var(--current-border-color);
         background-color:var(--current-front-bright-color);
         border-radius:5px;
     }
 
-    .profile-card a svg{
+    #profile-card a svg{
         color:var(--current-text-color);
         width:1.5em;
         height:1.5em;
     }
 
-    .profile-card a:hover{
+    #profile-card a:hover{
         filter: brightness(1.1);
     }
 
-    .profile-card a:active{
+    #profile-card a:active{
         filter: brightness(0.9);
     }
 </style>

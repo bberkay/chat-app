@@ -10,6 +10,7 @@
     <FriendCard/>
     <FriendCard/>
     <FriendCard/>
+
     <Profile/>
 </section>
 
