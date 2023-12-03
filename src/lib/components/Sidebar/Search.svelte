@@ -13,7 +13,8 @@
         display:flex;
         justify-content:center;
         align-items:center;
-        padding:1rem;
+        padding:1rem 1rem 0.84rem 1rem;
+        border-bottom:2px solid var(--current-border-color);
     }
 
     #search input {

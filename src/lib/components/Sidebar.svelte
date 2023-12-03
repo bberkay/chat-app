@@ -4,13 +4,14 @@
     import FriendCard from '$lib/components/Sidebar/FriendCard.svelte';
 </script>
 
-<section id="sidebar">
+<section id="sidebar" class = "show">
     <Search />
     <FriendCard/>
     <FriendCard/>
     <FriendCard/>
     <FriendCard/>
     <Profile/>
+    <span class = "hide"></span>
 </section>
 
 <style>
@@ -18,7 +19,15 @@
         height: 100vh;
         background-color: var(--current-front-color);
         border-right: 1px solid var(--current-border-color);
-        border-left: 1px solid var(--current-border-color);
         position:relative;
+    }
+
+    #sidebar.show{
+        display: flex;
+        flex-direction: column;
+    }
+
+    .hide{
+        display: none;
     }
 </style>
