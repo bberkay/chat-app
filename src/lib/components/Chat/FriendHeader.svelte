@@ -1,4 +1,4 @@
-<section id = "friend-header">
+<div id = "friend-header">
     <div id="friend-info">
         <div id="friend-avatar">
             <img src="https://www.w3schools.com/howto/img_avatar.png" alt="Avatar">
@@ -7,14 +7,15 @@
             <span>İsim Soyisim</span>
         </div>
     </div>
-</section>
+</div>
 
 <style>
     #friend-header{
         width:100%;
-        height:5rem;
+        padding:0.5rem 0;
         background-color: var(--current-front-color);
         color: var(--current-text-color);
+        border-bottom:2px solid var(--current-border-color);
     }
 
     #friend-info{

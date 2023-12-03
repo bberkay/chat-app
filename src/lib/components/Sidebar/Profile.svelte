@@ -26,6 +26,7 @@
         border-top:2px solid var(--current-border-color);
         color:var(--current-text-color);
         padding:1rem;
+        background-color:var(--current-front-color);
     }
 
     #profile-card #profile-info{
