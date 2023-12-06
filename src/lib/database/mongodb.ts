@@ -1,5 +1,5 @@
 import { MONGO_URL } from '$env/static/private';
-import { MongoClient } from 'mongodb';
+import { MongoClient, ObjectId } from 'mongodb';
 
 export class MongoDB{
     private static instance: MongoDB;
@@ -42,7 +42,7 @@ export class MongoDB{
      */
     public async getAllDocuments(collectionName: string): Promise<any>
     {
-        return await this.client.db(this.dbName).collection(collectionName).find().project({_id:0}).toArray();
+        return await this.client.db(this.dbName).collection(collectionName).find().toArray();
     }
 
     /**
@@ -50,7 +50,7 @@ export class MongoDB{
      */
     public async getDocumentById(collectionName: string, id: string): Promise<any>
     {
-        return await this.client.db(this.dbName).collection(collectionName).find().toArray();
+        return await this.client.db(this.dbName).collection(collectionName).find({_id: new ObjectId(id)}).toArray();
     }
 
     /**
