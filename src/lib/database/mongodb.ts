@@ -52,4 +52,12 @@ export class MongoDB{
     {
         return await this.client.db(this.dbName).collection(collectionName).find().toArray();
     }
+
+    /**
+     * Search Document(User) by Name
+     */
+    public async searchDocumentByName(collectionName: string, name: string): Promise<any>
+    {
+        return await this.client.db(this.dbName).collection(collectionName).find({name: name}).toArray();
+    }
 }
