@@ -2,8 +2,8 @@
     import { onMount } from 'svelte';
     import { page } from '$app/stores';
 
-    export let theme;
-    let currentPath;
+    export let theme: "dark" | "light";
+    let currentPath: string;
 
     onMount(() => {
         // set active link on navigation
