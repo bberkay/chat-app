@@ -13,8 +13,8 @@ export async function load({ cookies }: {cookies: any}): Promise<{theme: string,
     // Get the profile from the cookies. If the profile is not defined, set the profile to the first user
     let profile = cookies.get('profile');
     if (!profile) {
-        profile = users[0];
-        cookies.set('profile', JSON.stringify(profile), { path: '/' });
+        profile = JSON.stringify(users[0]);
+        cookies.set('profile', profile, { path: '/' });
     }
 
     // Get the theme from the cookies
@@ -29,6 +29,6 @@ export async function load({ cookies }: {cookies: any}): Promise<{theme: string,
     return {
         theme: theme,
         users: users,
-        profile: profile
+        profile: JSON.parse(profile)
     };
 }

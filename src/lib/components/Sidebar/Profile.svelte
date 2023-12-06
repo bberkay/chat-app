@@ -1,6 +1,4 @@
 <script lang="ts">
-    import {onMount} from "svelte";
-
     export let profile; // profile object(current user)
 </script>
 
