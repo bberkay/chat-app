@@ -1,9 +1,13 @@
+<script lang="ts">
+    export let user; // user object
+</script>
+
 <div class="friend-card">
     <div class="friend-avatar">
-        <img src="https://www.w3schools.com/howto/img_avatar.png" alt="">
+        <img src="{user.avatar}" alt="">
     </div>
     <div class="message-info">
-        <span>İsim Soyisim</span>
+        <span>{user.name}</span>
         <span>Lorem ipsum dolor sit amet...</span>
     </div>
 </div>

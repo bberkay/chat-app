@@ -2,12 +2,12 @@
     import Navbar from "$lib/components/Navbar.svelte";
     import Sidebar from "$lib/components/Sidebar.svelte";
 
-    export let data;
+    export let data; // data from the server
 </script>
 
 <main class="{data.theme}">
     <Navbar theme="{data.theme}"/>
-    <Sidebar />
+    <Sidebar users="{data.users}"/>
 
     <!-- Content -->
     <slot/>

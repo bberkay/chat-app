@@ -1,8 +1,11 @@
 <script lang="ts">
+    import {onMount} from "svelte";
     import Search from '$lib/components/Sidebar/Search.svelte';
     import Profile from '$lib/components/Sidebar/Profile.svelte';
     import FriendCard from '$lib/components/Sidebar/FriendCard.svelte';
-    import {onMount} from "svelte";
+
+    // Users from the database
+    export let users;
 
     // Listen for window resize
     let innerWidth;
@@ -20,10 +23,9 @@
 
 <section id="sidebar">
     <Search />
-    <FriendCard/>
-    <FriendCard/>
-    <FriendCard/>
-    <FriendCard/>
+    {#each users as user}
+        <FriendCard user={user}/>
+    {/each}
     <Profile/>
     <span class = "hide"></span>
 </section>

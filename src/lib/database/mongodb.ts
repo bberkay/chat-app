@@ -42,7 +42,7 @@ export class MongoDB{
      */
     public async getAllDocuments(collectionName: string): Promise<any>
     {
-        return await this.client.db(this.dbName).collection(collectionName).find().toArray();
+        return await this.client.db(this.dbName).collection(collectionName).find().project({_id:0}).toArray();
     }
 
     /**
