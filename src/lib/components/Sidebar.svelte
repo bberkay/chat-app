@@ -31,8 +31,8 @@
 <style>
     #sidebar{
         height: 100vh;
-        background-color: var(--current-front-color);
-        border-right: 1px solid var(--current-border-color);
+        background-color: var(--front-color);
+        border-right: 1px solid var(--border-color);
         position:relative;
     }
 

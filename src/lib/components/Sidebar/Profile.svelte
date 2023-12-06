@@ -23,10 +23,10 @@
         justify-content: space-between;
         cursor:pointer;
         margin-top:-3px;
-        border-top:2px solid var(--current-border-color);
-        color:var(--current-text-color);
+        border-top:2px solid var(--border-color);
+        color:var(--text-color);
         padding:1rem;
-        background-color:var(--current-front-color);
+        background-color:var(--front-color);
     }
 
     #profile-card #profile-info{
@@ -43,13 +43,13 @@
 
     #profile-card a{
         padding:0.4rem 0.4rem 0.2rem 0.4rem;
-        border:1px solid var(--current-border-color);
-        background-color:var(--current-front-bright-color);
+        border:1px solid var(--border-color);
+        background-color:var(--front-bright-color);
         border-radius:5px;
     }
 
     #profile-card a svg{
-        color:var(--current-text-color);
+        color:var(--text-color);
         width:1.5em;
         height:1.5em;
     }

@@ -16,11 +16,11 @@
     }
 
     .message-content{
-        background-color: var(--current-front-color);
+        background-color: var(--front-color);
         border-radius: 10px;
         padding: 0.5rem 1rem;
-        color: var(--current-text-color);
-        border: 1px solid var(--current-border-color);
+        color: var(--text-color);
+        border: 1px solid var(--border-color);
     }
 
     .message-avatar img{

@@ -15,11 +15,11 @@
         justify-content: flex-start;
         padding:1rem;
         cursor:pointer;
-        color:var(--current-text-color);
+        color:var(--text-color);
     }
 
     .friend-card:hover{
-        background-color:var(--current-border-color);
+        background-color:var(--border-color);
     }
 
     .friend-card:active{
@@ -37,7 +37,7 @@
 
     .friend-card .message-info span:last-child{
         font-size: 0.8rem;
-        color:var(--current-text-color);
+        color:var(--text-color);
     }
 
     .friend-card .friend-avatar img{

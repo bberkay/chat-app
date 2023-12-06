@@ -14,10 +14,10 @@
     }
 
     .message-content{
-        background-color: var(--current-front-bright-color);
+        background-color: var(--front-bright-color);
         border-radius: 10px;
         padding: 0.5rem 1rem;
-        color: var(--current-text-color);
+        color: var(--text-color);
     }
 
     .message-avatar img{

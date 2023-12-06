@@ -1,10 +1,12 @@
 <script lang ="ts">
     import Navbar from "$lib/components/Navbar.svelte";
     import Sidebar from "$lib/components/Sidebar.svelte";
+
+    export let data;
 </script>
 
-<main>
-    <Navbar />
+<main class="{data.theme}">
+    <Navbar theme="{data.theme}"/>
     <Sidebar />
 
     <!-- Content -->

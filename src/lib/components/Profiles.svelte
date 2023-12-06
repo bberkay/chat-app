@@ -44,10 +44,10 @@
         display:flex;
         align-items:center;
         padding:1rem;
-        border:1px solid var(--current-border-color);
+        border:1px solid var(--border-color);
         border-radius: 5px;
-        background-color: var(--current-front-bright-color);
-        color: var(--current-text-color);
+        background-color: var(--front-bright-color);
+        color: var(--text-color);
     }
 
     #profiles #page-info svg{
@@ -64,10 +64,10 @@
     #profiles .profile-card{
         margin:1rem;
         padding:1rem 2rem;
-        border:1px solid var(--current-border-color);
+        border:1px solid var(--border-color);
         border-radius: 5px;
-        background-color: var(--current-front-color);
-        color: var(--current-text-color);
+        background-color: var(--front-color);
+        color: var(--text-color);
     }
 
     #profiles .profile-info{
@@ -92,16 +92,16 @@
 
     #profiles .profile-info button{
         padding:0.5rem 1rem;
-        border:1px solid var(--current-border-color);
+        border:1px solid var(--border-color);
         border-radius: 5px;
-        background-color: var(--current-front-bright-color);
-        color: var(--current-text-color);
+        background-color: var(--front-bright-color);
+        color: var(--text-color);
         cursor:pointer;
         font-size:0.9rem;
     }
 
     #profiles .profile-info button.selected{
-        background-color: var(--current-front-color);
+        background-color: var(--front-color);
         cursor:default;
     }
 

@@ -13,9 +13,9 @@
     #friend-header{
         width:100%;
         padding:0.5rem 0;
-        background-color: var(--current-front-color);
-        color: var(--current-text-color);
-        border-bottom:2px solid var(--current-border-color);
+        background-color: var(--front-color);
+        color: var(--text-color);
+        border-bottom:2px solid var(--border-color);
     }
 
     #friend-info{

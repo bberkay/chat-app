@@ -10,7 +10,7 @@
 <style>
     #message-form{
         width:100%;
-        border-top: 2px solid var(--current-border-color);
+        border-top: 2px solid var(--border-color);
     }
 
     #message-form form{
@@ -28,9 +28,9 @@
     }
 
     #message-form #send-button{
-        background-color: var(--current-front-color);
-        color: var(--current-background-color);
-        border: 1px solid var(--current-border-color);
+        background-color: var(--front-color);
+        color: var(--background-color);
+        border: 1px solid var(--border-color);
         border-radius: 5px;
         cursor: pointer;
         padding: 0.5rem 0.5rem 0.3rem 0.5rem;
@@ -39,11 +39,11 @@
     #message-form #send-button svg{
         width: 1.7em;
         height: 1.7em;
-        color: var(--current-text-color);
+        color: var(--text-color);
     }
 
     #message-form #send-button:hover{
-        background-color: var(--current-border-color);
+        background-color: var(--border-color);
     }
 
     #message-form #send-button:active{
