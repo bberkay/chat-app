@@ -1,5 +1,6 @@
 <script lang="ts">
-    import {onMount} from "svelte";
+    import { onMount } from "svelte";
+    import { searchResults } from '$lib/stores/search';
     import Search from '$lib/components/Sidebar/Search.svelte';
     import Profile from '$lib/components/Sidebar/Profile.svelte';
     import FriendCard from '$lib/components/Sidebar/FriendCard.svelte';
@@ -18,13 +19,19 @@
     $: if (innerWidth > 768) {
         document.querySelector('#sidebar')?.classList.remove('hide');
     }
+
+    // Subscribe to the store for search results
+    let searchedUsers = [];
+    searchResults.subscribe((value) => {
+        searchedUsers = value.length > 0 ? value : users;
+    });
 </script>
 
 <svelte:window bind:innerWidth/>
 
 <section id="sidebar">
     <Search />
-    {#each users as user}
+    {#each searchedUsers as user}
         <FriendCard user={user}/>
     {/each}
     <Profile profile={profile}/>
