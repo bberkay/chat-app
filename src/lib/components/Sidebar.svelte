@@ -4,8 +4,9 @@
     import Profile from '$lib/components/Sidebar/Profile.svelte';
     import FriendCard from '$lib/components/Sidebar/FriendCard.svelte';
 
-    // Users from the database
+    // Users and current profile from the database
     export let users;
+    export let profile;
 
     // Listen for window resize
     let innerWidth;
@@ -26,7 +27,7 @@
     {#each users as user}
         <FriendCard user={user}/>
     {/each}
-    <Profile/>
+    <Profile profile={profile}/>
     <span class = "hide"></span>
 </section>
 

@@ -7,7 +7,7 @@
 
 <main class="{data.theme}">
     <Navbar theme="{data.theme}"/>
-    <Sidebar users="{data.users}"/>
+    <Sidebar users="{data.users}" profile="{data.profile}"/>
 
     <!-- Content -->
     <slot/>
