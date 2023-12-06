@@ -11,4 +11,4 @@ export function load({ cookies }: {cookies: any}): {theme: "light" | "dark"}
     return {
         theme: theme
     };
-};
+}

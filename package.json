@@ -19,5 +19,8 @@
     "typescript": "^5.0.0",
     "vite": "^4.4.2"
   },
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "mongodb": "^6.3.0"
+  }
 }
