@@ -1,7 +1,8 @@
 import { MongoDB } from '$lib/database/mongodb';
 import type { User } from '$lib/database/types';
+import { selectedUserId } from "$lib/stores/select";
 
-export async function load({ cookies }: {cookies: any}): Promise<{users: Array<User>, selectedUserId: string}>
+export async function load({ cookies }: {cookies: any}): Promise<{users: Array<User>, currentUserId: string}>
 {
     // Get all users from the database
     const db = new MongoDB();
@@ -10,11 +11,12 @@ export async function load({ cookies }: {cookies: any}): Promise<{users: Array<U
         user._id = user._id.toString();
     });
 
-    // Find current user from cookie
-    const selectedUserId = JSON.parse(cookies.get("profile"))._id;
+    // Get the selected user id from the cookies
+    const currentUserId = JSON.parse(cookies.get("profile"))._id;
 
+    // Return the users
     return {
         users: users,
-        selectedUserId: selectedUserId
+        currentUserId: currentUserId
     };
 }

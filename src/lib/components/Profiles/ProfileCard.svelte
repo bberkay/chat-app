@@ -1,6 +1,27 @@
 <script lang="ts">
+    import { selectedUserId } from "$lib/stores/select";
+    import type { User } from "$lib/database/types";
+
     export let user; // user object
-    export let isSelected; // boolean
+    export let isSelected; // is the user selected
+
+    /**
+     * Selects the user
+     */
+    async function selectUser(user: User): Promise<void>
+    {
+        // Send a request to the server to select the user and save it to the cookies.
+        await fetch(`/select`, {
+            method: 'POST',
+            body: JSON.stringify(user),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        // Update the selectedUserId store.
+        selectedUserId.set(user._id);
+    }
 </script>
 
 <div class="profile-card">
@@ -12,7 +33,7 @@
         {#if isSelected}
             <button class = "selected" disabled>Selected</button>
         {:else}
-            <button>Select</button>
+            <button on:click={selectUser(user)}>Select</button>
         {/if}
     </div>
 </div>
