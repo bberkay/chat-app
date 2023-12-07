@@ -5,7 +5,9 @@
     export let users; // users from the server
     export let currentUserId; // selected user id
 
-    // Change current user id when selectedUserId store changes
+    /**
+     * Change current user id when selectedUserId store changes
+     */
     selectedUserId.subscribe((value) => {
         if(value && value.length > 0)
             currentUserId = value;

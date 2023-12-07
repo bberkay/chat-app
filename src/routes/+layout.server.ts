@@ -5,7 +5,7 @@ export async function load({ cookies }: {cookies: any}): Promise<{theme: string,
 {
     // Get all users from the database
     const db = new MongoDB();
-    const users = await db.getAllDocuments('users');
+    let users = await db.getAllDocuments('users');
     users.map((user: User) => {
         user._id = user._id.toString();
     });
@@ -16,6 +16,10 @@ export async function load({ cookies }: {cookies: any}): Promise<{theme: string,
         profile = JSON.stringify(users[0]);
         cookies.set('profile', profile, { path: '/' });
     }
+    profile = JSON.parse(profile);
+
+    // Remove current user from users array
+    users = users.filter((user: User) => user._id !== profile._id);
 
     // Get the theme from the cookies
     let theme = cookies.get('theme');
@@ -29,6 +33,6 @@ export async function load({ cookies }: {cookies: any}): Promise<{theme: string,
     return {
         theme: theme,
         users: users,
-        profile: JSON.parse(profile)
+        profile: profile
     };
 }
