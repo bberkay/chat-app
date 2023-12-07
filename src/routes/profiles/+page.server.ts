@@ -1,6 +1,5 @@
 import { MongoDB } from '$lib/database/mongodb';
 import type { User } from '$lib/database/types';
-import { selectedUserId } from "$lib/stores/select";
 
 export async function load({ cookies }: {cookies: any}): Promise<{users: Array<User>, currentUserId: string}>
 {

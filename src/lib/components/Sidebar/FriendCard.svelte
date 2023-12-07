@@ -1,6 +1,5 @@
 <script lang="ts">
     import type { User } from "$lib/database/types"
-    import { messages } from "$lib/stores/messages";
 
     export let user; // user object
 
@@ -9,7 +8,8 @@
      */
     function showMessages(user: User): void
     {
-        messages.set(user);
+        // go to messages page
+        window.location.href = `/messages/${user._id}`;
     }
 </script>
 
