@@ -1,10 +1,15 @@
+<script lang="ts">
+    export let name: string;
+    export let avatar: string;
+</script>
+
 <div id = "friend-header">
     <div id="friend-info">
         <div id="friend-avatar">
-            <img src="https://www.w3schools.com/howto/img_avatar.png" alt="Avatar">
+            <img src="{avatar}" alt="Avatar">
         </div>
         <div id="friend-name">
-            <span>İsim Soyisim</span>
+            <span>{name}</span>
         </div>
     </div>
 </div>

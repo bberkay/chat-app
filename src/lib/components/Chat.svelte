@@ -3,10 +3,12 @@
     import MessageForm from "$lib/components/Chat/MessageForm.svelte";
     import FriendMessage from "$lib/components/Chat/FriendMessage.svelte";
     import MyMessage from "$lib/components/Chat/MyMessage.svelte";
+
+    export let friend;
 </script>
 
 <section id="chat">
-    <FriendHeader/>
+    <FriendHeader name="{friend.name}" avatar="{friend.avatar}"/>
     <div id="messages">
         <FriendMessage/>
         <FriendMessage/>
