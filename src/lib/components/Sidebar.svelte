@@ -30,7 +30,6 @@
     // Remove current user from search results
     selectedUserId.subscribe(() => { searchedUsers = users });
     $: searchedUsers = searchedUsers.filter(user => user._id !== profile._id);
-
 </script>
 
 <svelte:window bind:innerWidth/>
@@ -38,7 +37,9 @@
 <section id="sidebar">
     <Search />
     {#each searchedUsers as user}
-        <FriendCard user={user}/>
+        {#if user._id !== profile._id}
+            <FriendCard user={user}/>
+        {/if}
     {/each}
     <Profile profile={profile}/>
     <span class = "hide"></span>

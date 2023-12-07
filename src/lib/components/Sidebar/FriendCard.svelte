@@ -1,15 +1,19 @@
 <script lang="ts">
+    import type { User } from "$lib/database/types"
+    import { messages } from "$lib/stores/messages";
+
     export let user; // user object
 
     /**
      * Show messages
      */
-    function showMessages() {
-
+    function showMessages(user: User): void
+    {
+        messages.set(user);
     }
 </script>
 
-<div class="friend-card" on:click={showMessages}>
+<div class="friend-card" on:click={showMessages(user)}>
     <div class="friend-avatar">
         <img src="{user.avatar}" alt="">
     </div>
