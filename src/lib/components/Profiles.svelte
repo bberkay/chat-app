@@ -2,6 +2,7 @@
     import ProfileCard from "$lib/components/Profiles/ProfileCard.svelte";
 
     export let users; // users from the server
+    export let selectedUserId; // current user's id from the server(cookie)
 </script>
 
 <section id = "profiles">
@@ -11,7 +12,7 @@
     </div>
     <div id="profile-container">
         {#each users as user}
-            <ProfileCard user="{user}"/>
+            <ProfileCard user="{user}" isSelected="{selectedUserId === user._id}"/>
         {/each}
     </div>
 </section>

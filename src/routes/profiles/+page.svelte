@@ -4,7 +4,7 @@
     export let data;
 </script>
 
-<Profiles users="{data.users}"/>
+<Profiles users="{data.users}" selectedUserId = "{data.selectedUserId}"/>
 
 
 

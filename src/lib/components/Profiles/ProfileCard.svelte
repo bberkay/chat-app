@@ -1,5 +1,6 @@
 <script lang="ts">
     export let user; // user object
+    export let isSelected; // boolean
 </script>
 
 <div class="profile-card">
@@ -8,12 +9,15 @@
     </div>
     <div class="profile-info">
         <span>{user.name}</span>
-        <button class = "selected" disabled>Selected</button>
+        {#if isSelected}
+            <button class = "selected" disabled>Selected</button>
+        {:else}
+            <button>Select</button>
+        {/if}
     </div>
 </div>
 
 <style>
-
     .profile-card{
         margin:1rem;
         padding:1rem 2rem;
