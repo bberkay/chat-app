@@ -1,6 +1,7 @@
 <script lang="ts">
     import { onMount } from "svelte";
     import { searchResults } from '$lib/stores/search';
+    import { selectedUserId } from "$lib/stores/select";
     import Search from '$lib/components/Sidebar/Search.svelte';
     import Profile from '$lib/components/Sidebar/Profile.svelte';
     import FriendCard from '$lib/components/Sidebar/FriendCard.svelte';
@@ -25,6 +26,11 @@
     searchResults.subscribe((value) => {
         searchedUsers = value.length > 0 ? value : users;
     });
+
+    // Remove current user from search results
+    selectedUserId.subscribe(() => { searchedUsers = users });
+    $: searchedUsers = searchedUsers.filter(user => user._id !== profile._id);
+
 </script>
 
 <svelte:window bind:innerWidth/>

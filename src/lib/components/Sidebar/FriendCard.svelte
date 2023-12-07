@@ -1,8 +1,15 @@
 <script lang="ts">
     export let user; // user object
+
+    /**
+     * Show messages
+     */
+    function showMessages() {
+
+    }
 </script>
 
-<div class="friend-card">
+<div class="friend-card" on:click={showMessages}>
     <div class="friend-avatar">
         <img src="{user.avatar}" alt="">
     </div>
