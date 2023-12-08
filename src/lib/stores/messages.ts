@@ -1,6 +1,7 @@
 import { writable } from 'svelte/store';
 
 /**
- * @description Store for messages.
+ * @description Store for messages
+ * [{ senderId: string, receiverId: string, message: string }]
  */
-export const messages = writable({});
+export const messages = writable([]);

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { User } from "$lib/database/types"
+    import type { User } from '$lib/types';
 
     export let user; // user object
 

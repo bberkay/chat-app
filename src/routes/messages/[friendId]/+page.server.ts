@@ -1,7 +1,7 @@
-import type { User } from '$lib/database/types';
+import type { User } from '$lib/types';
 import { MongoDB } from '$lib/database/mongodb';
 
-export async function load({ params }: { params: { friendId: string } }): Promise<{friend: User}>
+export async function load({ params, cookies }: { params: { friendId: string }, cookies: any }): Promise<{userId: string, friend: User}>
 {
     const db = new MongoDB();
 
@@ -12,8 +12,13 @@ export async function load({ params }: { params: { friendId: string } }): Promis
         user._id = user._id.toString();
     });
 
+    // Get the user id from the cookies
+    const userId: string = JSON.parse(cookies.get("profile"))._id;
+
+
     // Return friend for chatting.
     return {
+        userId: userId,
         friend: friend[0]
     }
 }

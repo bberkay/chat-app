@@ -1,4 +1,5 @@
 <script lang="ts">
+    // Current chatting friend
     export let name: string;
     export let avatar: string;
 </script>

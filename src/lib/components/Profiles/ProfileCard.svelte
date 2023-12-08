@@ -1,6 +1,6 @@
 <script lang="ts">
     import { selectedUserId } from "$lib/stores/select";
-    import type { User } from "$lib/database/types";
+    import type { User } from '$lib/types';
 
     export let user; // user object
     export let isSelected; // is the user selected

@@ -1,6 +1,10 @@
+<script lang="ts">
+    export let message;
+</script>
+
 <div class = "my-message">
     <div class="message-content">
-        <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</span>
+        <span>{message}</span>
     </div>
 </div>
 
@@ -16,7 +20,7 @@
     .message-content{
         background-color: var(--front-bright-color);
         border-radius: 10px;
-        padding: 0.5rem 1rem;
+        padding: 0.4rem 0.7rem;
         color: var(--text-color);
     }
 

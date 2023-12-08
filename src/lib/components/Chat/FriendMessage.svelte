@@ -1,9 +1,14 @@
+<script lang="ts">
+    export let friendAvatar: string;
+    export let message;
+</script>
+
 <div class = "friend-message">
     <div class="message-avatar">
-        <img src="https://www.w3schools.com/howto/img_avatar.png" alt="Avatar">
+        <img src="{friendAvatar}" alt="Avatar">
     </div>
     <div class="message-content">
-        <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</span>
+        <span>{message}</span>
     </div>
 </div>
 
@@ -18,7 +23,7 @@
     .message-content{
         background-color: var(--front-color);
         border-radius: 10px;
-        padding: 0.5rem 1rem;
+        padding: 0.4rem 0.7rem;
         color: var(--text-color);
         border: 1px solid var(--border-color);
     }
