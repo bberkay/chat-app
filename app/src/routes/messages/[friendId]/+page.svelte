@@ -4,4 +4,4 @@
     export let data; // data from server
 </script>
 
-<Chat friend="{data.friend}" userId="{data.userId}"/>
+<Chat friend="{data.friend}" userId="{data.userId}" messages="{data.messages}"/>

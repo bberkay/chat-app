@@ -12,10 +12,10 @@ export async function GET(request: Request): Promise<Response>
     // If search isn't null, search for the user
     let users = null;
     if(search != null)
-        users = await db.searchDocumentByName('users', search);
+        users = await db.searchUserByName(search);
 
     // Set the searchedUsers store to the users found(if users is null, set it to all users)
-    users = users != null && users!.length > 0 ? users : await db.getAllDocuments('users');
+    users = users != null && users!.length > 0 ? users : await db.getAllUsers();
     searchResults.set(users);
 
     // Return the searchedUsers store

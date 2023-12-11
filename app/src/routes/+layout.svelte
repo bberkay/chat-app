@@ -10,7 +10,7 @@
      */
     let profile = data.profile;
     selectedUserId.subscribe((value) => {
-        if(value && value.length > 0 && value !== profile._id )
+        if(value && value.length > 0 && value !== profile._id)
             profile = data.users.find((user) => user._id === value);
     });
 </script>

@@ -5,7 +5,7 @@ export async function load({ cookies }: {cookies: any}): Promise<{theme: string,
 {
     // Get all users from the database
     const db = new MongoDB();
-    const users = await db.getAllDocuments('users');
+    const users = await db.getAllUsers();
     users.map((user: User) => {
         user._id = user._id.toString();
     });
