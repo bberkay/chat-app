@@ -1,10 +1,10 @@
-import { MongoDB } from '$lib/database/mongodb';
+import { Mongo } from '$lib/classes/Mongo';
 import type { User } from '$lib/types';
 
 export async function load({ cookies }: {cookies: any}): Promise<{users: Array<User>, currentUserId: string}>
 {
-    // Get all users from the database
-    const db = new MongoDB();
+    // Get all users from the classes
+    const db = new Mongo();
     const users = await db.getAllUsers();
     users.map((user: User) => {
         user._id = user._id.toString();

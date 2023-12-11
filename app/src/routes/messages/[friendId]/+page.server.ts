@@ -1,11 +1,11 @@
 import type { User } from '$lib/types';
-import { MongoDB } from '$lib/database/mongodb';
+import { Mongo } from '$lib/classes/Mongo';
 
 export async function load({ params, cookies }: { params: { friendId: string }, cookies: any }): Promise<{userId: string, friend: User, messages: string[]}>
 {
-    const db = new MongoDB();
+    const db = new Mongo();
 
-    // Get the user id from params then find the user from the database with that id.
+    // Get the user id from params then find the user from the classes with that id.
     const friendId: string = params.friendId;
     const friend = await db.getUserById(friendId);
     friend.map((user: User) => {

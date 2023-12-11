@@ -1,4 +1,4 @@
-// User type for MongoDB
+// User type for Mongo
 export interface User {
     _id: string;
     name: string;

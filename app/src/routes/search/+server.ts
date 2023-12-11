@@ -1,9 +1,9 @@
-import { MongoDB } from '$lib/database/mongodb';
+import { Mongo } from '$lib/classes/Mongo';
 import { searchResults} from "$lib/stores/search";
 
 export async function GET(request: Request): Promise<Response>
 {
-    const db = new MongoDB();
+    const db = new Mongo();
     const url = new URL(request.url);
 
     // Find the name parameter

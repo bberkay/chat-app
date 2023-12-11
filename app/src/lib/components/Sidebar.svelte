@@ -6,7 +6,7 @@
     import Profile from '$lib/components/Sidebar/Profile.svelte';
     import FriendCard from '$lib/components/Sidebar/FriendCard.svelte';
 
-    // Users and current profile from the database
+    // Users and current profile from the classes
     export let users;
     export let profile;
 

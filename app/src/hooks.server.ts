@@ -1,4 +1,4 @@
-import { MongoDB } from "$lib/database/mongodb";
+import { Mongo } from "$lib/classes/Mongo";
 
-const db = new MongoDB();
+const db = new Mongo();
 db.connect();
