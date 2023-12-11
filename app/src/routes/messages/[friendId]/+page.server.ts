@@ -17,6 +17,12 @@ export async function load({ params, cookies }: { params: { friendId: string }, 
 
     // Get the messages between the user and the friend.
     const messages = await db.getMessagesBetweenUsers(userId, friendId);
+    messages.map((message: any) => {
+        message._id = message._id.toString();
+        message.senderId = message.senderId.toString();
+        message.receiverId = message.receiverId.toString();
+        message.sentDate = message.sentDate.toString();
+    });
 
     // Return friend for chatting.
     return {

@@ -89,8 +89,10 @@ export class MongoDB{
     /**
      * Get Messages between Users
      */
-    public async getMessagesBetweenUsers(senderId: string, receiverId: string): Promise<any>
+    public async getMessagesBetweenUsers(senderId: string | ObjectId, receiverId: string | ObjectId): Promise<any>
     {
+        senderId = senderId instanceof ObjectId ? senderId : new ObjectId(senderId);
+        receiverId = receiverId instanceof ObjectId ? receiverId : new ObjectId(receiverId);
         return await this.searchDocumentWithFilter("messages", {$or: [{senderId: senderId, receiverId: receiverId}, {senderId: receiverId, receiverId: senderId}]});
     }
 
