@@ -16,7 +16,7 @@
         document.querySelector("main").classList.toggle("dark");
 
         // save theme as cookie without expiration date
-        document.cookie = "theme=" + theme + ";path=/";
+        document.cookie = "theme=" + theme + ";path=/ ;SameSite=Strict";
     }
 
     /**
