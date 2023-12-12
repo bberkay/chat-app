@@ -3,6 +3,8 @@ import { Mongo } from '$lib/classes/Mongo';
 
 export async function load({ params, cookies }: { params: { friendId: string }, cookies: any }): Promise<{userId: string, friend: User, messages: string[]}>
 {
+    // TODO: Burada Global kullanılacak.
+
     const db = new Mongo();
 
     // Get the user id from params then find the user from the classes with that id.

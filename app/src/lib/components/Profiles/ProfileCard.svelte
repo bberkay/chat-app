@@ -11,7 +11,7 @@
     async function selectUser(user: User): Promise<void>
     {
         // Send a request to the server to select the user and save it to the cookies.
-        await fetch(`/select`, {
+        await fetch(`/api/select`, {
             method: 'POST',
             body: JSON.stringify(user),
             headers: {

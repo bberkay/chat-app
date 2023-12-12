@@ -14,7 +14,7 @@ export async function GET(request: Request): Promise<Response>
     if(search != null)
         users = await db.searchUserByName(search);
 
-    // Set the searchedUsers store to the users found(if users is null, set it to all users)
+    // Set the searchedUsers store to the users found(if users is null, theme it to all users)
     users = users != null && users!.length > 0 ? users : await db.getAllUsers();
     searchResults.set(users);
 

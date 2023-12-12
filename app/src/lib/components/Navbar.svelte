@@ -13,9 +13,13 @@
     function changeTheme() {
         theme = theme == "dark" ? "light" : "dark";
         document.querySelector("main").classList.toggle("dark");
-
-        // save theme as cookie without expiration date
-        document.cookie = "theme=" + theme + ";path=/ ;SameSite=Strict";
+        fetch("/api/theme", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ theme }),
+        });
     }
 
     /**

@@ -8,7 +8,7 @@
      */
     async function searchPerson(): Promise<void>
     {
-        const response = await fetch(`/search?name=${search}`);
+        const response = await fetch(`/api/search?name=${search}`);
         const data = await response.json();
         searchResults.set(data);
     }
