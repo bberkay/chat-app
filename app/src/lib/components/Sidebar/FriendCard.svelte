@@ -19,7 +19,7 @@
     </div>
     <div class="message-info">
         <span>{user.name}</span>
-        <span>Lorem ipsum dolor sit amet...</span>
+        <span>{user.lastMessage ?? "Lorem ipsum dolar sit amet..."}</span>
     </div>
 </div>
 

@@ -1,7 +1,6 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import { searchResults } from '$lib/stores/search';
-    import { selectedUserId } from "$lib/stores/select";
+    import { searchResults, selectedUserId } from '$lib/stores';
     import Search from '$lib/components/Sidebar/Search.svelte';
     import Profile from '$lib/components/Sidebar/Profile.svelte';
     import FriendCard from '$lib/components/Sidebar/FriendCard.svelte';

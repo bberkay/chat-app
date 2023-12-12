@@ -1,5 +1,5 @@
 <script lang ="ts">
-    import { selectedUserId } from "$lib/stores/select";
+    import { selectedUserId } from "$lib/stores";
     import Navbar from "$lib/components/Navbar.svelte";
     import Sidebar from "$lib/components/Sidebar.svelte";
 

@@ -1,6 +1,4 @@
 <script lang="ts">
-    import { messages } from "$lib/stores/messages";
-
     export let friendId: string; // Current chatting friend id
     export let userId: string; // Current user id
 
@@ -30,7 +28,7 @@
     function sendMessage(): void
     {
         if(message.length > 0)
-            messages.update(messages => [...messages, {senderId: userId, receiverId: friendId, message: message}]);
+            //messages.update(messages => [...messages, {senderId: userId, receiverId: friendId, message: message}]);
     }
 </script>
 

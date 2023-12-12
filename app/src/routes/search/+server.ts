@@ -1,5 +1,5 @@
 import { Mongo } from '$lib/classes/Mongo';
-import { searchResults} from "$lib/stores/search";
+import { searchResults } from "$lib/stores";
 
 export async function GET(request: Request): Promise<Response>
 {

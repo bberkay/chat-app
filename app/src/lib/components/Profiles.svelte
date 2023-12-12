@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { selectedUserId } from "$lib/stores/select";
+    import { selectedUserId } from "$lib/stores";
     import ProfileCard from "$lib/components/Profiles/ProfileCard.svelte";
 
     export let users; // users from the server

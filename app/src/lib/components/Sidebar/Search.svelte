@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { searchResults } from "$lib/stores/search.js";
+    import { searchResults } from "$lib/stores";
 
     let search: string = "";
 

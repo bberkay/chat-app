@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { selectedUserId } from "$lib/stores/select";
+    import { selectedUserId } from "$lib/stores";
     import type { User } from '$lib/types';
 
     export let user; // user object
