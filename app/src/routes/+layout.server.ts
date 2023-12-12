@@ -1,19 +1,12 @@
-import { Mongo } from '$lib/classes/Mongo';
+import { Global } from '$lib/classes/Global';
 import type { User } from '$lib/types';
 
 export async function load({ cookies }: {cookies: any}): Promise<{theme: string, users: Array<User>, profile: User}>
 {
-    // Get all users from the classes
-    const db = new Mongo();
-    const users = await db.getAllUsers();
-    users.map((user: User) => {
-        user._id = user._id.toString();
-    });
-
     // Get the profile from the cookies. If the profile is not defined, set the profile to the first user
     let profile = cookies.get('profile');
     if (!profile || profile === 'undefined') {
-        profile = JSON.stringify(users[2]);
+        profile = JSON.stringify(Global.users[2]);
         cookies.set('profile', profile, { path: '/' });
     }
 
@@ -28,7 +21,7 @@ export async function load({ cookies }: {cookies: any}): Promise<{theme: string,
 
     return {
         theme: theme,
-        users: users,
+        users: Global.users,
         profile: JSON.parse(profile)
     };
 }

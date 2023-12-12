@@ -27,8 +27,8 @@
      */
     function sendMessage(): void
     {
-        if(message.length > 0)
-            //messages.update(messages => [...messages, {senderId: userId, receiverId: friendId, message: message}]);
+        /*if(message.length > 0)
+            messages.update(messages => [...messages, {senderId: userId, receiverId: friendId, message: message}]);*/
     }
 </script>
 

@@ -1,4 +1,4 @@
-class C3PO{
+class Droid {
     constructor(){
         console.log("I am C-3PO");
     }
