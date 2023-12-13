@@ -1,5 +1,6 @@
 import type { User } from "$lib/types";
 import { Mongo } from "$lib/classes/Mongo";
+import { Droid } from "$lib/classes/Droid";
 
 /**
  * This class is used to store data that is used in
@@ -20,6 +21,11 @@ class GlobalStore
      * All the messages in the database are stored here.
      */
     private _messages: string[] = [];
+
+    /**
+     * Chatbot of the application.
+     */
+    public readonly droid = new Droid();
 
     /**
      * Initialize the global variables.

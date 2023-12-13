@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { onMount } from "svelte";
+    import { onMount } from "svelte"
     import { searchResults, selectedUserId } from '$lib/stores';
     import Search from '$lib/components/Sidebar/Search.svelte';
     import Profile from '$lib/components/Sidebar/Profile.svelte';
@@ -8,7 +8,6 @@
     // Users and current profile from the classes
     export let users;
     export let profile;
-    export let chatbot;
 
     // Listen for window resize
     let innerWidth;
@@ -24,11 +23,11 @@
     // Subscribe to the store for search results
     let searchedUsers = [];
     searchResults.subscribe((value) => {
-        searchedUsers = value.length > 0 ? value : users.concat(chatbot);
+        searchedUsers = value.length > 0 ? value : users;
     });
 
     // Remove current user from search results
-    selectedUserId.subscribe(() => { searchedUsers = users.concat(chatbot) });
+    selectedUserId.subscribe(() => { searchedUsers = users });
     $: searchedUsers = searchedUsers.filter(user => user._id !== profile._id);
 </script>
 

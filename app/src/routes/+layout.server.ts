@@ -1,8 +1,7 @@
-import { Droid } from '$lib/classes/Droid';
 import { Global } from '$lib/classes/Global';
 import type { User } from '$lib/types'
 
-export async function load({ cookies }: {cookies: any}): Promise<{theme: string, users: Array<User | Droid>, profile: User, chatbot: User}>
+export async function load({ cookies }: {cookies: any}): Promise<{theme: string, users: Array<User>, profile: User}>
 {
     // Get the profile from the cookies. If the profile is not defined, theme the profile to the first user
     let profile = cookies.get('profile');
@@ -20,13 +19,9 @@ export async function load({ cookies }: {cookies: any}): Promise<{theme: string,
         cookies.set('theme', theme, { path: '/' });
     }
 
-    // Create a new droid as chatbot
-    const c3po = new Droid("C-3PO", "https://i.ibb.co/DgCBV68/c-3po.jpg");
-
     return {
         theme: theme,
-        users: Global.users,
-        chatbot: c3po.toJSON(),
+        users: Global.users.concat(Global.droid.toJSON()),
         profile: JSON.parse(profile)
     };
 }

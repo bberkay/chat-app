@@ -6,16 +6,20 @@ export async function load({ params, cookies }: { params: { friendId: string }, 
 {
     const db = new Mongo();
 
+    // Get the user id from the cookies
+    const userId: string = JSON.parse(cookies.get("profile"))._id;
+
     // Get the user id from params then find the user from the classes with that id.
     const friendId: string = params.friendId;
+    if(friendId === "droid")
+        return {userId: userId, friend: Global.droid.toJSON(), messages: []}
+
+    // If friend is not droid then find the user from the classes with that id.
     const friend = Global.users.find((user: User) => {
         if (user._id === friendId)
             return user;
     });
     if(!friend) throw new Error("Friend not found.");
-
-    // Get the user id from the cookies
-    const userId: string = JSON.parse(cookies.get("profile"))._id;
 
     // Get the messages between the user and the friend.
     const messages = await db.getMessagesBetweenUsers(userId, friendId);
