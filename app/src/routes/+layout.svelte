@@ -17,7 +17,7 @@
 
 <main class="{data.theme}">
     <Navbar theme="{data.theme}"/>
-    <Sidebar users="{data.users}" profile="{profile}"/>
+    <Sidebar users="{data.users}" profile="{profile}" chatbot="{data.chatbot}"/>
 
     <!-- Content -->
     <slot/>

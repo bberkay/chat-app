@@ -1,18 +1,18 @@
 import type { User } from '$lib/types';
 import { Mongo } from '$lib/classes/Mongo';
+import { Global } from '$lib/classes/Global';
 
 export async function load({ params, cookies }: { params: { friendId: string }, cookies: any }): Promise<{userId: string, friend: User, messages: string[]}>
 {
-    // TODO: Burada Global kullanılacak.
-
     const db = new Mongo();
 
     // Get the user id from params then find the user from the classes with that id.
     const friendId: string = params.friendId;
-    const friend = await db.getUserById(friendId);
-    friend.map((user: User) => {
-        user._id = user._id.toString();
+    const friend = Global.users.find((user: User) => {
+        if (user._id === friendId)
+            return user;
     });
+    if(!friend) throw new Error("Friend not found.");
 
     // Get the user id from the cookies
     const userId: string = JSON.parse(cookies.get("profile"))._id;
@@ -29,7 +29,7 @@ export async function load({ params, cookies }: { params: { friendId: string }, 
     // Return friend for chatting.
     return {
         userId: userId,
-        friend: friend[0],
+        friend: friend!,
         messages: messages
     }
 }

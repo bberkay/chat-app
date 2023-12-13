@@ -8,6 +8,7 @@
     // Users and current profile from the classes
     export let users;
     export let profile;
+    export let chatbot;
 
     // Listen for window resize
     let innerWidth;
@@ -23,11 +24,11 @@
     // Subscribe to the store for search results
     let searchedUsers = [];
     searchResults.subscribe((value) => {
-        searchedUsers = value.length > 0 ? value : users;
+        searchedUsers = value.length > 0 ? value : users.concat(chatbot);
     });
 
     // Remove current user from search results
-    selectedUserId.subscribe(() => { searchedUsers = users });
+    selectedUserId.subscribe(() => { searchedUsers = users.concat(chatbot) });
     $: searchedUsers = searchedUsers.filter(user => user._id !== profile._id);
 </script>
 
