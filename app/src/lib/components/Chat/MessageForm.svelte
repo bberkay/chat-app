@@ -1,8 +1,9 @@
 <script lang="ts">
+    import type { User, Droid } from "$lib/types";
     import { currentMessages } from "$lib/stores";
 
     // Component properties
-    export let friendId: string;
+    export let friend: User | Droid;
     export let userId: string;
 
     // Current message
@@ -29,7 +30,7 @@
     {
         document.getElementById("message-input").value = "";
         if(message.length > 0){
-            currentMessages.update(messages => [...messages, {senderId: userId, receiverId: friendId, content: message}]);
+            currentMessages.update(messages => [...messages, {senderId: userId, receiverId: friend._id, content: message}]);
             message = "";
         }
 
@@ -37,16 +38,17 @@
          * Droid logic
          * Send random message as droid after user send a message to droid.
          */
-        if(friendId === "droid")
+        if(friend._id === "droid")
         {
+            console.log(friend);
             // Send random message after 1 second.
             setTimeout(() => {
                 currentMessages.update((messages) => [
                     ...messages,
                     {
-                        senderId: "droid",
+                        senderId: friend._id,
                         receiverId: userId,
-                        content: "I'm a droid."
+                        content: friend.readyMessages[Math.floor(Math.random() * friend.readyMessages.length)]
                     }
                 ]);
             }, 1000);

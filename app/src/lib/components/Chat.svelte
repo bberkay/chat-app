@@ -37,7 +37,7 @@
             {/if}
         {/each}
     </div>
-    <MessageForm friendId="{friend._id}" userId="{userId}"/>
+    <MessageForm friend="{friend}" userId="{userId}"/>
 </section>
 
 <style>
