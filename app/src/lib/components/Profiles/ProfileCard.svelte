@@ -10,8 +10,8 @@
      */
     async function selectUser(user: User): Promise<void>
     {
-        // Send a request to the server to select the user and save it to the cookies.
-        await fetch(`/api/select`, {
+        // Send a request to the server to profile the user and save it to the cookies.
+        await fetch(`/api/profile/select`, {
             method: 'POST',
             body: JSON.stringify(user),
             headers: {

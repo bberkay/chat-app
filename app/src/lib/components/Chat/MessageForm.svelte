@@ -30,8 +30,23 @@
     {
         document.getElementById("message-input").value = "";
         if(message.length > 0){
-            currentMessages.update(messages => [...messages, {senderId: userId, receiverId: friend._id, content: message}]);
-            message = "";
+            fetch("/api/chat/send-message", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    senderId: userId,
+                    receiverId: friend._id,
+                    content: message
+                })
+            }).then(response => {
+                if(response.ok)
+                {
+                    currentMessages.update(messages => [...messages, {senderId: userId, receiverId: friend._id, content: message}]);
+                    message = "";
+                }
+            });
         }
 
         /**

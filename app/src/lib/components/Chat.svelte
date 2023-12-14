@@ -13,10 +13,35 @@
     // Add current messages to store
     currentMessages.set(messages);
 
-    // Send first message if friend is droid
+    /**
+     * If current friend is droid, send a welcome message as droid to user. Otherwise, connect
+     * to the chat room of the current friend and user.
+     */
     onMount(() => {
         if(friend._id === "droid")
-            currentMessages.update((messages) => [...messages, {senderId: "droid", receiverId: userId, content: `Hi, I'm ${friend.name}! I will send you a random message every time when you send me a message.`}]);
+        {
+            currentMessages.update((messages) => [
+                ...messages,
+                {
+                    senderId: "droid",
+                    receiverId: userId,
+                    content: `Hi, I'm ${friend.name}! I will send you a random message every time when you send me a message.`
+                }
+            ]);
+        }
+        else
+        {
+            fetch("/api/chat", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    senderId: userId,
+                    receiverId: friend._id
+                })
+            });
+        }
     });
 
     // Scroll to bottom of messages when new message is added
@@ -24,6 +49,13 @@
         const messagesDiv = document.getElementById("messages");
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
     });
+
+    // Listen for new messages
+    const eventSource = new EventSource(`/api/chat/get-messages/${userId}/${friend._id}`);
+    eventSource.onmessage = (event) => {
+        const message = JSON.parse(event.data);
+        currentMessages.update((messages) => [...messages, message]);
+    };
 </script>
 
 <section id="chat">
