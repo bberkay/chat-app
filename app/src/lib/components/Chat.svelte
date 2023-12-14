@@ -24,36 +24,6 @@
         const messagesDiv = document.getElementById("messages");
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
     });
-
-    /**
-     * Droid logic
-     * Send random message as droid after user send a message to droid.
-     * Also add message sending animation and remove it after 1 second when droid send message.
-     */
-    currentMessages.subscribe((subscribeValue) => {
-        if(subscribeValue.length > 0 && subscribeValue[subscribeValue.length - 1].receiverId === "droid" && friend._id === "droid")
-        {
-            // Message sending animation.
-            currentMessages.update((innerSubscribeValue) => [...innerSubscribeValue, {senderId: "droid", receiverId: userId, content: "..." }]);
-
-            // Send random message after 1 second.
-            setTimeout(() => {
-                currentMessages.update((innerSubscribeValue) => [
-                        ...innerSubscribeValue,
-                        {
-                            senderId: "droid",
-                            receiverId: userId,
-                            content: friend.readyMessages[Math.floor(Math.random() * friend.readyMessages.length)]
-                        }
-                ]);
-            }, 1000);
-
-            // Remove message sending animation.
-            setTimeout(() => {
-                currentMessages.update((innerSubscribeValue) => innerSubscribeValue.filter((message) => message.content !== "..."));
-            }, 1000);
-        }
-    });
 </script>
 
 <section id="chat">
