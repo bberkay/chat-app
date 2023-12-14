@@ -40,7 +40,6 @@
          */
         if(friend._id === "droid")
         {
-            console.log(friend);
             // Send random message after 1 second.
             setTimeout(() => {
                 currentMessages.update((messages) => [
