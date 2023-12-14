@@ -13,7 +13,7 @@ export const selectedUserId = writable('');
 export const searchResults = writable([]);
 
 /**
- * @description Store for the user messages that is used to
- * display the user messages in real time.
+ * @description Store for the current messages that is used to
+ * display the messages between users in real time.
  */
-export const userMessages = writable([]);
+export const currentMessages = writable([]);

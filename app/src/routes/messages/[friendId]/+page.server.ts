@@ -12,7 +12,7 @@ export async function load({ params, cookies }: { params: { friendId: string }, 
     // Get the user id from params then find the user from the classes with that id.
     const friendId: string = params.friendId;
     if(friendId === "droid")
-        return {userId: userId, friend: Global.droid.toJSON(), messages: []}
+        return {userId: userId, friend: Global.droid, messages: []}
 
     // If friend is not droid then find the user from the classes with that id.
     const friend = Global.users.find((user: User) => {

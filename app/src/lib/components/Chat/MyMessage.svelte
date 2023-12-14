@@ -19,7 +19,7 @@
 
     .message-content{
         background-color: var(--front-bright-color);
-        border-radius: 10px;
+        border-radius: 10px 10px 0 10px;
         padding: 0.4rem 0.7rem;
         color: var(--text-color);
     }

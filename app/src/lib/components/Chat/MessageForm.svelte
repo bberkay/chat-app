@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { userMessages } from "$lib/stores";
+    import { currentMessages } from "$lib/stores";
 
     // Component properties
     export let friendId: string;
@@ -32,8 +32,13 @@
     {
         document.getElementById("message-input").value = "";
         if(message.length > 0){
-            userMessages.update(messages => [...messages, {senderId: userId, receiverId: friendId, content: message}]);
+            currentMessages.update(messages => [...messages, {senderId: userId, receiverId: friendId, content: message}]);
             message = "";
+        }
+
+        // If the user is talking to the droid,
+        if(friendId === "droid"){
+
         }
     }
 </script>

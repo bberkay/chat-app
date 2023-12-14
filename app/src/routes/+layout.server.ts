@@ -1,7 +1,7 @@
 import { Global } from '$lib/classes/Global';
-import type { User } from '$lib/types'
+import type { User, Droid } from '$lib/types'
 
-export async function load({ cookies }: {cookies: any}): Promise<{theme: string, users: Array<User>, profile: User}>
+export async function load({ cookies }: {cookies: any}): Promise<{theme: string, users: Array<User | Droid>, profile: User}>
 {
     // Get the profile from the cookies. If the profile is not defined, theme the profile to the first user
     let profile = cookies.get('profile');
@@ -21,7 +21,7 @@ export async function load({ cookies }: {cookies: any}): Promise<{theme: string,
 
     return {
         theme: theme,
-        users: Global.users.concat(Global.droid.toJSON()),
+        users: Global.users.concat(Global.droid),
         profile: JSON.parse(profile)
     };
 }
