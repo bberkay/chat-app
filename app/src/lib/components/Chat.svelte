@@ -20,6 +20,7 @@
     onMount(() => {
         if(friend._id === "droid")
         {
+            // Get the first message from droid
             currentMessages.update((messages) => [
                 ...messages,
                 {
@@ -31,6 +32,7 @@
         }
         else
         {
+            // Connect to chat room
             fetch("/api/chat", {
                 method: "POST",
                 headers: {
@@ -51,11 +53,6 @@
     });
 
     // Listen for new messages
-    const eventSource = new EventSource(`/api/chat/get-messages/${userId}/${friend._id}`);
-    eventSource.onmessage = (event) => {
-        const message = JSON.parse(event.data);
-        currentMessages.update((messages) => [...messages, message]);
-    };
 </script>
 
 <section id="chat">

@@ -1,37 +1,64 @@
-let rooms: { [roomId: string]: any } = {};
-const server = Bun.serve<{ senderId: string, roomId: string }>({
-    fetch(req, server) {
-        const url: string[] = req.url.split("/chat/")[1].split("/");
-        const senderId: string = url[0];
-        const receiverId: string = url[1];
-        const roomId: string = url.sort().join("-");
+import { Credentials, Message } from "./types";
+import type { Server, ServerWebSocket } from "bun";
 
-        if (!rooms[roomId])
-            rooms[roomId] = [];
+/**
+ * Rooms is a map of roomId to an array of messages.
+ */
+let rooms: { [roomId: string]: Message[] } = {};
 
-        const success: boolean = server.upgrade(req, { data: { senderId, receiverId, roomId }});
+/**
+ * Extract the senderId, receiverId and roomId from the URL.
+ * @example /chat/1/2 -> { senderId: "1", receiverId: "2", roomId: "1-2" }
+ * @example /chat/2/1 -> { senderId: "1", receiverId: "2", roomId: "1-2" }
+ */
+function getDataFromUrl(url: string): Credentials
+{
+    const data: string[] = url.split("/chat/")[1].split("/");
+    return { senderId: data[0], receiverId: data[1], roomId: data.sort().join("-") };
+}
+
+/**
+ * Create a WebSocket server that listens on /chat/:senderId/:receiverId.
+ * @example /chat/1/2
+ */
+const server = Bun.serve<Credentials>({
+    fetch(req: Request, server: Server): Response | undefined
+    {
+        const credentials: Credentials = getDataFromUrl(req.url);
+
+        // If room doesn't exist, create it.
+        if (!rooms[credentials.roomId])
+            rooms[credentials.roomId] = [];
+
+        const success: boolean = server.upgrade(req, { data: credentials });
         if (success) {
-            // Bun automatically returns a 101 Switching Protocols
-            // if the upgrade succeeds
+            // Bun automatically returns a 101 Switching Protocols if the upgrade succeeds
             return undefined;
         }
 
         // handle HTTP request normally
-        return new Response("Hello world!");
+        return new Response("Not found", { status: 404 });
     },
     websocket: {
-        open(ws) {
+        open(ws: ServerWebSocket<Credentials>): void
+        {
+            /**
+             * When a client connects, subscribe to the room and publish the
+             * current messages in the room.
+             */
             ws.subscribe(ws.data.roomId);
             console.log(`Subscribed to ${ws.data.roomId} as ${ws.data.senderId} and currently has ${JSON.stringify(rooms[ws.data.roomId])} messages`);
             ws.publish(ws.data.roomId, JSON.stringify(rooms[ws.data.roomId]));
         },
-        // this is called when a message is received
-        async message(ws, message) {
-            const data = JSON.parse(message as string);
-            const content = { senderId: ws.data.senderId, message: data.message };
-            ws.publish(ws.data.roomId, JSON.stringify(content));
-            rooms[ws.data.roomId].push(content);
-            console.log(`Received message from ${ws.data.senderId} in ${ws.data.roomId} with content ${JSON.stringify(content)}`);
+        async message(ws: ServerWebSocket<Credentials>, message: string | Buffer): Promise<void>
+        {
+            /**
+             * When a client sends a message, publish it to the room.
+             */
+            const data: Message = JSON.parse(message as string);
+            ws.publish(ws.data.roomId, JSON.stringify(data));
+            rooms[ws.data.roomId].push(data);
+            console.log(`Received message from ${ws.data.senderId} in ${ws.data.roomId} with content "${data.content}"`);
         },
     },
 });
