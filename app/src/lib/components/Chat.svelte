@@ -30,20 +30,6 @@
                 }
             ]);
         }
-        else
-        {
-            // Connect to chat room
-            fetch("/api/chat", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    senderId: userId,
-                    receiverId: friend._id
-                })
-            });
-        }
     });
 
     // Scroll to bottom of messages when new message is added

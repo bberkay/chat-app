@@ -2,6 +2,10 @@ import { Client } from "$lib/classes/Client";
 
 export async function POST({ request }: {request: Request}): Promise<any>
 {
+    /**
+     * TODO: Save the message to the database.
+     */
+
     // Get the body from the request
     const data = await request.json()
 
