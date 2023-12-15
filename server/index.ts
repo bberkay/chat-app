@@ -59,7 +59,6 @@ const server = Bun.serve<Credentials>({
             console.log("Data extracted from message:", data);
             ws.publish(ws.data.roomId, JSON.stringify(data));
             rooms[ws.data.roomId].push(data);
-            console.log(`Received message from ${ws.data.senderId} in ${ws.data.roomId} with content "${data.content}"`);
         },
     },
 });

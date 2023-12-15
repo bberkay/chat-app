@@ -30,7 +30,7 @@
     {
         document.getElementById("message-input").value = "";
         if(message.length > 0){
-            fetch("/api/chat/send-message", {
+            fetch("/api/chat/send", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

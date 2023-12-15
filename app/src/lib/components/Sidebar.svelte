@@ -50,11 +50,11 @@
         background-color: var(--front-color);
         border-right: 1px solid var(--border-color);
         position:relative;
+        display: block;
     }
 
     .hide {
-        width: 0;
-        opacity: 0;
+        display:none!important;
         border-right: 0 !important; /* remove border right from sidebar */
     }
 </style>
