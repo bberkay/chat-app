@@ -1,6 +1,7 @@
 <script lang="ts">
     import type { User, Droid } from "$lib/types";
     import { currentMessages } from "$lib/stores";
+    import { Client } from "$lib/classes/Client";
 
     // Component properties
     export let friend: User | Droid;

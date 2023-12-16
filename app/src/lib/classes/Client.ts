@@ -1,3 +1,6 @@
+/**
+ * Client class for connecting to the WebSocket server.
+ */
 export class Client{
     private static instance: Client;
     private socket: WebSocket | undefined;
@@ -22,24 +25,30 @@ export class Client{
     }
 
     /**
+     * Disconnect from the WebSocket server.
+     */
+    public disconnect(): void
+    {
+        if(this.socket){
+            this.socket.close();
+        }
+    }
+
+    /**
+     * Get the WebSocket connection.
+     */
+    public getSocket(): WebSocket | undefined
+    {
+        return this.socket;
+    }
+
+    /**
      * Send a message to the WebSocket server.
      */
     public send(data: {senderId: string, receiverId: string, content: string}): void
     {
         if(this.socket){
             this.socket.send(JSON.stringify(data));
-        }
-    }
-
-    /**
-     * Listen for messages from the WebSocket server.
-     */
-    public listen(callback: (message: any) => void): void
-    {
-        if(this.socket){
-            this.socket.addEventListener('message', (event: MessageEvent) => {
-                callback(event.data);
-            });
         }
     }
 }
