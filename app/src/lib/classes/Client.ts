@@ -3,41 +3,24 @@
  */
 export class Client{
     private static instance: Client;
-    private static socket: WebSocket | undefined;
+    private readonly socket!: WebSocket;
 
     /**
      * @constructor
      */
-    public constructor() {
+    public constructor(userId: string, friendId: string) {
         if(Client.instance){
             return Client.instance;
         }
 
         Client.instance = this;
-    }
-
-    /**
-     * Connect to the WebSocket server.
-     */
-    public static connect(senderId: string, receiverId: string): void
-    {
-        Client.socket = new WebSocket(`ws://localhost:3000/chat/${senderId}/${receiverId}`);
-    }
-
-    /**
-     * Disconnect from the WebSocket server.
-     */
-    public static disconnect(): void
-    {
-        if(this.socket){
-            this.socket.close();
-        }
+        this.socket = new WebSocket(`ws://localhost:3000/chat/${userId}/${friendId}`);
     }
 
     /**
      * Get the WebSocket connection.
      */
-    public static getSocket(): WebSocket | undefined
+    public getSocket(): WebSocket
     {
         return this.socket;
     }
@@ -45,10 +28,17 @@ export class Client{
     /**
      * Send a message to the WebSocket server.
      */
-    public static send(data: {senderId: string, receiverId: string, content: string}): void
+    public send(data: {senderId: string, receiverId: string, content: string}): void
     {
-        if(this.socket){
-            this.socket.send(JSON.stringify(data));
-        }
+        this.socket.send(JSON.stringify(data));
+    }
+
+    /**
+     * Disconnect from the WebSocket server.
+     */
+    public disconnect(): void
+    {
+        if(this.socket.readyState === WebSocket.OPEN)
+            this.socket.close();
     }
 }

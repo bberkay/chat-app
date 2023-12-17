@@ -1,7 +1,6 @@
 <script lang="ts">
     import type { User, Droid } from "$lib/types";
-    import { currentMessages } from "$lib/stores";
-    import { Client } from "$lib/classes/Client";
+    import { messagesStore } from "$lib/stores";
 
     // Component properties
     export let friend: User | Droid;
@@ -41,12 +40,6 @@
                     receiverId: friend._id,
                     content: message
                 })
-            }).then(response => {
-                if(response.ok)
-                {
-                    currentMessages.update(messages => [...messages, {senderId: userId, receiverId: friend._id, content: message}]);
-                    message = "";
-                }
             });
         }
 
@@ -58,7 +51,7 @@
         {
             // Send random message after 1 second.
             setTimeout(() => {
-                currentMessages.update((messages) => [
+                messagesStore.update((messages) => [
                     ...messages,
                     {
                         senderId: friend._id,

@@ -1,13 +1,13 @@
 <script lang="ts">
     import Chat from '$lib/components/Chat.svelte';
     import { Client } from '$lib/classes/Client';
-    import { currentMessages } from "$lib/stores";
+    import { messagesStore, clientStore } from "$lib/stores";
     import { onMount } from "svelte";
 
     export let data; // data from server
 
     // Add current messages to store
-    currentMessages.set(data.messages);
+    messagesStore.set(data.messages);
 
     /**
      * If current friend is droid, send a welcome message as droid to user. Otherwise, connect
@@ -17,7 +17,7 @@
         if(data.friend._id === "droid")
         {
             // Get the first message from droid
-            currentMessages.update((messages) => [
+            messagesStore.update((messages) => [
                 ...messages,
                 {
                     senderId: "droid",
@@ -28,10 +28,12 @@
         }
     });
 
-    // Listen to new messages from server
-    Client.getSocket().addEventListener("message", (event) => {
+    // Listen to messages from server.
+    const client = new Client(data.userId, data.friend._id);
+    clientStore.set(client);
+    client.getSocket().addEventListener("message", (event) => {
         const message = JSON.parse(event.data);
-        currentMessages.update((messages) => [...messages, message]);
+        messagesStore.update((messages) => [...messages, message]);
     });
 </script>
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { selectedUserId } from "$lib/stores";
+    import { userIdStore } from "$lib/stores";
     import type { User } from '$lib/types';
 
     export let user; // user object
@@ -19,8 +19,8 @@
             }
         });
 
-        // Update the selectedUserId store.
-        selectedUserId.set(user._id);
+        // Update the userIdStore store.
+        userIdStore.set(user._id);
     }
 </script>
 

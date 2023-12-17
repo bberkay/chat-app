@@ -1,5 +1,5 @@
 import { Mongo } from '$lib/classes/Mongo';
-import { searchResults } from "$lib/stores";
+import { searchResultsStore } from "$lib/stores";
 
 export async function GET(request: Request): Promise<Response>
 {
@@ -15,7 +15,7 @@ export async function GET(request: Request): Promise<Response>
 
     // Set the searchedUsers store to the users found(if users is null, theme it to all users)
     users = users != null && users!.length > 0 ? users : await Mongo.getAllUsers();
-    searchResults.set(users);
+    searchResultsStore.set(users);
 
     // Return the searchedUsers store
     return new Response(JSON.stringify(users), {

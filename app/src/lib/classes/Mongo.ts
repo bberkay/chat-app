@@ -1,22 +1,14 @@
 import { MONGO_URL } from '$env/static/private';
 import { MongoClient, ObjectId } from 'mongodb';
 import type { Filter, Document } from 'mongodb';
+import type { User } from '$lib/types';
 
+/**
+ * Mongo class for connecting to the MongoDB.
+ */
 export class Mongo {
-    private static instance: Mongo;
     private static client: MongoClient = new MongoClient(MONGO_URL);
     private static readonly dbName: string = MONGO_URL.split("@")[1].split(".")[0];
-
-    /**
-     * @constructor
-     */
-    public constructor() {
-        if(Mongo.instance){
-            return Mongo.instance;
-        }
-
-        Mongo.instance = this;
-    }
 
     /**
      * Connect to Mongo
@@ -65,7 +57,7 @@ export class Mongo {
     /**
      * Get All Users
      */
-    public static async getAllUsers(): Promise<any>
+    public static async getAllUsers(): Promise<User[]>
     {
         return await this.getAllDocuments("users");
     }
@@ -73,7 +65,7 @@ export class Mongo {
     /**
      * Get User by ID
      */
-    public static async getUserById(id: string): Promise<any>
+    public static async getUserById(id: string): Promise<User>
     {
         return await this.getDocumentById("users", id);
     }
@@ -81,7 +73,7 @@ export class Mongo {
     /**
      * Search User by Name
      */
-    public static async searchUserByName(name: string): Promise<any>
+    public static async searchUserByName(name: string): Promise<User[]>
     {
         return await this.searchDocumentWithFilter("users", {name: {$regex:name, $options:'i'}});
     }
@@ -89,11 +81,20 @@ export class Mongo {
     /**
      * Get Messages between Users
      */
-    public static async getMessagesBetweenUsers(senderId: string | ObjectId, receiverId: string | ObjectId): Promise<any>
+    public static async getMessagesBetweenUsers(senderId: string | ObjectId, receiverId: string | ObjectId): Promise<string[]>
     {
         senderId = senderId instanceof ObjectId ? senderId : new ObjectId(senderId);
         receiverId = receiverId instanceof ObjectId ? receiverId : new ObjectId(receiverId);
         return await this.searchDocumentWithFilter("messages", {$or: [{senderId: senderId, receiverId: receiverId}, {senderId: receiverId, receiverId: senderId}]});
     }
 
+    /**
+     * Save Message
+     */
+    public static async saveMessage(senderId: string | ObjectId, receiverId: string | ObjectId, message: string): Promise<void>
+    {
+        senderId = senderId instanceof ObjectId ? senderId : new ObjectId(senderId);
+        receiverId = receiverId instanceof ObjectId ? receiverId : new ObjectId(receiverId);
+        await this.client.db(this.dbName).collection("messages").insertOne({senderId: senderId, receiverId: receiverId, message: message});
+    }
 }

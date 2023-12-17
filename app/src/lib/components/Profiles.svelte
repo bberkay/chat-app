@@ -1,14 +1,14 @@
 <script lang="ts">
-    import { selectedUserId } from "$lib/stores";
+    import { userIdStore } from "$lib/stores";
     import ProfileCard from "$lib/components/Profiles/ProfileCard.svelte";
 
     export let users; // users from the server
     export let currentUserId; // selected user id
 
     /**
-     * Change current user id when selectedUserId store changes
+     * Change current user id when userIdStore store changes
      */
-    selectedUserId.subscribe((value) => {
+    userIdStore.subscribe((value) => {
         if(value && value.length > 0)
             currentUserId = value;
     });

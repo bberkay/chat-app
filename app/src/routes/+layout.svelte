@@ -1,5 +1,5 @@
 <script lang ="ts">
-    import { selectedUserId } from "$lib/stores";
+    import { userIdStore } from "$lib/stores";
     import Navbar from "$lib/components/Navbar.svelte";
     import Sidebar from "$lib/components/Sidebar.svelte";
 
@@ -9,7 +9,7 @@
      * Find the profile of the selected user.
      */
     let profile = data.profile;
-    selectedUserId.subscribe((value) => {
+    userIdStore.subscribe((value) => {
         if(value && value.length > 0 && value !== profile._id)
             profile = data.users.find((user) => user._id === value);
     });

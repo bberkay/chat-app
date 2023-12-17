@@ -1,6 +1,6 @@
 <script lang="ts">
     import { afterUpdate } from "svelte";
-    import { currentMessages } from "$lib/stores";
+    import { messagesStore } from "$lib/stores";
     import FriendHeader from "$lib/components/Chat/FriendHeader.svelte";
     import MessageForm from "$lib/components/Chat/MessageForm.svelte";
     import FriendMessage from "$lib/components/Chat/FriendMessage.svelte";
@@ -19,7 +19,7 @@
 <section id="chat">
     <FriendHeader name="{friend.name}" avatar="{friend.avatar}"/>
     <div id="messages">
-        {#each $currentMessages as message}
+        {#each $messagesStore as message}
             {#if message.senderId === userId}
                 <MyMessage message="{message.content}"/>
             {:else if message.receiverId === userId}

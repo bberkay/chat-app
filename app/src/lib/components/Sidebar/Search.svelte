@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { searchResults } from "$lib/stores";
+    import { searchResultsStore } from "$lib/stores";
 
     let search: string = "";
 
@@ -10,11 +10,11 @@
     {
         const response = await fetch(`/api/search?name=${search}`);
         const data = await response.json();
-        searchResults.set(data);
+        searchResultsStore.set(data);
     }
 
     // Search person if search string is at least 3 characters long
-    $: if(search.length >= 3) { searchPerson() } else { searchResults.set([]) }
+    $: if(search.length >= 3) { searchPerson() } else { searchResultsStore.set([]) }
 </script>
 
 <div id="search">
