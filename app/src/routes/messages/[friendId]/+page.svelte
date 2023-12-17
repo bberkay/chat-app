@@ -1,5 +1,6 @@
 <script lang="ts">
     import Chat from '$lib/components/Chat.svelte';
+    import { Client } from '$lib/classes/Client';
     import { currentMessages } from "$lib/stores";
     import { onMount } from "svelte";
 
@@ -28,8 +29,7 @@
     });
 
     // Listen to new messages from server
-    const socket = new WebSocket(`ws://localhost:3000/chat/${data.userId}/${data.friend._id}`);
-    socket.addEventListener("message", (event) => {
+    Client.getSocket().addEventListener("message", (event) => {
         const message = JSON.parse(event.data);
         currentMessages.update((messages) => [...messages, message]);
     });

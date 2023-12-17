@@ -3,7 +3,6 @@ import { searchResults } from "$lib/stores";
 
 export async function GET(request: Request): Promise<Response>
 {
-    const db = new Mongo();
     const url = new URL(request.url);
 
     // Find the name parameter
@@ -12,10 +11,10 @@ export async function GET(request: Request): Promise<Response>
     // If search isn't null, search for the user
     let users = null;
     if(search != null)
-        users = await db.searchUserByName(search);
+        users = await Mongo.searchUserByName(search);
 
     // Set the searchedUsers store to the users found(if users is null, theme it to all users)
-    users = users != null && users!.length > 0 ? users : await db.getAllUsers();
+    users = users != null && users!.length > 0 ? users : await Mongo.getAllUsers();
     searchResults.set(users);
 
     // Return the searchedUsers store

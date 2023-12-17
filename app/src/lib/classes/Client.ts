@@ -3,7 +3,7 @@
  */
 export class Client{
     private static instance: Client;
-    private socket: WebSocket | undefined;
+    private static socket: WebSocket | undefined;
 
     /**
      * @constructor
@@ -19,15 +19,15 @@ export class Client{
     /**
      * Connect to the WebSocket server.
      */
-    public connect(senderId: string, receiverId: string): void
+    public static connect(senderId: string, receiverId: string): void
     {
-        this.socket = new WebSocket(`ws://localhost:3000/chat/${senderId}/${receiverId}`);
+        Client.socket = new WebSocket(`ws://localhost:3000/chat/${senderId}/${receiverId}`);
     }
 
     /**
      * Disconnect from the WebSocket server.
      */
-    public disconnect(): void
+    public static disconnect(): void
     {
         if(this.socket){
             this.socket.close();
@@ -37,7 +37,7 @@ export class Client{
     /**
      * Get the WebSocket connection.
      */
-    public getSocket(): WebSocket | undefined
+    public static getSocket(): WebSocket | undefined
     {
         return this.socket;
     }
@@ -45,7 +45,7 @@ export class Client{
     /**
      * Send a message to the WebSocket server.
      */
-    public send(data: {senderId: string, receiverId: string, content: string}): void
+    public static send(data: {senderId: string, receiverId: string, content: string}): void
     {
         if(this.socket){
             this.socket.send(JSON.stringify(data));

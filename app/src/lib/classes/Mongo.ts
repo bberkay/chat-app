@@ -4,8 +4,8 @@ import type { Filter, Document } from 'mongodb';
 
 export class Mongo {
     private static instance: Mongo;
-    private client: MongoClient = new MongoClient(MONGO_URL);
-    private dbName: string = MONGO_URL.split("@")[1].split(".")[0];
+    private static client: MongoClient = new MongoClient(MONGO_URL);
+    private static readonly dbName: string = MONGO_URL.split("@")[1].split(".")[0];
 
     /**
      * @constructor
@@ -21,7 +21,7 @@ export class Mongo {
     /**
      * Connect to Mongo
      */
-    public connect(): void
+    public static connect(): void
     {
         this.client.connect().then(r => {
             console.log('Connected to Mongo');
@@ -31,7 +31,7 @@ export class Mongo {
     /**
      * Disconnect from Mongo
      */
-    public disconnect(): void
+    public static disconnect(): void
     {
         this.client.close().then(r => {
             console.log('Disconnected from Mongo');
@@ -41,7 +41,7 @@ export class Mongo {
     /**
      * Get All Documents
      */
-    private async getAllDocuments(collectionName: string): Promise<any>
+    private static async getAllDocuments(collectionName: string): Promise<any>
     {
         return await this.client.db(this.dbName).collection(collectionName).find().toArray();
     }
@@ -49,7 +49,7 @@ export class Mongo {
     /**
      * Get Document by ID
      */
-    private async getDocumentById(collectionName: string, id: string): Promise<any>
+    private static async getDocumentById(collectionName: string, id: string): Promise<any>
     {
         return await this.client.db(this.dbName).collection(collectionName).find({_id: new ObjectId(id)}).toArray();
     }
@@ -57,7 +57,7 @@ export class Mongo {
     /**
      * Search Document with Filter
      */
-    private async searchDocumentWithFilter(collectionName: string, filter: Filter<Document>): Promise<any>
+    private static async searchDocumentWithFilter(collectionName: string, filter: Filter<Document>): Promise<any>
     {
         return await this.client.db(this.dbName).collection(collectionName).find(filter).toArray();
     }
@@ -65,7 +65,7 @@ export class Mongo {
     /**
      * Get All Users
      */
-    public async getAllUsers(): Promise<any>
+    public static async getAllUsers(): Promise<any>
     {
         return await this.getAllDocuments("users");
     }
@@ -73,7 +73,7 @@ export class Mongo {
     /**
      * Get User by ID
      */
-    public async getUserById(id: string): Promise<any>
+    public static async getUserById(id: string): Promise<any>
     {
         return await this.getDocumentById("users", id);
     }
@@ -81,7 +81,7 @@ export class Mongo {
     /**
      * Search User by Name
      */
-    public async searchUserByName(name: string): Promise<any>
+    public static async searchUserByName(name: string): Promise<any>
     {
         return await this.searchDocumentWithFilter("users", {name: {$regex:name, $options:'i'}});
     }
@@ -89,7 +89,7 @@ export class Mongo {
     /**
      * Get Messages between Users
      */
-    public async getMessagesBetweenUsers(senderId: string | ObjectId, receiverId: string | ObjectId): Promise<any>
+    public static async getMessagesBetweenUsers(senderId: string | ObjectId, receiverId: string | ObjectId): Promise<any>
     {
         senderId = senderId instanceof ObjectId ? senderId : new ObjectId(senderId);
         receiverId = receiverId instanceof ObjectId ? receiverId : new ObjectId(receiverId);

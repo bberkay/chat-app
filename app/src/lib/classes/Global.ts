@@ -9,7 +9,6 @@ class GlobalStore
 {
     // Instance
     private static instance: GlobalStore;
-    private mongo: Mongo = new Mongo();
 
     /**
      * All the users in the database are stored here.
@@ -72,7 +71,7 @@ class GlobalStore
      */
     public async initialize(): Promise<void>
     {
-        this._users = await this.mongo.getAllUsers();
+        this._users = await Mongo.getAllUsers();
         this._users.map((user: User) => {
             user._id = user._id.toString();
         });
