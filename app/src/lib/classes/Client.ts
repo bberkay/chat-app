@@ -30,6 +30,7 @@ export class Client{
      */
     public send(data: {senderId: string, receiverId: string, content: string}): void
     {
+        console.log("Sending message:", data);
         this.socket.send(JSON.stringify(data));
     }
 

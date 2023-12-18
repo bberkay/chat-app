@@ -59,6 +59,7 @@ const server = Bun.serve<Credentials>({
             console.log("Data extracted from message:", data);
             ws.publish(ws.data.roomId, JSON.stringify(data));
             rooms[ws.data.roomId].push(data);
+            console.log("Current messages in room:", rooms[ws.data.roomId]);
         },
     },
 });

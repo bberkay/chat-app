@@ -1,8 +1,6 @@
 import type { User } from '$lib/types';
 import { Mongo } from '$lib/classes/Mongo';
 import { Global } from '$lib/classes/Global'
-import { Client } from '$lib/classes/Client';
-import { clientStore } from "$lib/stores";
 
 export async function load({ params, cookies }: { params: { friendId: string }, cookies: any }): Promise<{userId: string, friend: User, messages: string[]}>
 {
@@ -20,8 +18,6 @@ export async function load({ params, cookies }: { params: { friendId: string }, 
             return user;
     });
     if(!friend) throw new Error("Friend not found.");
-
-    // Connect to the server with given credentials and client.
 
     // Get messages between users from the database.
     const messages = await Mongo.getMessagesBetweenUsers(userId, friendId);

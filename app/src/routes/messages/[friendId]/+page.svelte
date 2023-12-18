@@ -26,14 +26,18 @@
                 }
             ]);
         }
-    });
+        else
+        {
+            // Connect to chat room
+            const client = new Client(data.userId, data.friend._id);
+            clientStore.set(client);
 
-    // Listen to messages from server.
-    const client = new Client(data.userId, data.friend._id);
-    clientStore.set(client);
-    client.getSocket().addEventListener("message", (event) => {
-        const message = JSON.parse(event.data);
-        messagesStore.update((messages) => [...messages, message]);
+            // Listen to messages from friend
+            client.getSocket().addEventListener("message", (event) => {
+                const message = JSON.parse(event.data);
+                messagesStore.update((messages) => [...messages, message]);
+            });
+        }
     });
 </script>
 

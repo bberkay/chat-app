@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { User, Droid } from "$lib/types";
-    import { messagesStore } from "$lib/stores";
+    import { messagesStore, clientStore } from "$lib/stores";
 
     // Component properties
     export let friend: User | Droid;
@@ -30,16 +30,36 @@
     {
         document.getElementById("message-input").value = "";
         if(message.length > 0){
-            fetch("/api/chat/send", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
+            clientStore.subscribe((client) => {
+                // Send message to the server
+                client.send({
                     senderId: userId,
                     receiverId: friend._id,
                     content: message
-                })
+                });
+
+                // Save message to the store
+                messagesStore.update((messages) => [
+                    ...messages,
+                    {
+                        senderId: userId,
+                        receiverId: friend._id,
+                        content: message
+                    }
+                ]);
+
+                // Save message to the database
+                fetch("/api/mongo/save-message", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        senderId: userId,
+                        receiverId: friend._id,
+                        content: message
+                    })
+                });
             });
         }
 
