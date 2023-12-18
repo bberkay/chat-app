@@ -34,8 +34,8 @@
 
             // Listen to messages from friend
             client.getSocket().addEventListener("message", (event) => {
-                const message = JSON.parse(event.data);
-                messagesStore.update((messages) => [...messages, message]);
+                let message = JSON.parse(event.data);
+                messagesStore.update((messages) => [...messages, ...(message instanceof Array ? message : [message])]);
             });
         }
     });
