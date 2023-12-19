@@ -47,8 +47,8 @@ const server = Bun.serve<Credentials>({
              * current messages in the room.
              */
             ws.subscribe(ws.data.roomId);
+            ws.send(JSON.stringify(rooms[ws.data.roomId]));
             console.log(`Subscribed to ${ws.data.roomId} as ${ws.data.senderId} and currently has ${JSON.stringify(rooms[ws.data.roomId])} messages`);
-            ws.send(JSON.stringify(rooms[ws.data.roomId])); // TODO: Eski mesajlar geç gidiyor, burası hızlandırılmalı.
         },
         async message(ws: ServerWebSocket<Credentials>, message: string | Buffer): Promise<void>
         {
