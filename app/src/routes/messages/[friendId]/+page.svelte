@@ -1,13 +1,13 @@
 <script lang="ts">
     import Chat from '$lib/components/Chat.svelte';
-    import { Client } from '$lib/classes/Client';
-    import { messagesStore, clientStore } from "$lib/stores";
+    import { messagesStore, clientStore, profileStore } from "$lib/stores";
     import { onMount } from "svelte";
+    import { Client } from "$lib/classes/Client";
 
-    export let data; // data from server
-
-    // Add current messages to store
+    // Data from +page.server.ts
+    export let data;
     messagesStore.set(data.messages);
+    profileStore.set(data.profile);
 
     /**
      * If current friend is droid, send a welcome message as droid to user. Otherwise, connect
@@ -21,15 +21,19 @@
                 ...messages,
                 {
                     senderId: "droid",
-                    receiverId: data.userId,
+                    receiverId: data.profile._id,
                     content: `Hi, I'm ${data.friend.name}! I will send you a random message every time when you send me a message.`
                 }
             ]);
         }
         else
         {
-            // Connect to chat room
-            const client = new Client(data.userId, data.friend._id);
+            /**
+             * Client
+             * Connect to Server with Client and store it in the clientStore for use in other components.
+             */
+            const client = new Client();
+            if(!client.isConnected()) client.connect();
             clientStore.set(client);
 
             // Listen to messages from friend
@@ -41,4 +45,4 @@
     });
 </script>
 
-<Chat friend="{data.friend}" userId="{data.userId}"/>
+<Chat friend="{data.friend}" profile="{data.profile}"/>

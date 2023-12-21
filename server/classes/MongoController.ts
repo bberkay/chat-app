@@ -1,14 +1,13 @@
-import { MONGO_URL } from '$env/static/private';
 import { MongoClient, ObjectId } from 'mongodb';
 import type { Filter, Document } from 'mongodb';
-import type { User } from '$lib/types';
+import type { User } from '../types';
 
 /**
  * Mongo class for connecting to the MongoDB.
  */
 export class Mongo {
-    private static client: MongoClient = new MongoClient(MONGO_URL);
-    private static readonly dbName: string = MONGO_URL.split("@")[1].split(".")[0];
+    private static client: MongoClient = new MongoClient(Bun.env.MONGO_URL!);
+    private static readonly dbName: string = Bun.env.MONGO_URL!.split("@")[1].split(".")[0];
 
     /**
      * Connect to Mongo
@@ -67,13 +66,14 @@ export class Mongo {
      */
     public static async getUserById(id: string): Promise<User>
     {
-        return await this.getDocumentById("users", id);
+        const users = await this.getDocumentById("users", id)
+        return users[0];
     }
 
     /**
      * Search User by Name
      */
-    public static async searchUserByName(name: string): Promise<User[]>
+    public static async searchUsersByName(name: string): Promise<User[]>
     {
         return await this.searchDocumentWithFilter("users", {name: {$regex:name, $options:'i'}});
     }
@@ -91,10 +91,10 @@ export class Mongo {
     /**
      * Save Message
      */
-    public static async saveMessage(senderId: string | ObjectId, receiverId: string | ObjectId, message: string): Promise<void>
+    public static async saveMessage(senderId: string | ObjectId, receiverId: string | ObjectId, message: string): Promise<any>
     {
         senderId = senderId instanceof ObjectId ? senderId : new ObjectId(senderId);
         receiverId = receiverId instanceof ObjectId ? receiverId : new ObjectId(receiverId);
-        await this.client.db(this.dbName).collection("messages").insertOne({senderId: senderId, receiverId: receiverId, message: message});
+        return await this.client.db(this.dbName).collection("messages").insertOne({senderId: senderId, receiverId: receiverId, message: message});
     }
 }

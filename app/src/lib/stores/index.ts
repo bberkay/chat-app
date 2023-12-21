@@ -7,7 +7,7 @@ import type { User } from '$lib/types';
  * @description Store for the selected user id in the profile page for
  * changing the selected user in real time.
  */
-export const userIdStore: Writable<string> = writable('');
+export const profileStore: Writable<User> = writable();
 
 /**
  * @description Store for the search results that is used to

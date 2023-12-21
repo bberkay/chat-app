@@ -7,7 +7,7 @@
     import MyMessage from "$lib/components/Chat/MyMessage.svelte";
 
     export let friend;
-    export let userId;
+    export let profile;
 
     // Scroll to bottom of messages when new message is added
     afterUpdate(() => {
@@ -20,14 +20,14 @@
     <FriendHeader name="{friend.name}" avatar="{friend.avatar}"/>
     <div id="messages">
         {#each $messagesStore as message}
-            {#if message.senderId === userId}
+            {#if message.senderId === profile._id}
                 <MyMessage message="{message.content}"/>
-            {:else if message.receiverId === userId}
+            {:else if message.receiverId === profile._id}
                 <FriendMessage friendAvatar="{friend.avatar}" message="{message.content}"/>
             {/if}
         {/each}
     </div>
-    <MessageForm friend="{friend}" userId="{userId}"/>
+    <MessageForm friend="{friend}" profile="{profile}"/>
 </section>
 
 <style>

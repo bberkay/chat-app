@@ -1,23 +1,22 @@
 <script lang ="ts">
-    import { userIdStore } from "$lib/stores";
     import Navbar from "$lib/components/Navbar.svelte";
     import Sidebar from "$lib/components/Sidebar.svelte";
+    import { profileStore } from "$lib/stores"
 
-    export let data; // data from the server
+    // Data from the server(+layout.server.ts)
+    export let data;
+    profileStore.set(data.profile);
 
-    /**
-     * Find the profile of the selected user.
-     */
-    let profile = data.profile;
-    userIdStore.subscribe((value) => {
-        if(value && value.length > 0 && value !== profile._id)
-            profile = data.users.find((user) => user._id === value);
+    // Get the profile from the data, also subscribe to the userIdStore to listen for profile changes.
+    let profile = data.profile
+    profileStore.subscribe((value) => {
+        profile = data.users.find((user) => user._id === value._id);
     });
 </script>
 
 <main class="{data.theme}">
     <Navbar theme="{data.theme}"/>
-    <Sidebar users="{data.users}" profile="{profile}"/>
+    <Sidebar profile="{profile}" users="{data.users}"/>
 
     <!-- Content -->
     <slot/>

@@ -1,5 +1,6 @@
-import { Mongo } from '$lib/classes/Mongo';
+import { Server } from "$lib/classes/Server";
 import { searchResultsStore } from "$lib/stores";
+import type { User } from "$lib/types";
 
 export async function GET(request: Request): Promise<Response>
 {
@@ -9,12 +10,12 @@ export async function GET(request: Request): Promise<Response>
     const search = url.searchParams.get("name");
 
     // If search isn't null, search for the user
-    let users = null;
+    let users: User[] | undefined;
     if(search != null)
-        users = await Mongo.searchUserByName(search);
+        users = await Server.searchUsersByName(search);
 
     // Set the searchedUsers store to the users found(if users is null, theme it to all users)
-    users = users != null && users!.length > 0 ? users : await Mongo.getAllUsers();
+    users = users && users!.length > 0 ? users : await Server.getUsersWithDroid();
     searchResultsStore.set(users);
 
     // Return the searchedUsers store

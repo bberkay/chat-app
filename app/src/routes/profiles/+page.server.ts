@@ -1,14 +1,17 @@
-import { Global } from "$lib/classes/Global";
+import { Server } from "$lib/classes/Server";
 import type { User } from '$lib/types';
 
-export async function load({ cookies }: {cookies: any}): Promise<{users: Array<User>, currentUserId: string}>
+export async function load({ cookies }: {cookies: any}): Promise<{users: Array<User>, profile: User}>
 {
-    // Get the selected user id from the cookies
-    const currentUserId = JSON.parse(cookies.get("profile"))._id;
+    // Get the users from the server.
+    const users: User[] = await Server.getUsers();
+
+    // Get the profile from the cookies.
+    const profile: User = JSON.parse(cookies.get("profile"));
 
     // Return the users
     return {
-        users: Global.users,
-        currentUserId: currentUserId
+        users: users,
+        profile: profile
     };
 }

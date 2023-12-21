@@ -1,19 +1,17 @@
 <script lang="ts">
-    import type { User } from '$lib/types';
-
-    export let user; // user object
+    export let user;
 
     /**
      * Show messages
      */
-    function showMessages(user: User)
+    function showMessages(userId: string)
     {
         // go to messages page
-        window.location.href = `/messages/${user._id}`;
+        window.location.href = `/messages/${userId}`;
     }
 </script>
 
-<div class="friend-card" on:click={showMessages(user)}>
+<div class="friend-card" on:click={showMessages(user._id)}>
     <div class="friend-avatar">
         <img src="{user.avatar}" alt="">
     </div>

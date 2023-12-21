@@ -1,20 +1,47 @@
+import { Global } from "$lib/classes/Global";
+import { profileStore } from "$lib/stores";
+import { get } from "svelte/store";
+
 /**
  * Client class for connecting to the WebSocket server.
  */
 export class Client{
     private static instance: Client;
-    private readonly socket!: WebSocket;
+    private socket: WebSocket | undefined;
 
     /**
      * @constructor
      */
-    public constructor(userId: string, friendId: string) {
+    public constructor() {
         if(Client.instance){
             return Client.instance;
         }
 
         Client.instance = this;
-        this.socket = new WebSocket(`ws://localhost:3000/chat/${userId}/${friendId}`);
+    }
+
+    /**
+     * Connect to the WebSocket server.
+     */
+    public connect(): void
+    {
+        if(this.socket)
+            throw new Error("Socket is already defined, please disconnect from the WebSocket server with client.disconnect()");
+        else if(!get(profileStore))
+            throw new Error("Profile store is not defined yet, please connect to the WebSocket server after the profile store is defined");
+
+        this.socket = new WebSocket(`ws://${Global.SERVER_ADDRESS}/chat/${get(profileStore)._id}`);
+    }
+
+    /**
+     * Check if the client is connected to the WebSocket server.
+     */
+    public isConnected(): boolean
+    {
+        if(!this.socket)
+            return false;
+
+        return this.socket.readyState === WebSocket.OPEN;
     }
 
     /**
@@ -22,6 +49,9 @@ export class Client{
      */
     public getSocket(): WebSocket
     {
+        if(!this.socket)
+            throw new Error("Socket is not defined, please connect to the WebSocket server with client.connect()");
+
         return this.socket;
     }
 
@@ -30,6 +60,9 @@ export class Client{
      */
     public send(data: {senderId: string, receiverId: string, content: string}): void
     {
+        if(!this.socket)
+            throw new Error("Socket is not defined, please connect to the WebSocket server with client.connect()");
+
         this.socket.send(JSON.stringify(data));
     }
 
@@ -38,6 +71,9 @@ export class Client{
      */
     public disconnect(): void
     {
+        if(!this.socket)
+            throw new Error("Socket is not defined, please connect to the WebSocket server with client.connect()");
+
         if(this.socket.readyState === WebSocket.OPEN)
             this.socket.close();
     }

@@ -1,10 +1,9 @@
 <script lang="ts">
     import Profiles from '$lib/components/Profiles.svelte';
-
-    export let data; // data from server
+    export let data;
 </script>
 
-<Profiles users="{data.users}" currentUserId="{data.currentUserId}"/>
+<Profiles users="{data.users}" profile="{data.profile}"/>
 
 
 

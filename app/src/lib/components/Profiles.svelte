@@ -1,16 +1,14 @@
 <script lang="ts">
-    import { userIdStore } from "$lib/stores";
     import ProfileCard from "$lib/components/Profiles/ProfileCard.svelte";
+    import { profileStore } from "$lib/stores";
 
-    export let users; // users from the server
-    export let currentUserId; // selected user id
+    export let users;
+    export let profile;
 
-    /**
-     * Change current user id when userIdStore store changes
-     */
-    userIdStore.subscribe((value) => {
-        if(value && value.length > 0)
-            currentUserId = value;
+    // Change current user id when userIdStore store changes
+    let currentUserId = profile._id;
+    profileStore.subscribe((value) => {
+        currentUserId = value._id;
     });
 </script>
 
@@ -21,7 +19,9 @@
     </div>
     <div id="profile-container">
         {#each users as user}
-            <ProfileCard user="{user}" isSelected={currentUserId === user._id}/>
+            {#if user._id !== "droid"}
+                <ProfileCard user="{user}" isSelected={currentUserId === user._id}/>
+            {/if}
         {/each}
     </div>
 </section>

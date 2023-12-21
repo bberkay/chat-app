@@ -1,13 +1,12 @@
 <script lang="ts">
     import { onMount } from "svelte"
-    import { searchResultsStore, userIdStore } from '$lib/stores';
+    import { searchResultsStore, profileStore } from '$lib/stores';
     import Search from '$lib/components/Sidebar/Search.svelte';
     import Profile from '$lib/components/Sidebar/Profile.svelte';
     import FriendCard from '$lib/components/Sidebar/FriendCard.svelte';
 
-    // Users and current profile from the classes
-    export let users;
     export let profile;
+    export let users;
 
     // Listen for window resize
     let innerWidth;
@@ -27,7 +26,7 @@
     });
 
     // Remove current user from search results
-    userIdStore.subscribe(() => { searchedUsers = users });
+    profileStore.subscribe(() => { searchedUsers = users });
     $: searchedUsers = searchedUsers.filter(user => user._id !== profile._id);
 </script>
 
@@ -37,10 +36,10 @@
     <Search />
     {#each searchedUsers as user}
         {#if user._id !== profile._id}
-            <FriendCard user={user}/>
+            <FriendCard user="{user}"/>
         {/if}
     {/each}
-    <Profile profile={profile}/>
+    <Profile user="{profile}"/>
     <span class = "hide"></span>
 </section>
 

@@ -4,7 +4,7 @@
 
     // Component properties
     export let friend: User | Droid;
-    export let userId: string;
+    export let profile: User;
 
     // Current message
     let message;
@@ -31,35 +31,25 @@
         document.getElementById("message-input").value = "";
         if(message.length > 0){
             clientStore.subscribe((client) => {
-                // Send message to the server
-                client.send({
-                    senderId: userId,
-                    receiverId: friend._id,
-                    content: message
-                });
+                if(friend._id !== "droid")
+                {
+                    // Send message to the server
+                    client.send({
+                        senderId: profile._id,
+                        receiverId: friend._id,
+                        content: message
+                    });
+                }
 
                 // Save message to the store
                 messagesStore.update((messages) => [
                     ...messages,
                     {
-                        senderId: userId,
+                        senderId: profile._id,
                         receiverId: friend._id,
                         content: message
                     }
                 ]);
-
-                // Save message to the database
-                fetch("/api/mongo/save-message", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        senderId: userId,
-                        receiverId: friend._id,
-                        content: message
-                    })
-                });
             });
         }
 
@@ -75,7 +65,7 @@
                     ...messages,
                     {
                         senderId: friend._id,
-                        receiverId: userId,
+                        receiverId: profile._id,
                         content: friend.readyMessages[Math.floor(Math.random() * friend.readyMessages.length)]
                     }
                 ]);

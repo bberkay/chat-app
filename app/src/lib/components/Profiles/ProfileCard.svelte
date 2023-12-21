@@ -1,6 +1,6 @@
 <script lang="ts">
-    import { userIdStore } from "$lib/stores";
     import type { User } from '$lib/types';
+    import { profileStore } from '$lib/stores';
 
     export let user; // user object
     export let isSelected; // is the user selected
@@ -19,8 +19,8 @@
             }
         });
 
-        // Update the userIdStore store.
-        userIdStore.set(user._id);
+        // Update the profile store
+        profileStore.set(user);
     }
 </script>
 
