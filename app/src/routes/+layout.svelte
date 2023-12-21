@@ -1,7 +1,9 @@
 <script lang ="ts">
+    import { Client } from "$lib/classes/Client";
     import Navbar from "$lib/components/Navbar.svelte";
     import Sidebar from "$lib/components/Sidebar.svelte";
-    import { profileStore } from "$lib/stores"
+    import { profileStore, clientStore, messagesStore } from "$lib/stores"
+    import { onMount } from "svelte";
 
     // Data from the server(+layout.server.ts)
     export let data;
@@ -11,7 +13,24 @@
     let profile = data.profile
     profileStore.subscribe((value) => {
         profile = data.users.find((user) => user._id === value._id);
-    });
+    })
+
+    // Listen messages from the server.
+    onMount(() => {
+        /**
+         * Client
+         * Connect to Server with Client and store it in the clientStore for use in other components.
+         */
+        const client = new Client();
+        if(!client.isConnected()) client.connect();
+        clientStore.set(client);
+
+        // Listen to messages from friend
+        client.getSocket().addEventListener("message", (event) => {
+            let message = JSON.parse(event.data);
+            messagesStore.update((messages) => [...messages, ...(message instanceof Array ? message : [message])]);
+        });
+    })
 </script>
 
 <main class="{data.theme}">

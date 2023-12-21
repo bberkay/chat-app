@@ -91,15 +91,14 @@ const server = Bun.serve<{ userId: string }>({
             if (user._id === userId)
                 continue;
 
-            const roomId: string = `${userId}-${user._id}`;
-            if (!rooms[roomId]) {
+            const roomId: string = [userId, user._id].sort().join("-");
+            if (!rooms[roomId])
                 rooms[roomId] = [];
-            }
         }
 
-        const success: boolean = server.upgrade(req, {data: userId});
+        const success: boolean = server.upgrade(req, { data: { userId } });
         if (success) {
-            // Bun automatically returns a 101 Switching Protocols if the upgrade succeeds
+            console.log(`User[${userId}] connected to the server.`);
             return undefined;
         }
 
@@ -112,13 +111,16 @@ const server = Bun.serve<{ userId: string }>({
             if(ws.data.userId === undefined)
                 return;
 
+            console.log(`User[${ws.data.userId}] connected to the WebSocket server.`);
+
             // Subscribe to the rooms that the user is in
-            for(const room in rooms[ws.data.userId])
+            for(const room in rooms)
             {
-                if(room.includes(ws.data.userId))
+                if(room.includes(ws.data.userId)){
+                    console.log(`User[${ws.data.userId}] subscribed to room[${room}].`);
                     ws.subscribe(room);
+                }
             }
-            console.log(`${ws.data.userId} connected to the server`);
         },
         async message(ws: ServerWebSocket<{ userId: string }>, message: string | Buffer): Promise<void>
         {
@@ -128,10 +130,10 @@ const server = Bun.serve<{ userId: string }>({
              */
             const data: Message = JSON.parse(message as string);
             const roomId: string = [data.senderId, data.receiverId].sort().join("-");
-            console.log("Data extracted from message:", data);
+            console.log(`Publishing message to room[${roomId}]:`, data);
             ws.publish(roomId, JSON.stringify(data));
             rooms[roomId].push(data);
-            console.log("Current messages in room:", rooms[roomId]);
+            console.log(`Current messages in room[${roomId}]:`, rooms[roomId]);
         },
     },
 });
