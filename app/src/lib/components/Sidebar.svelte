@@ -1,6 +1,7 @@
 <script lang="ts">
     import { onMount } from "svelte"
-    import { searchResultsStore, profileStore } from '$lib/stores';
+    import type { Message } from '$lib/types';
+    import { searchResultsStore, profileStore, messagesStore } from '$lib/stores';
     import Search from '$lib/components/Sidebar/Search.svelte';
     import Profile from '$lib/components/Sidebar/Profile.svelte';
     import FriendCard from '$lib/components/Sidebar/FriendCard.svelte';
@@ -8,7 +9,9 @@
     export let profile;
     export let users;
 
-    // Listen for window resize
+    /**
+     * Responsive Sidebar
+     */
     let innerWidth;
     onMount(() => {
         innerWidth = window.innerWidth;
@@ -19,7 +22,10 @@
         document.querySelector('#sidebar')?.classList.remove('hide');
     }
 
-    // Subscribe to the store for search results
+    /**
+     * Search
+     * Subscribe to the store for search results
+     */
     let searchedUsers = [];
     searchResultsStore.subscribe((value) => {
         searchedUsers = value.length > 0 ? value : users;

@@ -2,8 +2,9 @@
     import { Client } from "$lib/classes/Client";
     import Navbar from "$lib/components/Navbar.svelte";
     import Sidebar from "$lib/components/Sidebar.svelte";
-    import { profileStore, clientStore, messagesStore } from "$lib/stores"
-    import { onMount } from "svelte";
+    import { profileStore, clientStore, messagesStore, lastMessageStore } from "$lib/stores"
+    import { onMount } from "svelte"
+    import { get } from "svelte/store"
 
     // Data from the server(+layout.server.ts)
     export let data;
@@ -28,7 +29,8 @@
         // Listen to messages from friend
         client.getSocket().addEventListener("message", (event) => {
             let message = JSON.parse(event.data);
-            messagesStore.update((messages) => [...messages, ...(message instanceof Array ? message : [message])]);
+            lastMessageStore.set({...get(lastMessageStore), ...{[message.senderId]: message.content}});
+            messagesStore.update((messages) => [...messages, ...(message instanceof Array ? message : [message])])
         });
     })
 </script>

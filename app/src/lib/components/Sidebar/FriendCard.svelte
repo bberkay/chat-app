@@ -1,14 +1,19 @@
 <script lang="ts">
+    import { lastMessageStore } from "$lib/stores";
+    import { get } from "svelte/store";
+
     export let user;
 
-    /**
-     * Show messages
-     */
+    // Show messages page
     function showMessages(userId: string)
     {
         // go to messages page
         window.location.href = `/messages/${userId}`;
     }
+
+    // Get last message
+    let lastMessage;
+    $: lastMessage = get(lastMessageStore)[user._id];
 </script>
 
 <div class="friend-card" on:click={showMessages(user._id)}>
@@ -17,7 +22,7 @@
     </div>
     <div class="message-info">
         <span>{user.name}</span>
-        <span>{user.lastMessage ?? "Lorem ipsum dolar sit amet..."}</span>
+        <span>{@html lastMessage ?? "<i>No messages yet</i>"}</span>
     </div>
     {#if user._id === 'droid'}
         <div class="droid-icon">

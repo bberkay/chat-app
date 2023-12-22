@@ -6,6 +6,7 @@ main{
     --front-bright-color: #F9FAFB;
     --border-color: #E5E8EA;
     --outline-color: #D1D5D8;
+    --accent-color: #1A73E8;
 }
 
 main.dark{
@@ -15,6 +16,7 @@ main.dark{
     --front-bright-color: #373B41;
     --border-color: #1A1C1F;
     --outline-color: #2A2D31;
+    --accent-color: #1A73E8;
 }
 
 /* General */

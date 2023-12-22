@@ -22,7 +22,7 @@
         {#each $messagesStore as message}
             {#if message.senderId === profile._id}
                 <MyMessage message="{message.content}"/>
-            {:else if message.receiverId === profile._id}
+            {:else if message.receiverId === profile._id && message.senderId === friend._id}
                 <FriendMessage friendAvatar="{friend.avatar}" message="{message.content}"/>
             {/if}
         {/each}

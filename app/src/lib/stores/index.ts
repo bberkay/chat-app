@@ -22,6 +22,12 @@ export const searchResultsStore: Writable<User[]> = writable([]);
 export const messagesStore: Writable<string[]> = writable([]);
 
 /**
+ * @description Store for the last message that is used to
+ * display the last message received in real time.
+ */
+export const lastMessageStore: Writable<{User: string} | {}> = writable({});
+
+/**
  * @description Store for the socket that is used to
  * send and receive messages in real time.
  */
