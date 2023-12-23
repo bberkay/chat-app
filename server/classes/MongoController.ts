@@ -81,7 +81,7 @@ export class Mongo {
     /**
      * Get Messages between Users
      */
-    public static async getMessagesBetweenUsers(senderId: string | ObjectId, receiverId: string | ObjectId): Promise<string[]>
+    public static async getMessagesBetweenUsers(senderId: string | ObjectId, receiverId: string | ObjectId): Promise<{senderId: string, receiverId: string, content: string, sentDate: any}[]>
     {
         senderId = senderId instanceof ObjectId ? senderId : new ObjectId(senderId);
         receiverId = receiverId instanceof ObjectId ? receiverId : new ObjectId(receiverId);

@@ -1,11 +1,14 @@
 <script lang="ts">
-    import Chat from '$lib/components/Chat.svelte';
-    import { messagesStore, profileStore } from "$lib/stores";
     import { onMount } from "svelte";
+    import { afterUpdate } from "svelte";
+    import { messagesStore, profileStore } from "$lib/stores";
+    import FriendHeader from "$lib/components/Chat/FriendHeader.svelte";
+    import MessageForm from "$lib/components/Chat/MessageForm.svelte";
+    import FriendMessage from "$lib/components/Chat/FriendMessage.svelte";
+    import MyMessage from "$lib/components/Chat/MyMessage.svelte";
 
     // Data from +page.server.ts
     export let data;
-    messagesStore.set(data.messages);
     profileStore.set(data.profile);
 
     /**
@@ -26,6 +29,39 @@
             ]);
         }
     });
+
+    // Scroll to bottom of messages when new message is added
+    afterUpdate(() => {
+        const messagesDiv = document.getElementById("messages");
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    });
 </script>
 
-<Chat friend="{data.friend}" profile="{data.profile}"/>
+<section id="chat">
+    <FriendHeader name="{data.friend.name}" avatar="{data.friend.avatar}"/>
+    <div id="messages">
+        {#each $messagesStore as message}
+            {#if message.senderId === data.profile._id}
+                <MyMessage message="{message.content}"/>
+            {:else if message.receiverId === data.profile._id && message.senderId === data.friend._id}
+                <FriendMessage friendAvatar="{data.friend.avatar}" message="{message.content}"/>
+            {/if}
+        {/each}
+    </div>
+    <MessageForm friend="{data.friend}" profile="{data.profile}"/>
+</section>
+
+<style>
+    #chat {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        width: 100%;
+    }
+
+    #messages{
+        padding: 1.5rem 1.5rem 0;
+        overflow-y: scroll;
+        height: 100%;
+    }
+</style>

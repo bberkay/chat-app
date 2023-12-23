@@ -24,14 +24,6 @@ export class Server
     }
 
     /**
-     * Get all messages between users from the server by using the api.
-     */
-    public static async getMessagesBetweenUsers(userId: string, friendId: string): Promise<string[]>
-    {
-        return fetch(`http://${Global.SERVER_ADDRESS}/api/get-messages/${userId}/${friendId}`).then(res => res.json());
-    }
-
-    /**
      * Get a user from the server by using the api.
      */
     public static async getUserById(id: string): Promise<User | undefined>

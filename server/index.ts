@@ -33,20 +33,6 @@ async function handleApiOperation(pathname: string): Promise<Response>
             return new Response(JSON.stringify(r), { status: 200 });
         });
     }
-    else if(pathname.includes("/get-messages"))
-    {
-        // params[0] = senderId, params[1] = receiverId
-        return await Mongo.getMessagesBetweenUsers(params[0], params[1]).then(r => {
-            r.map((message: any) => {
-                message._id = message._id.toString();
-                message.senderId = message.senderId.toString();
-                message.receiverId = message.receiverId.toString();
-                message.sentDate = message.sentDate.toString();
-            });
-            return new Response(JSON.stringify(r), { status: 200 });
-        });
-
-    }
     else if(pathname.includes("/search-users"))
     {
         // params[0] = searchedName
@@ -118,8 +104,20 @@ const server = Bun.serve<{ userId: string, friendId: string, roomId: string }>({
 
             // Send the current messages in the room to the user.
             console.log("Current messages in room: ", rooms[ws.data.roomId]);
-            if(rooms[ws.data.roomId].length > 0)
+            if(rooms[ws.data.roomId].length > 0){
+                /*
+                // TODO: Burada rooms tamamen kaldırılacağından concat a gerek kalmayacak.
+                const messages = await Mongo.getMessagesBetweenUsers(ws.data.userId, ws.data.friendId);
+                messages.map((message: any) => {
+                    message._id = message._id.toString();
+                    message.senderId = message.senderId.toString();
+                    message.receiverId = message.receiverId.toString();
+                    message.sentDate = message.sentDate.toString();
+                });
+                messages = messages.concat(rooms[ws.data.roomId]);
+                ws.send(JSON.stringify({type: MessageType.CurrentMessages, data: messages}));*/
                 ws.send(JSON.stringify({type: MessageType.CurrentMessages, data: rooms[ws.data.roomId]}));
+            }
         },
         async message(ws: ServerWebSocket<{ userId: string }>, message: string | Buffer): Promise<void>
         {
@@ -133,7 +131,8 @@ const server = Bun.serve<{ userId: string, friendId: string, roomId: string }>({
             ws.publish(roomId, JSON.stringify({type: MessageType.NewMessage, data: data}));
             rooms[roomId].push(data); // NOTE: This is not a good way to store messages. Use a database instead.
 
-            // Save the message to the database
+            // TODO: Save the message to the database
+            // FIXME: yine burada rooms kaldırılacak.
             // await Mongo.saveMessage(data.senderId, data.receiverId, data.content);
 
             console.log(`Current messages in room[${roomId}]:`, rooms[roomId]);
