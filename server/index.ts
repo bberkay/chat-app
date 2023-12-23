@@ -98,17 +98,18 @@ const server = Bun.serve<{ userId: string, friendId: string, roomId: string }>({
                 for(const room in rooms)
                 {
                     if(room.includes(ws.data.userId)){
-                        console.log(`User[${ws.data.userId}] subscribed to room[${room}].`);
                         ws.subscribe(room);
+                        console.log(`User[${ws.data.userId}] subscribed to room[${room}].`);
 
                         // Send the last message in the room to the user(these messages will showing at bottom of the user on the sidebar).
-                        if(rooms[room].length > 0)
+                        if(rooms[room].length > 0){
                             ws.send(JSON.stringify({type: MessageType.LastMessage, data: rooms[room][rooms[room].length - 1]}));
+                            console.log(`Last message in room[${room}] sent to user:`, rooms[room][rooms[room].length - 1]);
+                        }
                     }
                 }
 
                 // Send the current messages in the room to the user.
-                console.log("Current messages in room: ", rooms[ws.data.roomId]);
                 if(rooms[ws.data.roomId].length > 0){
                     /*
                     // TODO: Burada rooms tamamen kaldırılacağından concat a gerek kalmayacak.
@@ -122,6 +123,7 @@ const server = Bun.serve<{ userId: string, friendId: string, roomId: string }>({
                     messages = messages.concat(rooms[ws.data.roomId]);
                     ws.send(JSON.stringify({type: MessageType.CurrentMessages, data: messages}));*/
                     ws.send(JSON.stringify({type: MessageType.CurrentMessages, data: rooms[ws.data.roomId]}));
+                    console.log("Current messages in room: ", rooms[ws.data.roomId]);
                 }
             }catch(e){
                 console.error(e);
@@ -137,14 +139,11 @@ const server = Bun.serve<{ userId: string, friendId: string, roomId: string }>({
                  */
                 const data: Message = JSON.parse(message as string);
                 const roomId: string = [data.senderId, data.receiverId].sort().join("-");
-                console.log(`Publishing message to room[${roomId}]:`, data);
                 ws.publish(roomId, JSON.stringify({type: MessageType.NewMessage, data: data}));
-                rooms[roomId].push(data); // NOTE: This is not a good way to store messages. Use a database instead.
-
+                console.log(`Publishing message to room[${roomId}]:`, data);
+                rooms[roomId].push(data);
                 // TODO: Save the message to the database
-                // FIXME: yine burada rooms kaldırılacak.
                 // await Mongo.saveMessage(data.senderId, data.receiverId, data.content);
-
                 console.log(`Current messages in room[${roomId}]:`, rooms[roomId]);
             }catch(e){
                 console.error(e);

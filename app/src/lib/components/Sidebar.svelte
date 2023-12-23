@@ -4,6 +4,7 @@
     import Search from '$lib/components/Sidebar/Search.svelte';
     import Profile from '$lib/components/Sidebar/Profile.svelte';
     import FriendCard from '$lib/components/Sidebar/FriendCard.svelte';
+    import { get } from 'svelte/store';
 
     export let profile;
     export let users;
@@ -45,6 +46,7 @@
         if (index > 0) { // if user is not already at the top of the list
             const temp = searchedUsers.splice(index, 1);
             searchedUsers.unshift(temp[0]);
+            users = searchedUsers;
             searchedUsers = searchedUsers; // force update
         }
     });
@@ -56,7 +58,7 @@
     <Search />
     {#each searchedUsers as user}
         {#if user._id !== profile._id}
-            <FriendCard user="{user}"/>
+            <FriendCard user="{user}" lastMessage="{get(lastMessagesStore)[user._id]}"/>
         {/if}
     {/each}
     <Profile user="{profile}"/>

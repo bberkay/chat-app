@@ -1,8 +1,6 @@
 <script lang="ts">
-    import { get } from "svelte/store";
-    import { lastMessagesStore } from "$lib/stores";
-
     export let user;
+    export let lastMessage;
 
     // Show messages page
     function showMessages(userId: string)
@@ -17,7 +15,7 @@
     </div>
     <div class="message-info">
         <span>{user.name}</span>
-        <span>{@html get(lastMessagesStore)[user._id] ?? "<i>No messages yet</i>"}</span>
+        <span>{@html lastMessage ?? "<i>No messages yet</i>"}</span>
     </div>
     {#if user._id === 'droid'}
         <div class="droid-icon">
