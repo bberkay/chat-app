@@ -61,7 +61,11 @@ const server = Bun.serve<{ userId: string, friendId: string, roomId: string }>({
         if (url.pathname.includes("/api/"))
         {
             console.log(`API operation[${url.pathname}] requested.`)
-            return handleApiOperation(url.pathname);
+            try{
+                return handleApiOperation(url.pathname);
+            }catch(e){
+                return new Response("Unexpected error while handling API operation.", { status: 500 });
+            }
         }
 
         // Create friendship rooms for each user(because all users are friends with each other)
@@ -84,58 +88,68 @@ const server = Bun.serve<{ userId: string, friendId: string, roomId: string }>({
     websocket: {
         open(ws: ServerWebSocket<{ userId: string, friendId: string, roomId: string }>): void
         {
-            if(ws.data.userId === undefined)
-                return;
+            try{
+                if(ws.data.userId === undefined)
+                    return;
 
-            console.log(`User[${ws.data.userId}] connected to the WebSocket server.`);
+                console.log(`User[${ws.data.userId}] connected to the WebSocket server.`);
 
-            // Subscribe to the rooms that the user is in
-            for(const room in rooms)
-            {
-                if(room.includes(ws.data.userId)){
-                    console.log(`User[${ws.data.userId}] subscribed to room[${room}].`);
-                    ws.subscribe(room);
+                // Subscribe to the rooms that the user is in
+                for(const room in rooms)
+                {
+                    if(room.includes(ws.data.userId)){
+                        console.log(`User[${ws.data.userId}] subscribed to room[${room}].`);
+                        ws.subscribe(room);
 
-                    // Send the last message in the room to the user(these messages will showing at bottom of the user on the sidebar).
-                    if(rooms[room].length > 0)
-                        ws.send(JSON.stringify({type: MessageType.LastMessage, data: rooms[room][rooms[room].length - 1]}));
+                        // Send the last message in the room to the user(these messages will showing at bottom of the user on the sidebar).
+                        if(rooms[room].length > 0)
+                            ws.send(JSON.stringify({type: MessageType.LastMessage, data: rooms[room][rooms[room].length - 1]}));
+                    }
                 }
-            }
 
-            // Send the current messages in the room to the user.
-            console.log("Current messages in room: ", rooms[ws.data.roomId]);
-            if(rooms[ws.data.roomId].length > 0){
-                /*
-                // TODO: Burada rooms tamamen kaldırılacağından concat a gerek kalmayacak.
-                const messages = await Mongo.getMessagesBetweenUsers(ws.data.userId, ws.data.friendId);
-                messages.map((message: any) => {
-                    message._id = message._id.toString();
-                    message.senderId = message.senderId.toString();
-                    message.receiverId = message.receiverId.toString();
-                    message.sentDate = message.sentDate.toString();
-                });
-                messages = messages.concat(rooms[ws.data.roomId]);
-                ws.send(JSON.stringify({type: MessageType.CurrentMessages, data: messages}));*/
-                ws.send(JSON.stringify({type: MessageType.CurrentMessages, data: rooms[ws.data.roomId]}));
+                // Send the current messages in the room to the user.
+                console.log("Current messages in room: ", rooms[ws.data.roomId]);
+                if(rooms[ws.data.roomId].length > 0){
+                    /*
+                    // TODO: Burada rooms tamamen kaldırılacağından concat a gerek kalmayacak.
+                    const messages = await Mongo.getMessagesBetweenUsers(ws.data.userId, ws.data.friendId);
+                    messages.map((message: any) => {
+                        message._id = message._id.toString();
+                        message.senderId = message.senderId.toString();
+                        message.receiverId = message.receiverId.toString();
+                        message.sentDate = message.sentDate.toString();
+                    });
+                    messages = messages.concat(rooms[ws.data.roomId]);
+                    ws.send(JSON.stringify({type: MessageType.CurrentMessages, data: messages}));*/
+                    ws.send(JSON.stringify({type: MessageType.CurrentMessages, data: rooms[ws.data.roomId]}));
+                }
+            }catch(e){
+                console.error(e);
+                ws.close(500, "Unexpected error while opening WebSocket connection.");
             }
         },
         async message(ws: ServerWebSocket<{ userId: string }>, message: string | Buffer): Promise<void>
         {
-            /**
-             * When a client sends a message, find the room that the message belongs to
-             * and publish the message to that room.
-             */
-            const data: Message = JSON.parse(message as string);
-            const roomId: string = [data.senderId, data.receiverId].sort().join("-");
-            console.log(`Publishing message to room[${roomId}]:`, data);
-            ws.publish(roomId, JSON.stringify({type: MessageType.NewMessage, data: data}));
-            rooms[roomId].push(data); // NOTE: This is not a good way to store messages. Use a database instead.
+            try{
+                /**
+                 * When a client sends a message, find the room that the message belongs to
+                 * and publish the message to that room.
+                 */
+                const data: Message = JSON.parse(message as string);
+                const roomId: string = [data.senderId, data.receiverId].sort().join("-");
+                console.log(`Publishing message to room[${roomId}]:`, data);
+                ws.publish(roomId, JSON.stringify({type: MessageType.NewMessage, data: data}));
+                rooms[roomId].push(data); // NOTE: This is not a good way to store messages. Use a database instead.
 
-            // TODO: Save the message to the database
-            // FIXME: yine burada rooms kaldırılacak.
-            // await Mongo.saveMessage(data.senderId, data.receiverId, data.content);
+                // TODO: Save the message to the database
+                // FIXME: yine burada rooms kaldırılacak.
+                // await Mongo.saveMessage(data.senderId, data.receiverId, data.content);
 
-            console.log(`Current messages in room[${roomId}]:`, rooms[roomId]);
+                console.log(`Current messages in room[${roomId}]:`, rooms[roomId]);
+            }catch(e){
+                console.error(e);
+                ws.close(500, "Unexpected error while handling message.");
+            }
         },
     },
 });
