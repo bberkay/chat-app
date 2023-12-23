@@ -23,14 +23,14 @@ export class Client{
     /**
      * Connect to the WebSocket server.
      */
-    public connect(): void
+    public connect(friendId: string): void
     {
         if(this.socket)
             throw new Error("Socket is already defined, please disconnect from the WebSocket server with client.disconnect()");
         else if(!get(profileStore))
             throw new Error("Profile store is not defined yet, please connect to the WebSocket server after the profile store is defined");
 
-        this.socket = new WebSocket(`ws://${Global.SERVER_ADDRESS}/chat/${get(profileStore)._id}`);
+        this.socket = new WebSocket(`ws://${Global.SERVER_ADDRESS}/chat/${get(profileStore)._id}/${friendId}`);
     }
 
     /**

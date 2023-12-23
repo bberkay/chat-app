@@ -1,11 +1,10 @@
 /**
- * Type for the data that is sent in the url
- * @example /chat/1/2 -> { senderId: "1", receiverId: "2", roomId: "1-2" }
+ * Enum for the type of the message that is sent to the WebSocket server.
  */
-export type Credentials = {
-    senderId: string;
-    receiverId: string;
-    roomId: string;
+export enum MessageType{
+    CurrentMessages = "CurrentMessages",
+    LastMessage = "LastMessage",
+    NewMessage = "NewMessage"
 }
 
 /**

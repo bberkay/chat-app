@@ -1,4 +1,4 @@
-import { User, Message } from "./types";
+import { User, Message, MessageType } from "./types";
 import type { Server, ServerWebSocket } from "bun";
 import { Mongo } from "./classes/MongoController";
 
@@ -47,13 +47,6 @@ async function handleApiOperation(pathname: string): Promise<Response>
         });
 
     }
-    else if(pathname.includes("/save-message"))
-    {
-        // params[0] = senderId, params[1] = receiverId, params[2] = message
-        return await Mongo.saveMessage(params[0], params[1], params[2]).then(r => {
-            return new Response(JSON.stringify(r), { status: 200 });
-        });
-    }
     else if(pathname.includes("/search-users"))
     {
         // params[0] = searchedName
@@ -74,7 +67,7 @@ async function handleApiOperation(pathname: string): Promise<Response>
  * Create a WebSocket server that listens on /chat/:senderId/:receiverId.
  * @example /chat/1/2
  */
-const server = Bun.serve<{ userId: string }>({
+const server = Bun.serve<{ userId: string, friendId: string, roomId: string }>({
     async fetch(req: Request, server: Server): Promise<Response | undefined> {
         const url = new URL(req.url);
 
@@ -86,17 +79,14 @@ const server = Bun.serve<{ userId: string }>({
         }
 
         // Create friendship rooms for each user(because all users are friends with each other)
-        const userId: string = req.url.split("/chat/")[1];
-        for (const user of users) {
-            if (user._id === userId)
-                continue;
+        const params = req.url.split("/chat/")[1].split("/");
+        const userId: string = params[0];
+        const friendId: string = params[1];
+        const roomId: string = [userId, friendId].sort().join("-");
+        if (!rooms[roomId])
+            rooms[roomId] = [];
 
-            const roomId: string = [userId, user._id].sort().join("-");
-            if (!rooms[roomId])
-                rooms[roomId] = [];
-        }
-
-        const success: boolean = server.upgrade(req, { data: { userId } });
+        const success: boolean = server.upgrade(req, { data: { userId, friendId, roomId } });
         if (success) {
             console.log(`User[${userId}] connected to the server.`);
             return undefined;
@@ -106,7 +96,7 @@ const server = Bun.serve<{ userId: string }>({
         return new Response("Not found", {status: 404});
     },
     websocket: {
-        open(ws: ServerWebSocket<{ userId: string }>): void
+        open(ws: ServerWebSocket<{ userId: string, friendId: string, roomId: string }>): void
         {
             if(ws.data.userId === undefined)
                 return;
@@ -119,8 +109,17 @@ const server = Bun.serve<{ userId: string }>({
                 if(room.includes(ws.data.userId)){
                     console.log(`User[${ws.data.userId}] subscribed to room[${room}].`);
                     ws.subscribe(room);
+
+                    // Send the last message in the room to the user(these messages will showing at bottom of the user on the sidebar).
+                    if(rooms[room].length > 0)
+                        ws.send(JSON.stringify({type: MessageType.LastMessage, data: rooms[room][rooms[room].length - 1]}));
                 }
             }
+
+            // Send the current messages in the room to the user.
+            console.log("Current messages in room: ", rooms[ws.data.roomId]);
+            if(rooms[ws.data.roomId].length > 0)
+                ws.send(JSON.stringify({type: MessageType.CurrentMessages, data: rooms[ws.data.roomId]}));
         },
         async message(ws: ServerWebSocket<{ userId: string }>, message: string | Buffer): Promise<void>
         {
@@ -131,8 +130,12 @@ const server = Bun.serve<{ userId: string }>({
             const data: Message = JSON.parse(message as string);
             const roomId: string = [data.senderId, data.receiverId].sort().join("-");
             console.log(`Publishing message to room[${roomId}]:`, data);
-            ws.publish(roomId, JSON.stringify(data));
-            rooms[roomId].push(data);
+            ws.publish(roomId, JSON.stringify({type: MessageType.NewMessage, data: data}));
+            rooms[roomId].push(data); // NOTE: This is not a good way to store messages. Use a database instead.
+
+            // Save the message to the database
+            // await Mongo.saveMessage(data.senderId, data.receiverId, data.content);
+
             console.log(`Current messages in room[${roomId}]:`, rooms[roomId]);
         },
     },
