@@ -13,13 +13,7 @@
     function changeTheme() {
         theme = theme == "dark" ? "light" : "dark";
         document.querySelector("main").classList.toggle("dark");
-        fetch("/api/theme", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ theme }),
-        });
+        fetch("/api/theme", { method: "POST" });
     }
 
     /**

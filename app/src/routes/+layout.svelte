@@ -20,24 +20,27 @@
      * Client
      * Connect to Server with Client and store it in the clientStore for use in other components.
      */
-    const client = new Client();
-    if(!client.isConnected()){
-        const friendId = $page.url.pathname.split("/messages/")[1];
-        client.connect(friendId);
-        clientStore.set(client);
-    }
-
-    // Listen to messages from friend and also store the last messages.
-    client.getSocket().addEventListener("message", (event) => {
-        let message = JSON.parse(event.data);
-        console.log(message);
-        if(message.type === MessageType.NewMessage || message.type === MessageType.CurrentMessages)
-            messagesStore.update((messages) => [...messages, ...(message.type === MessageType.CurrentMessages ? message.data : [message.data])]);
-        else if(message.type === MessageType.NewMessage || message.type === MessageType.LastMessage){
-            const friendId = message.data.senderId === profile._id ? message.data.receiverId : message.data.senderId;
-            lastMessagesStore.update((messages) => { return {...messages, ...{[friendId]: message.data.content}} });
+    const friendId = $page.url.pathname.split("/messages/")[1];
+    if(friendId) // If user currently is in a chat, connect to client for messaging.
+    {
+        const client = new Client();
+        if(!client.isConnected()){
+            client.connect(friendId);
+            clientStore.set(client);
         }
-    });
+
+        // Listen to messages from friend and also store the last messages.
+        client.getSocket().addEventListener("message", (event) => {
+            let message = JSON.parse(event.data);
+            console.log(message);
+            if(message.type === MessageType.NewMessage || message.type === MessageType.CurrentMessages)
+                messagesStore.update((messages) => [...messages, ...(message.type === MessageType.CurrentMessages ? message.data : [message.data])]);
+            else if(message.type === MessageType.NewMessage || message.type === MessageType.LastMessage){
+                const friendId = message.data.senderId === profile._id ? message.data.receiverId : message.data.senderId;
+                lastMessagesStore.update((messages) => { return {...messages, ...{[friendId]: message.data.content}} });
+            }
+        });
+    }
 </script>
 
 <main class="{data.theme}">

@@ -3,10 +3,10 @@ export async function POST({ request, cookies }: {request: Request, cookies: any
     try
     {
         // Get the body from the request
-        const newTheme = await request.json();
+        const currentTheme = cookies.get("theme");
 
         // Set the profile cookie to the selected user
-        cookies.set('theme', newTheme.theme.toString(), { path: '/' });
+        cookies.set('theme', currentTheme === "dark" ? "light" : "dark", { path: '/' });
 
         // Return a 200 response
         return new Response("Theme changed successfully.", {
