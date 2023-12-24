@@ -32,6 +32,14 @@ export class Server
     }
 
     /**
+     * Get the last message between two users from the server by using the api.
+     */
+    public static async getLastMessageBetweenUsers(user1: string, user2: string): Promise<string | undefined>
+    {
+        return fetch(`http://${Global.SERVER_ADDRESS}/api/get-last-message/${user1}/${user2}`).then(res => res.text());
+    }
+
+    /**
      * Get a user from the server by using the api.
      */
     public static async searchUsersByName(name: string): Promise<User[] | undefined>

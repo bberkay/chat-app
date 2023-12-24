@@ -41,7 +41,7 @@
     <FriendHeader name="{data.friend.name}" avatar="{data.friend.avatar}"/>
     <div id="messages">
         {#each $messagesStore as message}
-            {#if message.senderId === data.profile._id}
+            {#if message.senderId === data.profile._id && message.receiverId === data.friend._id}
                 <MyMessage message="{message.content}"/>
             {:else if message.receiverId === data.profile._id && message.senderId === data.friend._id}
                 <FriendMessage friendAvatar="{data.friend.avatar}" message="{message.content}"/>
@@ -56,7 +56,7 @@
         display: flex;
         flex-direction: column;
         height: 100%;
-        width: 100%;
+        width: 100%!important;
     }
 
     #messages{

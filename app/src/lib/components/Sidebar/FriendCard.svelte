@@ -1,21 +1,50 @@
 <script lang="ts">
-    export let user;
-    export let lastMessage;
+    import { onMount } from "svelte";
+    import { profileStore, messagesStore } from "$lib/stores";
+    import { get } from "svelte/store";
 
-    // Show messages page
-    function showMessages(userId: string)
+    export let user;
+    let lastMessageOfUser;
+
+    /**
+     * Get the last message of the user
+     */
+    async function getLastMessageBetweenUsers(user1: string, user2: string): Promise<string>
     {
-        window.location.href = `/messages/${userId}`;
+        const response = await fetch(`/api/messages/last?user1=${user1}&user2=${user2}`);
+        return await response.text();
+    }
+
+    // Get the last message of the user when the component is mounted or when the profile is changed.
+    onMount(async () => {
+        if(user._id !== "droid")
+            lastMessageOfUser = await getLastMessageBetweenUsers(user._id, get(profileStore)._id);
+
+        profileStore.subscribe(async (profile) => {
+            if(user._id !== "droid")
+                lastMessageOfUser = await getLastMessageBetweenUsers(user._id, profile._id);
+            else
+                lastMessageOfUser = "";
+        });
+    });
+
+    // Set the last message of the user if the new message is from the user or to the user
+    if(user._id !== "droid"){
+        messagesStore.subscribe((messages) => {
+            const lastMessage = messages[messages.length - 1];
+            if(lastMessage && (lastMessage.senderId === user._id || lastMessage.receiverId === user._id))
+                lastMessageOfUser = lastMessage.content;
+        });
     }
 </script>
 
-<div class="friend-card" on:click={showMessages(user._id)}>
+<div class="friend-card" on:click={() => { window.location.href = `/messages/${user._id}` }}>
     <div class="friend-avatar">
         <img src="{user.avatar}" alt="">
     </div>
     <div class="message-info">
         <span>{user.name}</span>
-        <span>{@html lastMessage ?? "<i>No messages yet</i>"}</span>
+        <span>{@html lastMessageOfUser && lastMessageOfUser.length > 0 ? lastMessageOfUser : (user._id === "droid" ? "<i>Start a conversation</i>" : "<i>No messages yet</i>")}</span>
     </div>
     {#if user._id === 'droid'}
         <div class="droid-icon">

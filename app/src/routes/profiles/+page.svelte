@@ -27,7 +27,7 @@
 
 <style>
     #profiles{
-        width:100%;
+        width:100% !important;
         padding:1rem;
     }
 

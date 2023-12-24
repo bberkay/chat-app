@@ -38,10 +38,7 @@ export class Client{
      */
     public isConnected(): boolean
     {
-        if(!this.socket)
-            return false;
-
-        return this.socket.readyState === WebSocket.OPEN;
+        return this.socket !== undefined;
     }
 
     /**

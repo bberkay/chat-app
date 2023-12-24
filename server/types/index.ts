@@ -3,7 +3,6 @@
  */
 export enum MessageType{
     CurrentMessages = "CurrentMessages",
-    LastMessage = "LastMessage",
     NewMessage = "NewMessage"
 }
 

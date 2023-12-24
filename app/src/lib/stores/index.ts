@@ -16,12 +16,6 @@ export const profileStore: Writable<User> = writable();
 export const searchResultsStore: Writable<User[]> = writable([]);
 
 /**
- * @description Store for the last message that is used to
- * display the last message between users in real time.
- */
-export const lastMessagesStore: Writable<{string: string} | {}> = writable({});
-
-/**
  * @description Store for the current messages that is used to
  * display the messages between users in real time.
  */

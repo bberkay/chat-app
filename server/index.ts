@@ -33,6 +33,16 @@ async function handleApiOperation(pathname: string): Promise<Response>
             return new Response(JSON.stringify(r), { status: 200 });
         });
     }
+    else if (pathname.includes("/get-last-message"))
+    {
+        // params[0] = user1, params[1] = user2
+        const roomId: string = [params[0], params[1]].sort().join("-");
+        if(!rooms[roomId] || rooms[roomId].length === 0)
+            return new Response('', { status: 200 });
+
+        const lastMessage: string = rooms[roomId][rooms[roomId].length - 1].content;
+        return new Response(lastMessage, { status: 200 });
+    }
     else if(pathname.includes("/search-users"))
     {
         // params[0] = searchedName
@@ -77,10 +87,8 @@ const server = Bun.serve<{ userId: string, friendId: string, roomId: string }>({
             rooms[roomId] = [];
 
         const success: boolean = server.upgrade(req, { data: { userId, friendId, roomId } });
-        if (success) {
-            console.log(`User[${userId}] connected to the server.`);
+        if (success)
             return undefined;
-        }
 
         // handle HTTP request normally
         return new Response("Not found", {status: 404});
@@ -88,7 +96,8 @@ const server = Bun.serve<{ userId: string, friendId: string, roomId: string }>({
     websocket: {
         open(ws: ServerWebSocket<{ userId: string, friendId: string, roomId: string }>): void
         {
-            try{
+            try
+            {
                 if(ws.data.userId === undefined)
                     return;
 
@@ -100,32 +109,17 @@ const server = Bun.serve<{ userId: string, friendId: string, roomId: string }>({
                     if(room.includes(ws.data.userId)){
                         ws.subscribe(room);
                         console.log(`User[${ws.data.userId}] subscribed to room[${room}].`);
-
-                        // Send the last message in the room to the user(these messages will showing at bottom of the user on the sidebar).
-                        if(rooms[room].length > 0){
-                            ws.send(JSON.stringify({type: MessageType.LastMessage, data: rooms[room][rooms[room].length - 1]}));
-                            console.log(`Last message in room[${room}] sent to user:`, rooms[room][rooms[room].length - 1]);
-                        }
                     }
                 }
 
                 // Send the current messages in the room to the user.
                 if(rooms[ws.data.roomId].length > 0){
-                    /*
-                    // TODO: Burada rooms tamamen kaldırılacağından concat a gerek kalmayacak.
-                    const messages = await Mongo.getMessagesBetweenUsers(ws.data.userId, ws.data.friendId);
-                    messages.map((message: any) => {
-                        message._id = message._id.toString();
-                        message.senderId = message.senderId.toString();
-                        message.receiverId = message.receiverId.toString();
-                        message.sentDate = message.sentDate.toString();
-                    });
-                    messages = messages.concat(rooms[ws.data.roomId]);
-                    ws.send(JSON.stringify({type: MessageType.CurrentMessages, data: messages}));*/
                     ws.send(JSON.stringify({type: MessageType.CurrentMessages, data: rooms[ws.data.roomId]}));
-                    console.log("Current messages in room: ", rooms[ws.data.roomId]);
+                    console.log(`Sending current messages to user[${ws.data.userId}]:`, rooms[ws.data.roomId]);
                 }
-            }catch(e){
+            }
+            catch(e)
+            {
                 console.error(e);
                 ws.close(500, "Unexpected error while opening WebSocket connection.");
             }
@@ -142,9 +136,6 @@ const server = Bun.serve<{ userId: string, friendId: string, roomId: string }>({
                 ws.publish(roomId, JSON.stringify({type: MessageType.NewMessage, data: data}));
                 console.log(`Publishing message to room[${roomId}]:`, data);
                 rooms[roomId].push(data);
-                // TODO: Save the message to the database
-                // await Mongo.saveMessage(data.senderId, data.receiverId, data.content);
-                console.log(`Current messages in room[${roomId}]:`, rooms[roomId]);
             }catch(e){
                 console.error(e);
                 ws.close(500, "Unexpected error while handling message.");

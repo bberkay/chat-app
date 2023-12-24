@@ -88,6 +88,7 @@ export class Mongo {
         return await this.searchDocumentWithFilter("messages", {$or: [{senderId: senderId, receiverId: receiverId}, {senderId: receiverId, receiverId: senderId}]});
     }
 
+
     /**
      * Save Message
      */
