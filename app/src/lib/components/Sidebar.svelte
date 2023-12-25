@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount } from "svelte"
-    import { searchResultsStore, profileStore } from '$lib/stores';
+    import { searchResultsStore, profileStore, messagesStore } from '$lib/stores';
     import Search from '$lib/components/Sidebar/Search.svelte';
     import Profile from '$lib/components/Sidebar/Profile.svelte';
     import FriendCard from '$lib/components/Sidebar/FriendCard.svelte';
@@ -33,6 +33,22 @@
     // Remove current user from search results
     profileStore.subscribe(() => { searchedUsers = users });
     $: searchedUsers = searchedUsers.filter(user => user._id !== profile._id);
+
+    /**
+     * Messages
+     * Sort friends by last message when a new message is received.
+     */
+    messagesStore.subscribe((value) => {
+        if(value.length === 0) return;
+        const lastMessage = value[value.length - 1];
+        const index = searchedUsers.findIndex(user => user._id === lastMessage.senderId);
+        if (index > 0) { // if user is not already at the top of the list
+            const temp = searchedUsers.splice(index, 1);
+            searchedUsers.unshift(temp[0]);
+            users = searchedUsers;
+            searchedUsers = searchedUsers; // force update
+        }
+    });
 </script>
 
 <svelte:window bind:innerWidth/>

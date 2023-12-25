@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { onMount } from "svelte";
+    import { onMount, afterUpdate } from "svelte";
     import { profileStore, messagesStore } from "$lib/stores";
     import { get } from "svelte/store";
 
@@ -15,27 +15,34 @@
         return await response.text();
     }
 
-    // Get the last message of the user when the component is mounted or when the profile is changed.
+    /**
+     * Get the last message of the user when the component is mounted and
+     * every time the profile changes or new message is sent.
+     */
     onMount(async () => {
         if(user._id !== "droid")
+        {
             lastMessageOfUser = await getLastMessageBetweenUsers(user._id, get(profileStore)._id);
 
-        profileStore.subscribe(async (profile) => {
-            if(user._id !== "droid")
-                lastMessageOfUser = await getLastMessageBetweenUsers(user._id, profile._id);
-            else
-                lastMessageOfUser = "";
-        });
+            //
+            profileStore.subscribe(async (profile) => { lastMessageOfUser = await getLastMessageBetweenUsers(user._id, profile._id) });
+            messagesStore.subscribe((messages) => {
+                const lastMessage = messages[messages.length - 1];
+                if(lastMessage && (lastMessage.senderId === user._id || lastMessage.receiverId === user._id))
+                    lastMessageOfUser = lastMessage.content;
+            });
+        }
     });
 
-    // Set the last message of the user if the new message is from the user or to the user
-    if(user._id !== "droid"){
-        messagesStore.subscribe((messages) => {
-            const lastMessage = messages[messages.length - 1];
-            if(lastMessage && (lastMessage.senderId === user._id || lastMessage.receiverId === user._id))
-                lastMessageOfUser = lastMessage.content;
-        });
-    }
+    /**
+     * Get the last message of the user when the component is updated(this happens
+     * when the friend cards are updated/moved to the top of the list
+     * after a new message is sent).
+     */
+    afterUpdate(async () => {
+        if(user._id !== "droid")
+            lastMessageOfUser = await getLastMessageBetweenUsers(user._id, get(profileStore)._id);
+    });
 </script>
 
 <div class="friend-card" on:click={() => { window.location.href = `/messages/${user._id}` }}>

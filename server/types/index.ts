@@ -8,12 +8,13 @@ export enum MessageType{
 
 /**
  *  Type for the data that is sent in the message
- *  @example { senderId: "1", content: "Hello" }
  */
 export type Message = {
+    _id: string;
     senderId: string;
     receiverId: string;
     content: string;
+    sentDate: Date;
 }
 
 /**

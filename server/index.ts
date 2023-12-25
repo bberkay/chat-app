@@ -60,6 +60,18 @@ async function handleApiOperation(pathname: string): Promise<Response>
 }
 
 /**
+ * Create random 24 character string that starts with 657.
+ */
+function createMessageId(): string
+{
+    const chars: string = "0123456789abcdefghijklmnopqrstuvwxyz";
+    let result: string = "657";
+    for(let i = 0; i < 21; i++)
+        result += chars[Math.floor(Math.random() * chars.length)];
+    return result;
+}
+
+/**
  * Create a WebSocket server that listens on /chat/:senderId/:receiverId.
  * @example /chat/1/2
  */
@@ -132,6 +144,8 @@ const server = Bun.serve<{ userId: string, friendId: string, roomId: string }>({
                  * and publish the message to that room.
                  */
                 const data: Message = JSON.parse(message as string);
+                data._id = createMessageId();
+                data.sentDate = new Date();
                 const roomId: string = [data.senderId, data.receiverId].sort().join("-");
                 ws.publish(roomId, JSON.stringify({type: MessageType.NewMessage, data: data}));
                 console.log(`Publishing message to room[${roomId}]:`, data);

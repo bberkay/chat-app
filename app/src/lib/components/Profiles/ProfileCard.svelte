@@ -8,7 +8,7 @@
     /**
      * Selects the user
      */
-    function selectUser(user: User): void
+    async function selectUser(user: User): void
     {
         // Send a request to the server to profile the user and save it to the cookies.
         fetch(`/api/profile/select`, {
@@ -17,10 +17,10 @@
             headers: {
                 'Content-Type': 'application/json'
             }
+        }).then(async (response) => {
+            if (response.ok)
+                profileStore.set(user);
         });
-
-        // Update the profile store
-        profileStore.set(user);
     }
 </script>
 
@@ -33,7 +33,7 @@
         {#if isSelected}
             <button class = "selected" disabled>Selected</button>
         {:else}
-            <button on:click={() => { selectUser(user) }}>Select</button>
+            <button on:click={async () => { await selectUser(user) }}>Select</button>
         {/if}
     </div>
 </div>

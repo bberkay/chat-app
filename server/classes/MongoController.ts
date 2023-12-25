@@ -96,6 +96,6 @@ export class Mongo {
     {
         senderId = senderId instanceof ObjectId ? senderId : new ObjectId(senderId);
         receiverId = receiverId instanceof ObjectId ? receiverId : new ObjectId(receiverId);
-        return await this.client.db(this.dbName).collection("messages").insertOne({senderId: senderId, receiverId: receiverId, message: message});
+        return await this.client.db(this.dbName).collection("messages").insertOne({senderId: senderId, receiverId: receiverId, content: message, sentDate: new Date()});
     }
 }
