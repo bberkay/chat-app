@@ -10,7 +10,7 @@
 
 <h3>Introduction</h3>
 <p>This is a simple chat application with SvelteKit, Bun, and MongoDB. It's designed to demonstrate how these technologies can seamlessly integrate to create a real-time, user-friendly chat experience as easily as possible.</p>
-<img src="https://i.ibb.co/gtctgXY/sveltekit-mongodb-banner.jpg" alt="sveltekit-mongodb" border="0">
+<img src="#" alt="sveltekit-mongodb" border="0">
 
 <h3>Features</h3>
 
