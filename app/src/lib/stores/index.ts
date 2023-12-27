@@ -10,6 +10,11 @@ import type { User } from '$lib/types';
 export const profileStore: Writable<User> = writable();
 
 /**
+ * @description Store for
+ */
+export const friendsStore: Writable<User[]> = writable([]);
+
+/**
  * @description Store for the search results that is used to
  * display the search results in real time.
  */

@@ -1,6 +1,7 @@
 import { Server } from "$lib/classes/Server";
 import type { User } from '$lib/types';
-import {profileStore} from "$lib/stores";
+import { profileStore, friendsStore } from "$lib/stores";
+import { get } from 'svelte/store';
 
 export async function load({ cookies }: {cookies: any}): Promise<{theme: string, users: User[], profile: User}>
 {
@@ -18,7 +19,12 @@ export async function load({ cookies }: {cookies: any}): Promise<{theme: string,
      * Users
      * Get the users from the server.
      */
-    const users: User[] = await Server.getUsersWithDroid();
+    let users: User[] = get(friendsStore);
+    if(!users || users.length === 0)
+    {
+        users = await Server.getUsersWithDroid();
+        friendsStore.set(users);
+    }
 
     /**
      * Profile
@@ -27,16 +33,16 @@ export async function load({ cookies }: {cookies: any}): Promise<{theme: string,
     let profile = cookies.get('profile') ? JSON.parse(cookies.get('profile')) : undefined;
     if (!profile)
     {
-        if(users.length === 0) throw new Error('No users found for using as default profile.');
-        profile = users[0];
+        if(get(friendsStore).length === 0) throw new Error('No users found for using as default profile.');
+        profile = get(friendsStore)[0];
         cookies.set('profile', JSON.stringify(profile), { path: '/' });
     }
     profileStore.set(profile);
 
 
     return {
-        profile: profile,
         users: users,
+        profile: profile,
         theme: theme
     };
 }

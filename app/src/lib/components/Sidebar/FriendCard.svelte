@@ -5,6 +5,7 @@
 
     export let user;
     let lastMessageOfUser;
+    let currentProfile = get(profileStore);
 
     /**
      * Get the last message of the user
@@ -22,15 +23,18 @@
     onMount(async () => {
         if(user._id !== "droid")
         {
-            lastMessageOfUser = await getLastMessageBetweenUsers(user._id, get(profileStore)._id);
-
-            //
-            profileStore.subscribe(async (profile) => { lastMessageOfUser = await getLastMessageBetweenUsers(user._id, profile._id) });
             messagesStore.subscribe((messages) => {
                 const lastMessage = messages[messages.length - 1];
                 if(lastMessage && (lastMessage.senderId === user._id || lastMessage.receiverId === user._id))
                     lastMessageOfUser = lastMessage.content;
             });
+
+            profileStore.subscribe(async (profile) => {
+                if(profile._id !== currentProfile._id)
+                    lastMessageOfUser = await getLastMessageBetweenUsers(user._id, profile._id)
+            });
+
+            lastMessageOfUser = lastMessageOfUser ? lastMessageOfUser : await getLastMessageBetweenUsers(user._id, get(profileStore)._id);
         }
     });
 
@@ -40,7 +44,7 @@
      * after a new message is sent).
      */
     afterUpdate(async () => {
-        if(user._id !== "droid")
+        if(user._id !== "droid" && !lastMessageOfUser && get(profileStore)._id !== currentProfile._id)
             lastMessageOfUser = await getLastMessageBetweenUsers(user._id, get(profileStore)._id);
     });
 </script>

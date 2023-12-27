@@ -21,18 +21,23 @@
      * Connect to Server with Client and store it in the clientStore for use in other components.
      */
     const client = new Client();
-    if(!client.isConnected()){
-        const friendId = $page.url.pathname.split("/messages/")[1];
-        client.connect(friendId);
+    if(!client.isConnected())
+    {
         clientStore.set(client);
+        const friendId = $page.url.pathname.split("/messages/")[1];
+        if(friendId)
+            client.connect(friendId);
     }
 
     // Listen to messages from friend and also store the last messages.
-    client.getSocket().addEventListener("message", (event) => {
-        let message = JSON.parse(event.data);
-        if(message.type === MessageType.NewMessage || message.type === MessageType.CurrentMessages)
-            messagesStore.update((messages) => [...messages, ...(message.type === MessageType.CurrentMessages ? message.data : [message.data])]);
-    });
+    if(client.isConnected())
+    {
+        client.getSocket().addEventListener("message", (event) => {
+            let message = JSON.parse(event.data);
+            if(message.type === MessageType.NewMessage || message.type === MessageType.CurrentMessages)
+                messagesStore.update((messages) => [...messages, ...(message.type === MessageType.CurrentMessages ? message.data : [message.data])]);
+        });
+    }
 </script>
 
 <main class="{data.theme}">
