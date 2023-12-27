@@ -1,6 +1,6 @@
-import { Global } from "$lib/classes/Global";
 import type { User } from "$lib/types";
 import { droid } from "$lib/classes/Droid";
+import { PUBLIC_SERVER_ADDRESS as SERVER_ADDRESS } from "$env/static/public";
 
 /**
  * This class is used for getting data from the server.
@@ -12,7 +12,7 @@ export class Server
      */
     public static async getUsers(): Promise<User[]>
     {
-        return fetch(`http://${Global.SERVER_ADDRESS}/api/get-users`).then((res) => res.json());
+        return fetch(`http://${SERVER_ADDRESS}/api/get-users`).then((res) => res.json()) as Promise<User[]>;
     }
 
     /**
@@ -28,7 +28,7 @@ export class Server
      */
     public static async getUserById(id: string): Promise<User | undefined>
     {
-        return fetch(`http://${Global.SERVER_ADDRESS}/api/get-user/${id}`).then(res => res.json());
+        return fetch(`http://${SERVER_ADDRESS}/api/get-user/${id}`).then(res => res.json()) as Promise<User | undefined>;
     }
 
     /**
@@ -36,7 +36,7 @@ export class Server
      */
     public static async getLastMessageBetweenUsers(user1: string, user2: string): Promise<string | undefined>
     {
-        return fetch(`http://${Global.SERVER_ADDRESS}/api/get-last-message/${user1}/${user2}`).then(res => res.text());
+        return fetch(`http://${SERVER_ADDRESS}/api/get-last-message/${user1}/${user2}`).then(res => res.text());
     }
 
     /**
@@ -44,6 +44,6 @@ export class Server
      */
     public static async searchUsersByName(name: string): Promise<User[] | undefined>
     {
-        return fetch(`http://${Global.SERVER_ADDRESS}/api/search-users/${name}`).then(res => res.json());
+        return fetch(`http://${SERVER_ADDRESS}/api/search-users/${name}`).then(res => res.json()) as Promise<User[] | undefined>;
     }
 }
