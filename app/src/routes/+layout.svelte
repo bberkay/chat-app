@@ -34,6 +34,7 @@
     {
         client.getSocket().addEventListener("message", (event) => {
             let message = JSON.parse(event.data);
+            console.log(message);
             if(message.type === MessageType.NewMessage || message.type === MessageType.CurrentMessages)
                 messagesStore.update((messages) => [...messages, ...(message.type === MessageType.CurrentMessages ? message.data : [message.data])]);
         });

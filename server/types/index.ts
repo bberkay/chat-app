@@ -7,10 +7,20 @@ export enum MessageType{
 }
 
 /**
+ * Enum for the type of the api operations.
+ */
+export enum ApiOperation{
+    GetUsers = "get-users",
+    GetUser = "get-user",
+    GetLastMessage = "get-last-message",
+    SearchUsers = "search-users"
+}
+
+/**
  *  Type for the data that is sent in the message
  */
 export type Message = {
-    _id: string;
+    _id?: string;
     senderId: string;
     receiverId: string;
     content: string;

@@ -12,8 +12,7 @@
      */
     async function getLastMessageBetweenUsers(user1: string, user2: string): Promise<string>
     {
-        const response = await fetch(`/api/messages/last?user1=${user1}&user2=${user2}`);
-        return await response.text();
+        return await fetch(`/api/messages/last?user1=${user1}&user2=${user2}`).then(res => res.json()).then(res => res[0] ? res[0].content : "");
     }
 
     /**
