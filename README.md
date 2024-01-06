@@ -35,12 +35,12 @@ bun install
 ```
 3. Create a .env file like <a href ="https://github.com/bberkay/sveltekit-bun-mongodb/blob/main/server/.env.example">this</a> in the server directory and add the following variables
 ```bash
-MONGO_URL = <your_mongodb_url>
+MONGO_URL=<your_mongodb_url>
 ```
-4. Create a .env file like <a href ="">this</a> in the app directory and add the following variables
+4. Create a .env file like <a href ="https://github.com/bberkay/sveltekit-bun-mongodb/blob/main/app/.env.example">this</a> in the app directory and add the following variables
 ```bash
-PUBLIC_SERVER_ADDRESS = <http/https:your_server_host:your_server_port>
-PUBLIC_WS_ADDRESS = <ws/wss:your_server_host:your_server_port>
+PUBLIC_SERVER_ADDRESS=<http/https:your_server_host:your_server_port>
+PUBLIC_WS_ADDRESS=<ws/wss:your_server_host:your_server_port>
 ```
    
 5. Run the server then the client
