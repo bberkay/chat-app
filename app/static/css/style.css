@@ -6,7 +6,16 @@ main{
     --front-bright-color: #F9FAFB;
     --border-color: #E5E8EA;
     --outline-color: #D1D5D8;
-    --accent-color: #1A73E8;
+    --accent-color: #4274c2;
+    --info-color: #CFF4FC;
+    --info-border-color: #9EEAF9;
+    --info-text-color: #055160;
+    --error-color: #F8D7DA;
+    --error-border-color: #F1AEB5;
+    --error-text-color: #68272F;
+    --success-color: #D1E7DD;
+    --success-border-color: #A3CFBB;
+    --success-text-color: #0A3622;
 }
 
 main.dark{
@@ -16,7 +25,16 @@ main.dark{
     --front-bright-color: #373B41;
     --border-color: #1A1C1F;
     --outline-color: #2A2D31;
-    --accent-color: #1A73E8;
+    --accent-color: #144a9a;
+    --info-color: #032830;
+    --info-border-color: #087990;
+    --info-text-color: #6EDFF6;
+    --error-color: #2C0B0E;
+    --error-border-color: #842029;
+    --error-text-color: #EA868F;
+    --success-color: #051B11;
+    --success-border-color: #0F5132;
+    --success-text-color: #6AA98B;
 }
 
 /* General */

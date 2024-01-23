@@ -13,7 +13,9 @@ export enum ApiOperation{
     GetUsers = "get-users",
     GetUser = "get-user",
     GetLastMessage = "get-last-message",
-    SearchUsers = "search-users"
+    SearchUsers = "search-users",
+    GetSessionId = "get-session-id",
+    CheckSessionId = "check-session-id"
 }
 
 /**
@@ -21,6 +23,7 @@ export enum ApiOperation{
  */
 export type Message = {
     _id?: string;
+    sessionId: string;
     senderId: string;
     receiverId: string;
     content: string;

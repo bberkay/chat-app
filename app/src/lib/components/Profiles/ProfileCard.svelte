@@ -11,16 +11,9 @@
     async function selectUser(user: User): void
     {
         // Send a request to the server to profile the user and save it to the cookies.
-        fetch(`/api/profile/select`, {
-            method: 'POST',
-            body: JSON.stringify(user),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(async (response) => {
-            if (response.ok)
-                profileStore.set(user);
-        });
+        const response = await fetch(`/api/profile/select?id=${user._id}`);
+        if(response.ok)
+            profileStore.set(user);
     }
 </script>
 

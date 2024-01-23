@@ -1,5 +1,5 @@
 import type { User } from '$lib/types';
-import { friendsStore } from "$lib/stores";
+import { usersStore } from "$lib/stores";
 import { get } from 'svelte/store';
 
 export async function load({ cookies }: {cookies: any}): Promise<{users: Array<User>, profile: User}>
@@ -9,7 +9,7 @@ export async function load({ cookies }: {cookies: any}): Promise<{users: Array<U
 
     // Return the users
     return {
-        users: get(friendsStore),
+        users: get(usersStore),
         profile: profile
     };
 }

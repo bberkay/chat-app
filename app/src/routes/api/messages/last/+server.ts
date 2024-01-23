@@ -23,7 +23,7 @@ export async function GET(request: Request): Promise<Response>
     catch(e)
     {
         console.error(e);
-        return new Response("Unexpected error while searching for users.", { status: 500 });
+        return new Response("Unexpected error while getting last message", { status: 500 });
     }
 
 }

@@ -3,11 +3,12 @@
     import { Client } from "$lib/classes/Client";
     import Navbar from "$lib/components/Navbar.svelte";
     import Sidebar from "$lib/components/Sidebar.svelte";
-    import { profileStore, clientStore, messagesStore } from "$lib/stores";
+    import { profileStore, clientStore, messagesStore, sessionIdStore } from "$lib/stores";
     import { page } from "$app/stores";
 
     // Data from the server(+layout.server.ts)
     export let data;
+    sessionIdStore.set(data.sessionId);
     profileStore.set(data.profile);
 
     // Get the profile from the data, also subscribe to the userIdStore to listen for profile changes.
@@ -34,7 +35,6 @@
     {
         client.getSocket().addEventListener("message", (event) => {
             let message = JSON.parse(event.data);
-            console.log(message);
             if(message.type === MessageType.NewMessage || message.type === MessageType.CurrentMessages)
                 messagesStore.update((messages) => [...messages, ...(message.type === MessageType.CurrentMessages ? message.data : [message.data])]);
         });

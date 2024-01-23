@@ -1,6 +1,7 @@
 <script lang="ts">
     import type { User, Droid } from "$lib/types";
-    import { messagesStore, clientStore } from "$lib/stores";
+    import { messagesStore, clientStore, sessionIdStore } from "$lib/stores";
+    import { get } from "svelte/store";
 
     // Component properties
     export let friend: User | Droid;
@@ -35,6 +36,7 @@
                 {
                     // Send message to the server
                     client.send({
+                        sessionId: get(sessionIdStore),
                         senderId: profile._id,
                         receiverId: friend._id,
                         content: message
@@ -45,6 +47,7 @@
                 messagesStore.update((messages) => [
                     ...messages,
                     {
+                        sessionId: get(sessionIdStore),
                         senderId: profile._id,
                         receiverId: friend._id,
                         content: message
@@ -64,6 +67,7 @@
                 messagesStore.update((messages) => [
                     ...messages,
                     {
+                        sessionId: get(sessionIdStore),
                         senderId: friend._id,
                         receiverId: profile._id,
                         content: friend.readyMessages[Math.floor(Math.random() * friend.readyMessages.length)]

@@ -1,4 +1,4 @@
-import { profileStore } from "$lib/stores";
+import { profileStore, sessionIdStore } from "$lib/stores";
 import { get } from "svelte/store";
 import { PUBLIC_WS_ADDRESS as WS_ADDRESS } from "$env/static/public";
 
@@ -30,7 +30,7 @@ export class Client{
         else if(!get(profileStore))
             throw new Error("Profile store is not defined yet, please connect to the WebSocket server after the profile store is defined");
 
-        this.socket = new WebSocket(`${WS_ADDRESS}/chat/${get(profileStore)._id}/${friendId}`);
+        this.socket = new WebSocket(`${WS_ADDRESS}/chat/${get(sessionIdStore)}/${get(profileStore)._id}/${friendId}/`);
     }
 
     /**

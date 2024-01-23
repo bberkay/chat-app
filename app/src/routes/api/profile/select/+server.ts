@@ -1,14 +1,20 @@
 import type { User } from "$lib/types";
-import { profileStore } from "$lib/stores";
+import { profileStore, usersStore } from "$lib/stores";
+import { get } from 'svelte/store';
 
-export async function POST({ request, cookies }: {request: Request, cookies: any}): Promise<any>
+export async function GET({ request, cookies }: {request: Request, cookies: any}): Promise<any>
 {
     try
     {
-        // Get the body from the request
-        const selectedUser: User = await request.json()
+        // Get the id from the URL
+        const url = new URL(request.url);
+        const id = url.searchParams.get("id");
 
         // Set the profile cookie to the selected user
+        const selectedUser: User | undefined = get(usersStore).find(user => user._id === id);
+        if(!selectedUser)
+            return new Response("User not found.", { status: 404 });
+
         cookies.set('profile', JSON.stringify(selectedUser), { path: '/' });
         profileStore.set(selectedUser);
 

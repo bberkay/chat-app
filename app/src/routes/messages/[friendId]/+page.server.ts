@@ -1,6 +1,8 @@
 import { Server } from '$lib/classes/Server';
 import type { User } from '$lib/types';
 import { droid } from '$lib/classes/Droid';
+import { usersStore } from "$lib/stores";
+import { get } from 'svelte/store';
 
 export async function load({ params, cookies }: { params: { friendId: string }, cookies: any }): Promise<{profile?: User, friend: User}>
 {
@@ -10,7 +12,7 @@ export async function load({ params, cookies }: { params: { friendId: string }, 
         return {friend: droid}
 
     // If friend is not droid then find the user from the classes with that id.
-    const friend = await Server.getUserById(friendId);
+    const friend = get(usersStore).find(user => user._id === friendId);
     if(!friend) throw new Error("Friend not found.");
 
     // Get the profile from the cookies.

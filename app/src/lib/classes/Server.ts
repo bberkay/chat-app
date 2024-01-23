@@ -1,12 +1,30 @@
 import type { User } from "$lib/types";
 import { droid } from "$lib/classes/Droid";
 import { PUBLIC_SERVER_ADDRESS as SERVER_ADDRESS } from "$env/static/public";
+import { sessionIdStore } from "$lib/stores";
+import { get } from "svelte/store";
 
 /**
  * This class is used for getting data from the server.
  */
 export class Server
 {
+    /**
+     * Get Session ID of the user.
+     */
+    public static async getSessionId(): Promise<string>
+    {
+        return fetch(`${SERVER_ADDRESS}/api/get-session-id`).then(res => res.text());
+    }
+
+    /**
+     * Save session ID of the user.
+     */
+    public static async checkSessionId(id: string): Promise<string | "false">
+    {
+        return fetch(`${SERVER_ADDRESS}/api/check-session-id/${id}`).then(res => res.text());
+    }
+
     /**
      * Get all users from the server by using the api.
      */
@@ -36,7 +54,7 @@ export class Server
      */
     public static async getLastMessageBetweenUsers(user1: string, user2: string): Promise<string | undefined>
     {
-        return fetch(`${SERVER_ADDRESS}/api/get-last-message/${user1}/${user2}`).then(res => res.text());
+        return fetch(`${SERVER_ADDRESS}/api/get-last-message/${get(sessionIdStore)}/${user1}/${user2}`).then(res => res.text());
     }
 
     /**

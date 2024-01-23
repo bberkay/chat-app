@@ -4,15 +4,20 @@ import type { Client } from '$lib/classes/Client';
 import type { User } from '$lib/types';
 
 /**
+ * @description Session ID store.
+ */
+export const sessionIdStore: Writable<string> = writable();
+
+/**
  * @description Store for the selected user id in the profile page for
  * changing the selected user in real time.
  */
 export const profileStore: Writable<User> = writable();
 
 /**
- * @description Store for
+ * @description Store for all users.
  */
-export const friendsStore: Writable<User[]> = writable([]);
+export const usersStore: Writable<User[]> = writable([]);
 
 /**
  * @description Store for the search results that is used to

@@ -16,6 +16,8 @@ export class MongoController {
     {
         this.client.connect().then(r => {
             console.log('Connected to Mongo');
+        }).catch(e => {
+            console.error(e);
         });
     }
 
@@ -80,30 +82,25 @@ export class MongoController {
     /**
      * Get Messages between Users
      */
-    public static async getMessagesBetweenUsers(senderId: string | ObjectId, receiverId: string | ObjectId): Promise<Message[]>
+    public static async getMessagesBetweenUsers(sessionId: string, senderId: string, receiverId: string): Promise<Message[]>
     {
-        senderId = senderId instanceof ObjectId ? senderId : new ObjectId(senderId);
-        receiverId = receiverId instanceof ObjectId ? receiverId : new ObjectId(receiverId);
-        return await this.searchDocumentWithFilter("messages", {$or: [{senderId: senderId, receiverId: receiverId}, {senderId: receiverId, receiverId: senderId}]});
+        return await this.searchDocumentWithFilter("messages", {$or: [{sessionId: sessionId, senderId: senderId, receiverId: receiverId}, {sessionId: sessionId, senderId: receiverId, receiverId: senderId}]});
     }
 
     /**
      * Get Last Message between Users
      */
-    public static async getLastMessageBetweenUsers(senderId: string | ObjectId, receiverId: string | ObjectId): Promise<any>
+    public static async getLastMessageBetweenUsers(sessionId: string, senderId: string, receiverId: string): Promise<any>
     {
-        senderId = senderId instanceof ObjectId ? senderId : new ObjectId(senderId);
-        receiverId = receiverId instanceof ObjectId ? receiverId : new ObjectId(receiverId);
-        return await this.client.db(this.dbName).collection("messages").find({$or: [{senderId: senderId, receiverId: receiverId}, {senderId: receiverId, receiverId: senderId}]}).limit(1).sort({$natural: -1}).toArray();
+        return await this.client.db(this.dbName).collection("messages").find({$or: [{sessionId: sessionId, senderId: senderId, receiverId: receiverId}, {sessionId: sessionId, senderId: receiverId, receiverId: senderId}]}).limit(1).sort({$natural: -1}).toArray();
     }
 
     /**
      * Save Message
      */
-    public static async saveMessage(senderId: string | ObjectId, receiverId: string | ObjectId, message: string): Promise<any>
+    public static async saveMessage(sessionId: string | ObjectId, senderId: string, receiverId: string, message: string): Promise<any>
     {
-        senderId = senderId instanceof ObjectId ? senderId : new ObjectId(senderId);
-        receiverId = receiverId instanceof ObjectId ? receiverId : new ObjectId(receiverId);
-        return await this.client.db(this.dbName).collection("messages").insertOne({senderId: senderId, receiverId: receiverId, content: message, sentDate: new Date()});
+        return await this.client.db(this.dbName).collection("messages").insertOne({sessionId: sessionId, senderId: senderId, receiverId: receiverId, content: message, sentDate: new Date()});
     }
+
 }
