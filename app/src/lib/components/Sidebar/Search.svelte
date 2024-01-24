@@ -1,5 +1,6 @@
 <script lang="ts">
-    import { searchResultsStore } from "$lib/stores";
+    import { searchResultsStore, usersStore, profileStore } from "$lib/stores";
+    import { get } from "svelte/store";
 
     let search: string = "";
 
@@ -14,7 +15,7 @@
     }
 
     // Search person if search string is at least 3 characters long
-    $: if(search.length >= 3) { searchPerson() } else { searchResultsStore.set([]) }
+    $: if(search.length >= 3) { searchPerson() } else { searchResultsStore.set(get(usersStore).filter(user => user._id !== get(profileStore)._id)) }
 </script>
 
 <div id="search">

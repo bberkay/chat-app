@@ -1,8 +1,5 @@
 import { Server } from "$lib/classes/Server";
-import { searchResultsStore, usersStore } from "$lib/stores";
 import type { User } from "$lib/types";
-import { get } from 'svelte/store';
-import { droid } from '$lib/classes/Droid';
 
 export async function GET(request: Request): Promise<Response>
 {
@@ -13,17 +10,13 @@ export async function GET(request: Request): Promise<Response>
         // Find the name parameter
         const search = url.searchParams.get("name");
 
-        // If search isn't null, search for the user
-        let users: User[] | undefined;
+        // If there is no user with the given name return all users.
+        let foundUsers: User[] | undefined;
         if(search != null)
-            users = await Server.searchUsersByName(search);
-
-        // Set the searchedUsers store to the users found(if users is null, theme it to all users)
-        users = users && users!.length > 0 ? users : get(usersStore).concat(droid);
-        searchResultsStore.set(users);
+            foundUsers = await Server.searchUsersByName(search);
 
         // Return the searchedUsers store
-        return new Response(JSON.stringify(users), {
+        return new Response(JSON.stringify(foundUsers), {
             headers: {
                 'Content-Type': 'application/json'
             }

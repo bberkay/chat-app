@@ -1,9 +1,10 @@
 <script lang="ts">
     import { onMount } from "svelte"
-    import { searchResultsStore, profileStore, messagesStore } from '$lib/stores';
+    import { searchResultsStore, messagesStore } from '$lib/stores';
     import Search from '$lib/components/Sidebar/Search.svelte';
     import Profile from '$lib/components/Sidebar/Profile.svelte';
     import FriendCard from '$lib/components/Sidebar/FriendCard.svelte';
+    import { get } from 'svelte/store';
 
     export let profile;
     export let users;
@@ -14,6 +15,7 @@
     let innerWidth;
     onMount(() => {
         innerWidth = window.innerWidth;
+        searchResultsStore.set(users.filter(user => user._id !== profile._id));
     })
 
     /* Remove hide when the window is resized to a width greater than 768px */
@@ -22,31 +24,16 @@
     }
 
     /**
-     * Search
-     * Subscribe to the store for search results
-     */
-    let searchedUsers = [];
-    searchResultsStore.subscribe((value) => {
-        searchedUsers = value.length > 0 ? value : users;
-    });
-
-    // Remove current user from search results
-    profileStore.subscribe(() => { searchedUsers = users });
-    $: searchedUsers = searchedUsers.filter(user => user._id !== profile._id);
-
-    /**
      * Messages
      * Sort friends by last message when a new message is received.
      */
     messagesStore.subscribe((value) => {
         if(value.length === 0) return;
         const lastMessage = value[value.length - 1];
-        const index = searchedUsers.findIndex(user => user._id === lastMessage.senderId);
+        const index = get(searchResultsStore).findIndex(user => user._id === lastMessage.senderId);
         if (index > 0) { // if user is not already at the top of the list
-            const temp = searchedUsers.splice(index, 1);
-            searchedUsers.unshift(temp[0]);
-            users = searchedUsers;
-            searchedUsers = searchedUsers; // force update
+            const temp = get(searchResultsStore).splice(index, 1);
+            searchResultsStore.set(get(searchResultsStore).unshift(temp[0]));
         }
     })
 </script>
@@ -55,10 +42,8 @@
 
 <section id="sidebar">
     <Search />
-    {#each searchedUsers as user}
-        {#if user._id !== profile._id}
-            <FriendCard user="{user}"/>
-        {/if}
+    {#each $searchResultsStore as user}
+        <FriendCard user="{user}"/>
     {/each}
     <Profile user="{profile}"/>
     <span class = "hide"></span>
