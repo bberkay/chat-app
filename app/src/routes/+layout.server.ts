@@ -23,7 +23,6 @@ export async function load({ cookies }: {cookies: any}): Promise<{theme: string,
     if(!users || users.length === 0)
     {
         users = await Server.getUsersWithDroid();
-        // TODO: usersStore gerekli olmayabilir ancak bu load fonksiyonunun nasıl çalıştığını anlamak için şimdilik kalsın.
         usersStore.set(users);
     }
 

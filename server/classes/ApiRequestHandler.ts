@@ -10,7 +10,7 @@ export class ApiRequestHandler
      */
     public static async handle(pathname: string): Promise<Response>
     {
-        console.log(`API operation[${pathname}] requested.`);
+        console.log(`${new Date().toLocaleString()} API operation[${pathname}] requested.`);
         const params = pathname.split("/api/")[1].split("/");
         try {
             switch (params[0]) // params[0] will always be the operation name (e.g. api/get-users, api/search-users, etc.)
