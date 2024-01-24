@@ -5,7 +5,8 @@
         integrate to create a real-time, user-friendly chat experience as easily as possible.
     </p>
     <p>
-        <b>Tip: </b> TODO: Session
+        <b>Tip: </b> To testing real-time chat, open this page on another browser/device and sync them with the session ID in the profile section
+        at the bottom left of the app.
     </p>
     <i><a href = "https://github.com/bberkay/sveltekit-bun-mongodb" target = "_blank">For more information and source code...</a></i>
 </section>
