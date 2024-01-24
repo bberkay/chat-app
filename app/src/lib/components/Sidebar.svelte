@@ -48,7 +48,7 @@
             users = searchedUsers;
             searchedUsers = searchedUsers; // force update
         }
-    });
+    })
 </script>
 
 <svelte:window bind:innerWidth/>

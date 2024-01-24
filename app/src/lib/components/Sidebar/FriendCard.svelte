@@ -54,7 +54,7 @@
     </div>
     <div class="message-info">
         <span>{user.name}</span>
-        <span>{@html lastMessageOfUser && lastMessageOfUser.length > 0 ? lastMessageOfUser : (user._id === "droid" ? "<i>Start a conversation</i>" : "<i>No messages yet</i>")}</span>
+        <span>{@html lastMessageOfUser && lastMessageOfUser.length > 0 ? (lastMessageOfUser.length >= 30 ? lastMessageOfUser.slice(0, 30) + "..." : lastMessageOfUser) : (user._id === "droid" ? "<i>Start a conversation</i>" : "<i>No messages yet</i>")}</span>
     </div>
     {#if user._id === 'droid'}
         <div class="droid-icon">

@@ -5,8 +5,7 @@
         integrate to create a real-time, user-friendly chat experience as easily as possible.
     </p>
     <p>
-        <b>Tip: </b>You can change your current profile for testing(for example choose "Luke Skywalker" in this page and "Darth Vader" in private page) and you can see
-        how the chat works in real time.
+        <b>Tip: </b> TODO: Session
     </p>
     <i><a href = "https://github.com/bberkay/sveltekit-bun-mongodb" target = "_blank">For more information and source code...</a></i>
 </section>
