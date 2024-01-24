@@ -1,7 +1,7 @@
 import { writable } from 'svelte/store';
 import type { Writable } from 'svelte/store';
 import type { Client } from '$lib/classes/Client';
-import type { User } from '$lib/types';
+import type { User, Message } from '$lib/types';
 
 /**
  * @description Session ID store.
@@ -29,7 +29,7 @@ export const searchResultsStore: Writable<User[]> = writable([]);
  * @description Store for the current messages that is used to
  * display the messages between users in real time.
  */
-export const messagesStore: Writable<string[]> = writable([]);
+export const messagesStore: Writable<Message[]> = writable([]);
 
 /**
  * @description Store for the socket that is used to

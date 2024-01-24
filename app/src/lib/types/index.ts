@@ -5,6 +5,13 @@ export interface User {
     avatar: string;
 }
 
+// Message type
+export interface Message {
+    senderId: string;
+    receiverId: string;
+    content: string;
+}
+
 // Droid type
 export interface Droid extends User{
     readyMessages: string[];

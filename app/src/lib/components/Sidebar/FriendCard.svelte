@@ -4,37 +4,28 @@
     import { get } from "svelte/store";
 
     export let user;
-    let lastMessageOfUser;
-    let currentProfile = get(profileStore);
+    let lastMessageOfUser = user._id === "droid" ? "<i>Start a conversation</i>" : "<i>Loading...</i>";
 
     /**
      * Get the last message of the user
      */
-    async function getLastMessageBetweenUsers(user1: string, user2: string): Promise<string>
+    async function getLastMessageBetweenUsers(user1: string, user2: string): Promise<string> | string
     {
+        if(user1 === "droid" || user2 === "droid")
+        {
+            return get(messagesStore).reverse().forEach(message => {
+                if(message.senderId === "droid" || message.receiverId === "droid")
+                    return message.content;
+            });
+        }
         return await fetch(`/api/messages/last?user1=${user1}&user2=${user2}`).then(res => res.json()).then(res => res[0] ? res[0].content : "");
     }
 
     /**
-     * Get the last message of the user when the component is mounted and
-     * every time the profile changes or new message is sent.
+     * Get the last message of the user when the component is mounted.
      */
     onMount(async () => {
-        if(user._id !== "droid")
-        {
-            messagesStore.subscribe((messages) => {
-                const lastMessage = messages[messages.length - 1];
-                if(lastMessage && (lastMessage.senderId === user._id || lastMessage.receiverId === user._id))
-                    lastMessageOfUser = lastMessage.content;
-            });
-
-            profileStore.subscribe(async (profile) => {
-                if(profile._id !== currentProfile._id)
-                    lastMessageOfUser = await getLastMessageBetweenUsers(user._id, profile._id)
-            });
-
-            lastMessageOfUser = lastMessageOfUser ? lastMessageOfUser : await getLastMessageBetweenUsers(user._id, get(profileStore)._id);
-        }
+        lastMessageOfUser = await getLastMessageBetweenUsers(user._id, get(profileStore)._id);
     });
 
     /**
@@ -43,8 +34,9 @@
      * after a new message is sent).
      */
     afterUpdate(async () => {
-        if(user._id !== "droid" && !lastMessageOfUser && get(profileStore)._id !== currentProfile._id)
+        messagesStore.subscribe(async () => {
             lastMessageOfUser = await getLastMessageBetweenUsers(user._id, get(profileStore)._id);
+        });
     });
 </script>
 
@@ -54,7 +46,7 @@
     </div>
     <div class="message-info">
         <span>{user.name}</span>
-        <span>{@html lastMessageOfUser && lastMessageOfUser.length > 0 ? (lastMessageOfUser.length >= 30 ? lastMessageOfUser.slice(0, 30) + "..." : lastMessageOfUser) : (user._id === "droid" ? "<i>Start a conversation</i>" : "<i>No messages yet</i>")}</span>
+        <span>{@html lastMessageOfUser && lastMessageOfUser.length > 0 ? (lastMessageOfUser.length >= 30 ? lastMessageOfUser.slice(0, 30) + "..." : lastMessageOfUser) : "<i>No messages yet</i>"}</span>
     </div>
     {#if user._id === 'droid'}
         <div class="droid-icon">
