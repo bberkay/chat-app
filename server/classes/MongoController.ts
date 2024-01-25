@@ -15,7 +15,7 @@ export class MongoController {
     public static connect(): void
     {
         this.client.connect().then(r => {
-            console.log(`${new Date().toLocaleString()} Connected to Mongo`);
+            console.log(`${new Date().toLocaleTimeString()} Connected to Mongo`);
         }).catch(e => {
             console.error(e);
         });
@@ -27,7 +27,7 @@ export class MongoController {
     public static disconnect(): void
     {
         this.client.close().then(r => {
-            console.log(`${new Date().toLocaleString()} Disconnected from Mongo`);
+            console.log(`${new Date().toLocaleTimeString()} Disconnected from Mongo`);
         });
     }
 

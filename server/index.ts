@@ -53,27 +53,27 @@ const server = Bun.serve<{ sessionId: string, userId: string, friendId: string, 
                 if(ws.data.userId === undefined)
                     return;
 
-                console.log(`${new Date().toLocaleString()} User[${ws.data.userId}] connected to the WebSocket server.`);
+                console.log(`${new Date().toLocaleTimeString()} User[${ws.data.userId}] connected to the WebSocket server.`);
 
                 // Subscribe to the rooms that the user is in
                 for(const room of getRoomIds(ws.data.sessionId, ws.data.userId))
                 {
                     ws.subscribe(room);
-                    console.log(`${new Date().toLocaleString()} User[${ws.data.sessionId}] subscribed to room[${room}].`);
+                    console.log(`${new Date().toLocaleTimeString()} User[${ws.data.sessionId}] subscribed to room[${room}].`);
                 }
 
                 // Send the current messages in the room to the user.
                 await MongoController.getMessagesBetweenUsers(ws.data.sessionId, ws.data.userId, ws.data.friendId).then(messages => {
                     if(messages.length > 0){
                         ws.send(JSON.stringify({type: MessageType.CurrentMessages, data: messages}));
-                        console.log(`${new Date().toLocaleString()} Current messages of room[${ws.data.roomId}] sent to user[${ws.data.sessionId}].`);
+                        console.log(`${new Date().toLocaleTimeString()} Current messages of room[${ws.data.roomId}] sent to user[${ws.data.sessionId}].`);
                     }
                 });
             }
             catch(e)
             {
                 console.error(e);
-                ws.close(500, `${new Date().toLocaleString()} Unexpected error while opening WebSocket connection.`);
+                ws.close(500, `${new Date().toLocaleTimeString()} Unexpected error while opening WebSocket connection.`);
             }
         },
         async message(ws: ServerWebSocket<{ userId: string }>, message: string | Buffer): Promise<void>
@@ -86,14 +86,14 @@ const server = Bun.serve<{ sessionId: string, userId: string, friendId: string, 
                 const data: Message = JSON.parse(message as string);
                 const roomId: string = [data.sessionId, data.senderId, data.receiverId].sort().join("-");
                 ws.publish(roomId, JSON.stringify({type: MessageType.NewMessage, data: data}));
-                console.log(`${new Date().toLocaleString()} Publishing message to room[${roomId}]:`, data);
+                console.log(`${new Date().toLocaleTimeString()} Publishing message to room[${roomId}]:`, data);
                 await MongoController.saveMessage(data.sessionId, data.senderId, data.receiverId, data.content);
             }catch(e){
                 console.error(e);
-                ws.close(500, `${new Date().toLocaleString()} Unexpected error while handling message.`);
+                ws.close(500, `${new Date().toLocaleTimeString()} Unexpected error while handling message.`);
             }
         },
     },
 });
 
-console.log(`${new Date().toLocaleString()} Listening on ${server.hostname}:${server.port}`);
+console.log(`${new Date().toLocaleTimeString()} Listening on ${server.hostname}:${server.port}`);

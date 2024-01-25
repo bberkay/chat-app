@@ -16,7 +16,7 @@
             return get(messagesStore).reverse().forEach(message => {
                 if(message.senderId === "droid" || message.receiverId === "droid")
                     return message.content;
-            });
+            }) || "Start a conversation";
         }
         return await fetch(`/api/messages/last?user1=${user1}&user2=${user2}`).then(res => res.json()).then(res => res[0] ? res[0].content : "");
     }
