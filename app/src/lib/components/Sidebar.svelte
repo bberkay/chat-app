@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount } from "svelte"
-    import { searchResultsStore, messagesStore } from '$lib/stores';
+    import {searchResultsStore, messagesStore, profileStore} from '$lib/stores';
     import Search from '$lib/components/Sidebar/Search.svelte';
     import Profile from '$lib/components/Sidebar/Profile.svelte';
     import FriendCard from '$lib/components/Sidebar/FriendCard.svelte';
@@ -22,6 +22,14 @@
     $: if (innerWidth > 768) {
         document.querySelector('#sidebar')?.classList.remove('hide');
     }
+
+    /**
+     * Profile Change
+     * Change users when profile changes.
+     */
+    profileStore.subscribe((value) => {
+        searchResultsStore.set(users.filter(user => user._id !== value._id));
+    });
 
     /**
      * Messages
