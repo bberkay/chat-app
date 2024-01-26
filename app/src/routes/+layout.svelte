@@ -27,7 +27,7 @@
     {
         clientStore.set(client);
         const friendId = $page.url.pathname.split("/messages/")[1];
-        if(friendId)
+        if(friendId && friendId !== "droid")
             client.connect(friendId);
     }
 
