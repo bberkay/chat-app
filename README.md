@@ -1,4 +1,5 @@
 <h1 align = "center">Simple Chat App with SvelteKit</h1>
+<p><a href = "https://sveltekit-bun-mongodb-live-demo-app.onrender.com">Live Demo</a> (The site may open slowly because I deployed the project to a free render account)</p>
 <h3>Table of Contents</h3>
 <ul>
   <li><a href="#introduction">Introduction</a></li>
