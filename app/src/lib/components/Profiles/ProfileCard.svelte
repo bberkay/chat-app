@@ -2,13 +2,13 @@
     import type { User } from '$lib/types';
     import { profileStore } from '$lib/stores';
 
-    export let user; // user object
-    export let isSelected; // is the user selected
+    export let user: User; // user object
+    export let isSelected: boolean; // is the user selected
 
     /**
      * Selects the user
      */
-    async function selectUser(user: User): void
+    async function selectUser(user: User): Promise<void>
     {
         // Send a request to the server to profile the user and save it to the cookies.
         const response = await fetch(`/api/profile/select?id=${user._id}`);

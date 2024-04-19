@@ -60,3 +60,33 @@ input{
 input:focus{
     outline: 1px solid var(--outline-color);
 }
+
+/* Loading */
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.loading{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding: 0.75rem 1rem;
+    font-size:1.2em;
+
+    & .loader{
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        display: inline-block;
+        box-sizing: border-box;
+        animation: rotation 1s linear infinite;
+        border: 3px solid var(--text-color);
+        border-bottom-color: transparent;
+        margin-right: 10px;
+    }
+}

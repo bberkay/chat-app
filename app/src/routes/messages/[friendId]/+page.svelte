@@ -28,11 +28,13 @@
                 }
             ]);
         }
+
+        document.querySelector('#chat .loading')?.remove();
     });
 
     // Scroll to bottom of messages when new message is added
     afterUpdate(() => {
-        const messagesDiv = document.getElementById("messages");
+        const messagesDiv = document.getElementById("messages")!;
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
     });
 </script>
@@ -40,6 +42,10 @@
 <section id="chat">
     <FriendHeader name="{data.friend.name}" avatar="{data.friend.avatar}"/>
     <div id="messages">
+        <div class="loading">
+            <span class = "loader"></span>
+            <span>Loading...</span>
+        </div>
         {#each $messagesStore as message}
             {#if message.senderId === data.profile._id && message.receiverId === data.friend._id}
                 <MyMessage message="{message.content}"/>

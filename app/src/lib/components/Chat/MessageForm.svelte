@@ -2,19 +2,29 @@
     import type { User, Droid } from "$lib/types";
     import { messagesStore, clientStore, sessionIdStore } from "$lib/stores";
     import { get } from "svelte/store";
+    import { onMount } from "svelte";
 
     // Component properties
     export let friend: User | Droid;
     export let profile: User;
 
     // Current message
-    let message;
+    let message: string;
+
+    onMount(() => {
+        // Scroll to the bottom of the messages
+        const messages = document.getElementById("messages")!;
+        messages.scrollTop = messages.scrollHeight;
+
+        // Focus on the message input
+        document.getElementById("message-input")!.focus();
+    });
 
     /**
      * Handle user's message input. If the user presses enter,
      * send the message.
      */
-    function handleMessageInput(event): void
+    function handleMessageInput(event: any): void
     {
         message = event.target.value;
         if(event.key === "Enter")
@@ -29,7 +39,7 @@
      */
     function sendMessage(): void
     {
-        document.getElementById("message-input").value = "";
+        document.getElementById("message-input")!.innerText = "";
         if(message.length > 0){
             clientStore.subscribe((client) => {
                 if(friend._id !== "droid")
@@ -70,7 +80,7 @@
                         sessionId: get(sessionIdStore),
                         senderId: friend._id,
                         receiverId: profile._id,
-                        content: friend.readyMessages[Math.floor(Math.random() * friend.readyMessages.length)]
+                        content: (friend as Droid).readyMessages[Math.floor(Math.random() * (friend as Droid).readyMessages.length)]
                     }
                 ]);
             }, 1000);
@@ -80,7 +90,7 @@
 
 <div id = "message-form">
     <form>
-        <input type="text" id = "message-input" on:keydown={handleMessageInput} autocomplete="off" autofocus>
+        <input type="text" id = "message-input" on:keydown={handleMessageInput} autocomplete="off">
         <button id = "send-button" on:click={sendMessage}>
             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 256 256"><path d="M227.32,28.68a16,16,0,0,0-15.66-4.08l-.15,0L19.57,82.84a16,16,0,0,0-2.42,29.84l85.62,40.55,40.55,85.62A15.86,15.86,0,0,0,157.74,248q.69,0,1.38-.06a15.88,15.88,0,0,0,14-11.51l58.2-191.94c0-.05,0-.1,0-.15A16,16,0,0,0,227.32,28.68ZM157.83,231.85l-.05.14L118.42,148.9l47.24-47.25a8,8,0,0,0-11.31-11.31L107.1,137.58,24,98.22l.14,0L216,40Z"></path></svg>
         </button>

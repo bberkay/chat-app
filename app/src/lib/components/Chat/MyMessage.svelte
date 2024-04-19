@@ -1,5 +1,5 @@
 <script lang="ts">
-    export let message;
+    export let message: string;
 </script>
 
 <div class = "my-message">
@@ -22,13 +22,6 @@
         border-radius: 10px 10px 0 10px;
         padding: 0.4rem 0.7rem;
         color: var(--text-color);
-    }
-
-    .message-avatar img{
-        width: 1.5em;
-        height: 1.5em;
-        border-radius: 50%;
-        margin-right: 10px;
     }
 </style>
 

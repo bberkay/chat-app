@@ -3,7 +3,7 @@ import type { User } from "$lib/types";
 import { get } from "svelte/store";
 import { profileStore, sessionIdStore, usersStore } from "$lib/stores";
 
-export async function load({ cookies }: {cookies: any}): Promise<{theme: string, users: User[], sessionId: string, profile: User}>
+export async function load({ cookies }: {cookies: any}): Promise<{theme: "dark" | "light", users: User[], sessionId: string, profile: User}>
 {
     /**
      * Theme

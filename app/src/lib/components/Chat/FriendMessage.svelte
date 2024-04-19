@@ -1,6 +1,6 @@
 <script lang="ts">
     export let friendAvatar: string;
-    export let message;
+    export let message: string;
 </script>
 
 <div class = "friend-message">

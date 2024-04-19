@@ -20,7 +20,7 @@
 
 <div id="search">
     <form>
-        <input type="text" name="search" id="search" min="3" autocomplete="off" size="30" placeholder="Search person" bind:value = {search} required/>
+        <input type="text" name="search" id="search" min="3" autocomplete="off" size="30" placeholder="Search person" bind:value={search} required/>
     </form>
 </div>
 

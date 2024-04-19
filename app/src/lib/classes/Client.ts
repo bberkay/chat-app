@@ -55,7 +55,7 @@ export class Client{
     /**
      * Send a message to the WebSocket server.
      */
-    public send(data: {senderId: string, receiverId: string, content: string}): void
+    public send(data: {sessionId: string, senderId: string, receiverId: string, content: string}): void
     {
         if(!this.socket)
             throw new Error("Socket is not defined, please connect to the WebSocket server with client.connect()");

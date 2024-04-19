@@ -44,9 +44,8 @@ PUBLIC_SERVER_ADDRESS=<http/https:your_server_host:your_server_port>
 PUBLIC_WS_ADDRESS=<ws/wss:your_server_host:your_server_port>
 ```
    
-5. Run the server then the client
+5. Run the server then client:
 ```bash
-cd server
 bun run index.ts
 cd ../app
 bun --bun run dev

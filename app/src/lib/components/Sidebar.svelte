@@ -1,20 +1,22 @@
 <script lang="ts">
+    import type { User } from '$lib/types';
     import { onMount } from "svelte"
-    import {searchResultsStore, messagesStore, profileStore} from '$lib/stores';
+    import { searchResultsStore, messagesStore, profileStore } from '$lib/stores';
     import Search from '$lib/components/Sidebar/Search.svelte';
     import Profile from '$lib/components/Sidebar/Profile.svelte';
     import FriendCard from '$lib/components/Sidebar/FriendCard.svelte';
     import { get } from 'svelte/store';
 
-    export let profile;
-    export let users;
+    export let profile: User;
+    export let users: User[] = [];
 
     /**
      * Responsive Sidebar
      */
-    let innerWidth;
+    let innerWidth = 0;
     onMount(() => {
         innerWidth = window.innerWidth;
+        document.querySelector('#sidebar .loading')?.remove();
         searchResultsStore.set(users.filter(user => user._id !== profile._id));
     })
 
@@ -37,12 +39,12 @@
      */
     messagesStore.subscribe((value) => {
         if(value.length === 0) return;
+        const searchResults = get(searchResultsStore);
         const lastMessage = value[value.length - 1];
-        const index = get(searchResultsStore).findIndex(user => user._id === lastMessage.senderId);
-        if (index > 0) { // if user is not already at the top of the list
-            const temp = get(searchResultsStore).splice(index, 1);
-            searchResultsStore.set(get(searchResultsStore).unshift(temp[0]));
-        }
+        const index = searchResults.findIndex(user => user._id === lastMessage.senderId);
+        const temp = searchResults.splice(index, 1);
+        searchResults.unshift(temp[0]);
+        searchResultsStore.set(searchResults);
     })
 </script>
 
@@ -50,6 +52,10 @@
 
 <section id="sidebar">
     <Search />
+    <div class="loading">
+        <span class = "loader"></span>
+        <span>Loading...</span>
+    </div>
     {#each $searchResultsStore as user}
         <FriendCard user="{user}"/>
     {/each}

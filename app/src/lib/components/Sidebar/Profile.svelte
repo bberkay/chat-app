@@ -1,56 +1,59 @@
 <script lang="ts">
+    import type { User } from "$lib/types";
     import { sessionIdStore } from "$lib/stores";
     import { afterUpdate, onMount } from "svelte";
     import { get } from "svelte/store"
 
-    export let user;
+    export let user: User;
     let isSessionModalActive = false;
 
     // Get all session modal elements
-    let sessionModal = null;
-    let sessionIdInput = null;
+    let sessionModal: HTMLElement, sessionIdInput: HTMLInputElement;
     onMount(() => {
-        sessionModal = document.getElementById("session-modal");
-        sessionIdInput = document.getElementById("session-id");
+        sessionModal = document.getElementById("session-modal")!;
+        sessionIdInput = document.getElementById("session-id") as HTMLInputElement;
+
+        // Add copy event listener
+        document.getElementById("copy-session-id")!.addEventListener("click", () => {
+            sessionIdInput.select();
+            sessionIdInput.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(sessionIdInput.value);
+        });
+
+        // Add save event listener
+        document.getElementById("save-session-id")!.addEventListener("click", async () => {
+            if(sessionIdInput.value.length === 24) {
+                const response = await fetch(`/api/session/save?id=${sessionIdInput.value}`);
+                const data = await response.text();
+                if(data !== "false"){
+                    (sessionModal.querySelector(".session-modal-alert.success") as HTMLElement).style.display = "flex";
+                    sessionIdStore.set(sessionIdInput.value);
+                }
+                else (sessionModal.querySelector(".session-modal-alert.error") as HTMLElement).style.display = "flex";
+            }
+        });
+
+        // Add open event listener
+        document.getElementById("toggle-session-modal")!.addEventListener("click", () => {
+            isSessionModalActive = !isSessionModalActive;
+            sessionModal.style.opacity = isSessionModalActive ? "1" : "0";
+            sessionModal.style.pointerEvents = isSessionModalActive ? "all" : "none";
+        });
+
+        // Add toggle event listener
+        document.addEventListener("click", (e) => {
+            if(!isSessionModalActive) return;
+            if(sessionModal.contains(e.target as Node) || document.getElementById("toggle-session-modal")!.contains(e.target as Node)) return;
+            isSessionModalActive = false;
+            sessionModal.style.opacity = "0";
+            sessionModal.style.pointerEvents = "none";
+        });
     });
 
     // Update session id on change
     afterUpdate(() => {
         sessionIdInput.value = get(sessionIdStore);
     });
-
-    // Session modal functions
-    function openSessionModal() {
-        isSessionModalActive = true;
-        sessionModal.style.opacity = "1";
-        sessionModal.style.pointerEvents = "all";
-    }
-
-    function closeSessionModal() {
-        isSessionModalActive = false;
-        sessionModal.style.opacity = "0";
-        sessionModal.style.pointerEvents = "none";
-    }
-
-    function copySessionId() {
-        sessionIdInput.select();
-        sessionIdInput.setSelectionRange(0, 99999);
-        navigator.clipboard.writeText(sessionIdInput.value);
-    }
-
-    async function saveSessionId(): Promise<void>
-    {
-        if(sessionIdInput.value.length === 24) {
-            const response = await fetch(`/api/session/save?id=${sessionIdInput.value}`);
-            const data = await response.text();
-            if(data !== "false"){
-                document.querySelector("#session-modal .session-modal-alert.success").style.display = "flex";
-                sessionIdStore.set(sessionIdInput.value);
-            }
-            else
-                document.querySelector("#session-modal .session-modal-alert.error").style.display = "flex";
-        }
-    }
 </script>
 
 <div id="profile-card-container">
@@ -73,11 +76,11 @@
         </div>
         <div style="display:flex;align-items:center;justify-content:center;">
             <input type="text" id="session-id" minlength="24" maxlength="24">
-            <button on:click={copySessionId}>
+            <button id = "copy-session-id">
                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 256 256"><path d="M216,32H88a8,8,0,0,0-8,8V80H40a8,8,0,0,0-8,8V216a8,8,0,0,0,8,8H168a8,8,0,0,0,8-8V176h40a8,8,0,0,0,8-8V40A8,8,0,0,0,216,32ZM160,208H48V96H160Zm48-48H176V88a8,8,0,0,0-8-8H96V48H208Z"></path></svg>
             </button>
             <span class = "gap"></span>
-            <button on:click={saveSessionId}>
+            <button id = "save-session-id">
                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 256 256"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"></path></svg>
             </button>
         </div>
@@ -88,19 +91,13 @@
             <span><b>{user.name}</b><br><small><i>My Profile</i></small></span>
         </div>
         <div id="profile-buttons">
-            {#if !isSessionModalActive}
-                <button on:click={openSessionModal}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 256 256" style="--darkreader-inline-fill: #000000;" data-darkreader-inline-fill=""><path d="M160,16A80.07,80.07,0,0,0,83.91,120.78L26.34,178.34A8,8,0,0,0,24,184v40a8,8,0,0,0,8,8H72a8,8,0,0,0,8-8V208H96a8,8,0,0,0,8-8V184h16a8,8,0,0,0,5.66-2.34l9.56-9.57A80,80,0,1,0,160,16Zm0,144a63.7,63.7,0,0,1-23.65-4.51,8,8,0,0,0-8.84,1.68L116.69,168H96a8,8,0,0,0-8,8v16H72a8,8,0,0,0-8,8v16H40V187.31l58.83-58.82a8,8,0,0,0,1.68-8.84A64,64,0,1,1,160,160Zm32-84a12,12,0,1,1-12-12A12,12,0,0,1,192,76Z"></path></svg>
-                </button>
-            {:else}
-                <button on:click={closeSessionModal}>
+            <button type="button" id = "toggle-session-modal">
+                {#if !isSessionModalActive}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 256 256" style="--darkreader-inline-fill: #000000;" data-darkreader-inline-fill=""><path d="M160,16A80.07,80.07,0,0,0,83.91,120.78L26.34,178.34A8,8,0,0,0,24,184v40a8,8,0,0,0,8,8H72a8,8,0,0,0,8-8V208H96a8,8,0,0,0,8-8V184h16a8,8,0,0,0,5.66-2.34l9.56-9.57A80,80,0,1,0,160,16Zm0,144a63.7,63.7,0,0,1-23.65-4.51,8,8,0,0,0-8.84,1.68L116.69,168H96a8,8,0,0,0-8,8v16H72a8,8,0,0,0-8,8v16H40V187.31l58.83-58.82a8,8,0,0,0,1.68-8.84A64,64,0,1,1,160,160Zm32-84a12,12,0,1,1-12-12A12,12,0,0,1,192,76Z"></path></svg>                
+                {:else}
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 256 256" style="--darkreader-inline-fill: #000000;" data-darkreader-inline-fill=""><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"></path></svg>
-                </button>
-            {/if}
-            <span class = "gap"></span>
-            <a href="/profiles">
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 256 256"><path d="M253.66,133.66l-24,24a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L216,132.69V128A88,88,0,0,0,56.49,76.67a8,8,0,0,1-13-9.34A104,104,0,0,1,232,128v4.69l10.34-10.35a8,8,0,0,1,11.32,11.32Zm-41.18,55A104,104,0,0,1,24,128v-4.69L13.66,133.66A8,8,0,0,1,2.34,122.34l24-24a8,8,0,0,1,11.32,0l24,24a8,8,0,0,1-11.32,11.32L40,123.31V128a87.62,87.62,0,0,0,22.24,58.41A79.66,79.66,0,0,1,98.3,157.66a48,48,0,1,1,59.4,0,79.59,79.59,0,0,1,36.08,28.78,89.68,89.68,0,0,0,5.71-7.11,8,8,0,0,1,13,9.34ZM128,152a32,32,0,1,0-32-32A32,32,0,0,0,128,152Zm0,64a88.2,88.2,0,0,0,53.92-18.49,64,64,0,0,0-107.84,0A87.57,87.57,0,0,0,128,216Z"></path></svg>
-            </a>
+                {/if}
+            </button>
         </div>
     </div>
 </div>
@@ -148,7 +145,7 @@
         height:3em;
     }
 
-    #profile-card-container a, #profile-card-container button{
+    #profile-card-container button{
         padding:0.4rem 0.4rem 0.2rem 0.4rem;
         border:1px solid var(--border-color);
         background-color:var(--front-bright-color);
@@ -167,11 +164,11 @@
         height:1.5em;
     }
 
-    #profile-card-container a:hover, #profile-card-container button:hover{
+    #profile-card-container button:hover{
         opacity:0.7;
     }
 
-    #profile-card-container a:active, #profile-card-container button:active{
+    #profile-card-container button:active{
         opacity:0.5;
     }
 
