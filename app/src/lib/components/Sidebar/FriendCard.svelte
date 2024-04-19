@@ -76,6 +76,15 @@
         width: 100%;
         text-align: start; 
         font-size:0.85em;
+        font-family: 'Roboto', sans-serif;
+    }
+
+    .friend-card span:nth-child(1){
+        margin-bottom:2px;
+    }
+
+    .friend-card span:nth-child(2){
+        filter: brightness(0.8);
     }
 
     .friend-card .droid-icon{
