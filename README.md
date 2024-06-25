@@ -1,11 +1,11 @@
 <h1 align = "center">Simple Chat App with SvelteKit</h1>
 <p><a href = "https://sveltekit-bun-mongodb-live-demo-app.onrender.com">Live Demo</a> (The site may open slowly because I deployed the project to a free render account)</p>
 <h3>Table of Contents</h3>
-<ul>
+<ol>
   <li><a href="#introduction">Introduction</a></li>
   <li><a href="#features">Features</a></li>
   <li><a href="#installation--setup">Installation & Setup</a></li>
-</ul>
+</ol>
 
 <h3>Introduction</h3>
 <p>This is a simple chat application with SvelteKit, Bun, and MongoDB. It's designed to demonstrate how these technologies can seamlessly integrate to create a real-time, user-friendly chat experience as easily as possible.</p>
