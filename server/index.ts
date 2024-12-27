@@ -34,7 +34,9 @@ const server = Bun.serve<{ sessionId: string, userId: string, friendId: string, 
             return ApiRequestHandler.handle(url.pathname);
 
         // Get values from the URL
-        const [ sessionId, userId, friendId] = req.url.split("/chat/")[1].split("/");
+        const chatParams = req.url.split("/chat/");
+				if (chatParams.length == 0)
+					return undefined;
         const roomId: string = [ sessionId, userId, friendId ].sort().join("-");
 
         // Upgrade the HTTP request to WebSocket
