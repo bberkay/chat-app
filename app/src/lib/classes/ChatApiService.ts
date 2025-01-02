@@ -48,22 +48,6 @@ export class ChatApiService
     }
 
     /**
-     * Get the last messages of the user from the server by using the api.
-     */
-    public static async getLastMessages(sessionId: string, profile: string): Promise<string | undefined>
-    {
-        return fetch(`${SERVER_ADDRESS}/api/get-last-message/${sessionId}/${profile}`).then(res => res.text());
-    }
-
-     /**
-     * Get the last message between two users from the server by using the api.
-     */
-     public static async getLastMessageBetweenUsers(sessionId: string, user1: string, user2: string): Promise<string | undefined>
-     {
-         return fetch(`${SERVER_ADDRESS}/api/get-last-message/${sessionId}/${user1}/${user2}`).then(res => res.text());
-     }
-
-    /**
      * Get a user from the server by using the api.
      */
     public static async searchUsersByName(name: string): Promise<User[] | undefined>

@@ -21,10 +21,6 @@ export class ApiRequestHandler
                     return await this.getUsers();
                 case ApiOperation.GetUser:
                     return await this.getUser(params[1]); // api/get-user/1234567890<userId>
-                case ApiOperation.GetLastMessage:
-                    return await this.getLastMessage(params[1], params[2], params[3]); // api/get-last-message/1234567890<senderId>/0987654321<receiverId>
-                case ApiOperation.GetLastMessages:
-                    return await this.getLastMessages(params[1], params[2]); // api/get-last-messages/1234567890<userId>
                 case ApiOperation.SearchUsers:
                     return await this.searchUsers(params[1]); // api/search-users/John
                 case ApiOperation.CreateSessionId:
@@ -73,26 +69,6 @@ export class ApiRequestHandler
     {
         return await MongoController.getUserById(id).then(r => {
             return this.formatResponse(r[0]);
-        });
-    }
-
-    /**
-     * Get the last message between two users.
-     */
-    private static async getLastMessage(sessionId: string, senderOrReceiverId: string, receiverOrSenderId: string): Promise<Response>
-    {
-        return await MongoController.getLastMessageBetweenUsers(sessionId, senderOrReceiverId, receiverOrSenderId).then(r => {
-            return this.formatResponse(r);
-        });
-    }
-
-    /**
-     * Get the last messages of the user.
-     */
-    private static async getLastMessages(sessionId: string, userId: string): Promise<Response>
-    {
-        return await MongoController.getLastMessages(sessionId, userId).then(r => {
-            return this.formatResponse(r);
         });
     }
 

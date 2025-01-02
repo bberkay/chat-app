@@ -14,8 +14,6 @@ export enum MessageType{
 export enum ApiOperation{
     GetUsers = "get-users",
     GetUser = "get-user",
-    GetLastMessage = "get-last-message",
-    GetLastMessages = "get-last-messages",
     SearchUsers = "search-users",
     CreateSessionId = "create-session-id",
     CheckSessionId = "check-session-id"
