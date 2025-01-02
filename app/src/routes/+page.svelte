@@ -8,7 +8,7 @@
         To testing real-time chat, open this page on another browser/device and sync them with the session ID in the profile section
         at the bottom left of the app.
     </blockquote>
-    <i><a href = "https://github.com/bberkay/sveltekit-bun-mongodb" target = "_blank">For more information and source code...</a></i>
+    <i><a href = "https://github.com/bberkay/chat-app" target = "_blank">For more information and source code...</a></i>
 </section>
 
 <style>
