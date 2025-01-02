@@ -82,7 +82,6 @@ const server = Bun.serve<{ sessionId: string, userId: string, personalChannel: s
         },
         async message(ws: ServerWebSocket<{ sessionId: string, userId: string, personalChannel: string }>, message: string | Buffer): Promise<void>
         {
-            // TODO: Svelte update 5
             try{
                 // Send message to user itself.
                 const data: Message = JSON.parse(message as string);
