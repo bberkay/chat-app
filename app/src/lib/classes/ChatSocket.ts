@@ -1,36 +1,32 @@
-import { profileStore, sessionIdStore } from "$lib/stores";
-import { get } from "svelte/store";
 import { PUBLIC_WS_ADDRESS as WS_ADDRESS } from "$env/static/public";
 
 /**
  * Client class for connecting to the WebSocket server.
  */
-export class Client{
-    private static instance: Client;
+export class ChatSocket{
+    private static _instance: ChatSocket;
     private socket: WebSocket | undefined;
 
     /**
      * @constructor
      */
     public constructor() {
-        if(Client.instance){
-            return Client.instance;
+        if(ChatSocket._instance){
+            return ChatSocket._instance;
         }
 
-        Client.instance = this;
+        ChatSocket._instance = this;
     }
 
     /**
      * Connect to the WebSocket server.
      */
-    public connect(friendId: string): void
+    public connect(sessionId: string, profileId: string, friendId: string | null = null): void
     {
         if(this.socket)
             throw new Error("Socket is already defined, please disconnect from the WebSocket server with client.disconnect()");
-        else if(!get(profileStore))
-            throw new Error("Profile store is not defined yet, please connect to the WebSocket server after the profile store is defined");
 
-        this.socket = new WebSocket(`${WS_ADDRESS}/chat/${get(sessionIdStore)}/${get(profileStore)._id}/${friendId}/`);
+        this.socket = new WebSocket(`${WS_ADDRESS}/chat/${sessionId}/${profileId}/${friendId || ''}`);
     }
 
     /**
@@ -50,6 +46,18 @@ export class Client{
             throw new Error("Socket is not defined, please connect to the WebSocket server with client.connect()");
 
         return this.socket;
+    }
+
+    /**
+     * Get the friend id that the client is chatting with.
+     */
+    public getChattingFriendId(): string | undefined
+    {
+        if(!this.socket)
+            return undefined;
+
+        const [ , , friendId ] = this.socket.url.split("/chat/")[1].split("/");
+        return friendId;
     }
 
     /**

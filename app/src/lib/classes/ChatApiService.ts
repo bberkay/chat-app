@@ -1,28 +1,26 @@
 import type { User } from "$lib/types";
 import { droid } from "$lib/classes/Droid";
 import { PUBLIC_SERVER_ADDRESS as SERVER_ADDRESS } from "$env/static/public";
-import { sessionIdStore } from "$lib/stores";
-import { get } from "svelte/store";
 
 /**
  * This class is used for getting data from the server.
  */
-export class Server
+export class ChatApiService
 {
     /**
-     * Get Session ID of the user.
+     * Create a Session ID for chatting with the friend.
      */
-    public static async getSessionId(): Promise<string>
+    public static async createSessionId(): Promise<string>
     {
-        return fetch(`${SERVER_ADDRESS}/api/get-session-id`).then(res => res.text());
+        return fetch(`${SERVER_ADDRESS}/api/create-session-id`).then(res => res.text());
     }
 
     /**
      * Save session ID of the user.
      */
-    public static async checkSessionId(id: string): Promise<string | "false">
+    public static async checkSessionId(id: string): Promise<boolean>
     {
-        return fetch(`${SERVER_ADDRESS}/api/check-session-id/${id}`).then(res => res.text());
+        return fetch(`${SERVER_ADDRESS}/api/check-session-id/${id}`).then(res => res.json()) as Promise<boolean>;
     }
 
     /**
@@ -50,12 +48,20 @@ export class Server
     }
 
     /**
+     * Get the last messages of the user from the server by using the api.
+     */
+    public static async getLastMessages(sessionId: string, profile: string): Promise<string | undefined>
+    {
+        return fetch(`${SERVER_ADDRESS}/api/get-last-message/${sessionId}/${profile}`).then(res => res.text());
+    }
+
+     /**
      * Get the last message between two users from the server by using the api.
      */
-    public static async getLastMessageBetweenUsers(user1: string, user2: string): Promise<string | undefined>
-    {
-        return fetch(`${SERVER_ADDRESS}/api/get-last-message/${get(sessionIdStore)}/${user1}/${user2}`).then(res => res.text());
-    }
+     public static async getLastMessageBetweenUsers(sessionId: string, user1: string, user2: string): Promise<string | undefined>
+     {
+         return fetch(`${SERVER_ADDRESS}/api/get-last-message/${sessionId}/${user1}/${user2}`).then(res => res.text());
+     }
 
     /**
      * Get a user from the server by using the api.
