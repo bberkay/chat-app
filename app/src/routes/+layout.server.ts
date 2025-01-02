@@ -9,7 +9,7 @@ export async function load({ cookies }: {cookies: any}): Promise<{theme: "dark" 
      */
     let theme = cookies.get('theme');
     if (!theme){
-        theme = 'dark';
+        theme = 'system';
         cookies.set('theme', theme, { path: '/' });
     }
 
