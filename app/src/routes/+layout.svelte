@@ -28,7 +28,6 @@
         {
             const messagesParams = $page.url.pathname.split("/messages/");
             const friendId = messagesParams.length > 1 ? messagesParams[1] : "";
-            console.log("burada", messagesParams, friendId);
             chatSocket.connect(get(sessionIdStore), get(profileStore)._id, friendId);
             chatSocketStore.set(chatSocket);
         }
@@ -45,9 +44,7 @@
          */
         function updateIncomingMessages(event: MessageEvent) {
             let message: { type: MessageType, data: Message | Message[] } = JSON.parse(event.data);
-            console.log("new incoming message: ", message);
             if (message.type === MessageType.NewRoomMessage || message.type === MessageType.NewExternalMessage && (message.data as Message).senderId === chatSocket.getChattingFriendId()) {
-                console.log("ama buraya geliyor olması lazım:", message);
                 messagesStore.update((messages) => [
                     ...messages,
                     ...[(message.data as Message)]
@@ -60,7 +57,6 @@
             }
 
             if (message.type === MessageType.NewRoomMessage || message.type === MessageType.NewExternalMessage) {
-                console.log("ve buraya geliyor da olması lazım:", message);
                 searchResultsStore.update((friends) => {
                     return friends.map((friend) => {
                         const messageData = message.data as Message;
