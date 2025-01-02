@@ -5,20 +5,31 @@ export interface User {
     avatar: string;
 }
 
+export interface Friend extends User {
+    lastMessage?: {
+        senderId: string;
+        sentAt: Date;
+        content: string;
+    }
+}
+
 // Message type
 export interface Message {
     senderId: string;
     receiverId: string;
     content: string;
+    sentAt: Date;
 }
 
 // Droid type
-export interface Droid extends User{
+export interface Droid extends Friend{
     readyMessages: string[];
 }
 
 // MessageType that is used in the WebSocket
-export enum MessageType {
-    CurrentMessages= "CurrentMessages",
-    NewMessage = "NewMessage"
+export enum MessageType{
+    AllRoomMessages = "AllRoomMessages",
+    NewRoomMessage = "NewRoomMessage",
+    NewExternalMessage = "NewExternalMessage",
+    LastMessagesFromFriends = "LastMessagesFromFriends"
 }

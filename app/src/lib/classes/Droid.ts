@@ -7,6 +7,10 @@ export const droid: Droid = {
     _id: "droid",
     name: "C-3P0",
     avatar: "https://i.ibb.co/DgCBV68/c-3po.jpg",
+    lastMessage: {
+        sentAt: new Date(),
+        content: "Start a conversation"
+    },
     readyMessages: [
         "I am C-3P0, human-cyborg relations.",
         "I am a protocol droid, not a therapist.",
