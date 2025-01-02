@@ -44,6 +44,21 @@
          */
         function updateIncomingMessages(event: MessageEvent) {
             let message: { type: MessageType, data: Message | Message[] } = JSON.parse(event.data);
+
+            // Convert string dates to Date objects
+            if (message.data instanceof Array) {
+                message.data = message.data.map((msg: Message) => {
+                    if (Object.hasOwn(msg, "sentAt") && typeof msg.sentAt === "string")
+                        msg.sentAt = new Date(msg.sentAt);
+                    return msg;
+                })
+            } else {
+                if (Object.hasOwn(message.data, "sentAt") && typeof message.data.sentAt === "string") {
+                    message.data.sentAt = new Date(message.data.sentAt);
+                }
+            }
+
+            // Update messagesStore
             if (message.type === MessageType.NewRoomMessage || message.type === MessageType.NewExternalMessage && (message.data as Message).senderId === chatSocket.getChattingFriendId()) {
                 messagesStore.update((messages) => [
                     ...messages,
@@ -56,6 +71,7 @@
                 ]);
             }
 
+            // Update searchResultsStore
             if (message.type === MessageType.NewRoomMessage || message.type === MessageType.NewExternalMessage) {
                 searchResultsStore.update((friends) => {
                     return friends.map((friend) => {
