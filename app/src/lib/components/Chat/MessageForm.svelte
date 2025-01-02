@@ -1,23 +1,24 @@
 <script lang="ts">
-    import type { User, Droid } from "$lib/types";
-    import { messagesStore, clientStore, sessionIdStore } from "$lib/stores";
+    import type { User, Friend, Droid } from "$lib/types";
+    import { messagesStore, chatSocketStore, sessionIdStore } from "$lib/stores";
     import { get } from "svelte/store";
     import { onMount } from "svelte";
 
     // Component properties
-    export let friend: User | Droid;
+    export let friend: Friend | Droid;
     export let profile: User;
 
     // Current message
     let message: string;
-
+    let messageInput: HTMLInputElement;
     onMount(() => {
         // Scroll to the bottom of the messages
         const messages = document.getElementById("messages")!;
         messages.scrollTop = messages.scrollHeight;
 
         // Focus on the message input
-        document.getElementById("message-input")!.focus();
+        messageInput = document.getElementById("message-input") as HTMLInputElement;
+        messageInput.focus();
     });
 
     /**
@@ -39,30 +40,19 @@
      */
     function sendMessage(): void
     {
-        document.getElementById("message-input")!.innerText = "";
+        messageInput.value = "";
         if(message.length > 0){
-            clientStore.subscribe((client) => {
+            chatSocketStore.subscribe((socket) => {
                 if(friend._id !== "droid")
                 {
                     // Send message to the server
-                    client.send({
+                    socket.send({
                         sessionId: get(sessionIdStore),
                         senderId: profile._id,
                         receiverId: friend._id,
                         content: message
                     });
                 }
-
-                // Save message to the store
-                messagesStore.update((messages) => [
-                    ...messages,
-                    {
-                        sessionId: get(sessionIdStore),
-                        senderId: profile._id,
-                        receiverId: friend._id,
-                        content: message
-                    }
-                ]);
             });
         }
 
@@ -80,7 +70,8 @@
                         sessionId: get(sessionIdStore),
                         senderId: friend._id,
                         receiverId: profile._id,
-                        content: (friend as Droid).readyMessages[Math.floor(Math.random() * (friend as Droid).readyMessages.length)]
+                        content: (friend as Droid).readyMessages[Math.floor(Math.random() * (friend as Droid).readyMessages.length)],
+                        sentAt: new Date()
                     }
                 ]);
             }, 1000);
