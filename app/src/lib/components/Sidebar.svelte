@@ -4,27 +4,17 @@
     import Search from '$lib/components/Sidebar/Search.svelte';
     import Profile from '$lib/components/Sidebar/Profile.svelte';
     import FriendCard from '$lib/components/Sidebar/FriendCard.svelte';
-    import { get } from 'svelte/store';
-    import type { Friend, Message } from "$lib/types";
+    import type { Message } from "$lib/types";
+    import { sortFriendsByLastMessage } from "$lib/utils";
+    import { get } from "svelte/store";
 
     /**
      * Responsive Sidebar
      */
     onMount(() => {
         document.querySelector('#sidebar .loading')?.remove();
-        sortByLastMessage();
+        sortFriendsByLastMessage(get(searchResultsStore));
     })
-
-    /**
-     * Sort friends by last message
-     */
-    function sortByLastMessage() {
-        searchResultsStore.set(get(searchResultsStore).sort((a, b) => {
-            const dateA = a.lastMessage?.sentAt.getTime() ?? -Infinity;
-            const dateB = b.lastMessage?.sentAt.getTime() ?? -Infinity;
-            return dateB - dateA;
-        }));
-    }
 
     /**
      * Messages
@@ -34,7 +24,7 @@
         if(messages.length === 0)
             return;
 
-        sortByLastMessage();
+        sortFriendsByLastMessage(get(searchResultsStore));
     })
 </script>
 

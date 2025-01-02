@@ -81,7 +81,7 @@
     {/if}
     <div id = "profile-card">
         <div id = "profile-info">
-            <img src="{$profileStore.avatar}" alt="">
+            <img src="/images/avatar/{$profileStore.avatar}" alt="profile">
             <span><b>{$profileStore.name}</b><br><small><i>My Profile</i></small></span>
         </div>
         <div id="profile-buttons">

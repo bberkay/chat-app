@@ -23,18 +23,7 @@ export class ChatSocket{
      */
     public connect(sessionId: string, profileId: string, friendId: string | null = null): void
     {
-        if(this.socket)
-            throw new Error("Socket is already defined, please disconnect from the WebSocket server with client.disconnect()");
-
         this.socket = new WebSocket(`${WS_ADDRESS}/chat/${sessionId}/${profileId}/${friendId || ''}`);
-    }
-
-    /**
-     * Check if the client is connected to the WebSocket server.
-     */
-    public isConnected(): boolean
-    {
-        return this.socket !== undefined;
     }
 
     /**
@@ -76,10 +65,6 @@ export class ChatSocket{
      */
     public disconnect(): void
     {
-        if(!this.socket)
-            throw new Error("Socket is not defined, please connect to the WebSocket server with client.connect()");
-
-        if(this.socket.readyState === WebSocket.OPEN)
-            this.socket.close();
+        this.socket.close();
     }
 }

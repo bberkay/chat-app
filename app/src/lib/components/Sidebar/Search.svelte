@@ -2,6 +2,7 @@
     import { searchResultsStore, friendsStore } from "$lib/stores";
     import { get } from "svelte/store";
     import type { Friend } from "$lib/types";
+    import { sortFriendsByLastMessage } from "$lib/utils";
 
     let search: string = "";
 
@@ -24,7 +25,8 @@
     $: if(search.length >= 3) {
         searchPerson()
     } else {
-        searchResultsStore.set(get(friendsStore))
+        searchResultsStore.set(get(friendsStore));
+        sortFriendsByLastMessage(get(searchResultsStore));
     }
 </script>
 

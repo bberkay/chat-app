@@ -11,7 +11,7 @@
 
 <button class="friend-card" on:click={() => { window.location.href = `/messages/${friend._id}` }} tabindex="0">
     <div class="friend-avatar">
-        <img src="{friend.avatar}" alt="">
+        <img src="/images/avatar/{friend.avatar}" alt="friend">
     </div>
     <div class="message-info">
         <span>{friend.name}</span>
