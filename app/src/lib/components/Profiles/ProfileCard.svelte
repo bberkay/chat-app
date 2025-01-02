@@ -1,9 +1,7 @@
 <script lang="ts">
     import type { User } from '$lib/types';
-    import { profileStore } from '$lib/stores';
 
     export let user: User; // user object
-    export let isSelected: boolean; // is the user selected
 
     /**
      * Selects the user
@@ -12,8 +10,9 @@
     {
         // Send a request to the server to profile the user and save it to the cookies.
         const response = await fetch(`/api/profile/select?id=${user._id}`);
-        if(response.ok)
-            profileStore.set(user);
+        if(response.ok) {
+            window.location.reload();
+        }
     }
 </script>
 
@@ -23,11 +22,7 @@
     </div>
     <div class="profile-info">
         <span>{user.name}</span>
-        {#if isSelected}
-            <button class = "selected" disabled>Selected</button>
-        {:else}
-            <button on:click={async () => { await selectUser(user) }}>Select</button>
-        {/if}
+        <button on:click={async () => { await selectUser(user) }}>Select</button>
     </div>
 </div>
 
@@ -69,18 +64,5 @@
         color: var(--text-color);
         cursor:pointer;
         font-size:0.9rem;
-    }
-
-    .profile-info button.selected{
-        background-color: var(--front-color);
-        cursor:default;
-    }
-
-    .profile-info button:not(.selected):hover{
-        opacity:0.9;
-    }
-
-    .profile-info button:not(.selected):active{
-        opacity:0.8;
     }
 </style>
