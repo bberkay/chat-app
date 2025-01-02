@@ -1,5 +1,5 @@
-import { Server } from "$lib/classes/Server";
-import type { User } from "$lib/types";
+import { ChatApiService } from "$lib/classes/ChatApiService";
+import type { Friend } from "$lib/types";
 
 export async function GET(request: Request): Promise<Response>
 {
@@ -11,9 +11,9 @@ export async function GET(request: Request): Promise<Response>
         const search = url.searchParams.get("name");
 
         // If there is no user with the given name return all users.
-        let foundUsers: User[] | undefined;
+        let foundUsers: Friend[] | undefined;
         if(search != null)
-            foundUsers = await Server.searchUsersByName(search);
+            foundUsers = await ChatApiService.searchUsersByName(search);
 
         // Return the searchedUsers store
         return new Response(JSON.stringify(foundUsers), {

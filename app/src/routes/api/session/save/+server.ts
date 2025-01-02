@@ -1,5 +1,4 @@
-import { Server } from "$lib/classes/Server";
-import { sessionIdStore } from "$lib/stores";
+import { ChatApiService } from "$lib/classes/ChatApiService";
 
 export async function GET({ request, cookies }: {request: Request, cookies: any}): Promise<Response>
 {
@@ -12,14 +11,15 @@ export async function GET({ request, cookies }: {request: Request, cookies: any}
             return new Response("Invalid user ID.", { status: 400 });
 
         // Check if the session id is valid on the server.
-        const newSessionId = await Server.checkSessionId(id);
-        if(newSessionId !== "false"){
-            cookies.set('sessionId', newSessionId, { path: '/' });
-            sessionIdStore.set(newSessionId);
+        const isValid = await ChatApiService.checkSessionId(id);
+        if (isValid) {
+            cookies.set('sessionId', id, { path: '/' });
+
+            // Return the searchedUsers store
+            return new Response(JSON.stringify(isValid), { status: 200 });
         }
 
-        // Return the searchedUsers store
-        return new Response(newSessionId, { status: 200 });
+        return new Response("Session ID not found.", { status: 404 });
     }
     catch(e)
     {
