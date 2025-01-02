@@ -3,6 +3,7 @@ main{
     --bg-color: #FFFFFF;
     --text-color: #2A2D31;
     --front-color: #F3F5F7;
+    --scrollbar-thumb-color: #808080;
     --front-bright-color: #F9FAFB;
     --border-color: #E5E8EA;
     --outline-color: #D1D5D8;
@@ -21,6 +22,7 @@ main{
 main.dark{
     --bg-color: #0F1012;
     --text-color: #CFCFD2;
+    --scrollbar-thumb-color: #808080;
     --front-color: #131517;
     --front-bright-color: #373B41;
     --border-color: #1A1C1F;
@@ -42,6 +44,19 @@ body{
     padding:0;
     margin:0;
     font-family: 'Roboto', sans-serif;
+}
+
+::-webkit-scrollbar {
+    width: 2px;
+    height: 2px;
+}
+
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px var(--bg-color);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb-color);
 }
 
 main{
@@ -88,5 +103,14 @@ input:focus{
         border: 3px solid var(--text-color);
         border-bottom-color: transparent;
         margin-right: 10px;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    #sidebar {
+        &.hide {
+            display: block;
+            border-right: 1px solid var(--border-color);
+        }
     }
 }
