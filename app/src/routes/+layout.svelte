@@ -1,53 +1,102 @@
 <script lang="ts">
-    import { MessageType } from "$lib/types";
-    import type { User } from "$lib/types";
-    import { Client } from "$lib/classes/Client";
+    import { type Message, MessageType } from "$lib/types";
+    import { ChatSocket } from "$lib/classes/ChatSocket";
+    import { page } from "$app/stores";
+    import { get } from "svelte/store";
+    import { chatSocketStore, messagesStore } from "$lib/stores";
     import Navbar from "$lib/components/Navbar.svelte";
     import Sidebar from "$lib/components/Sidebar.svelte";
-    import { profileStore, clientStore, messagesStore, sessionIdStore, usersStore } from "$lib/stores";
-    import { page } from "$app/stores";
+    import { profileStore, sessionIdStore, friendsStore, searchResultsStore } from "$lib/stores";
+    import { onMount } from "svelte";
 
     // Data from the server(+layout.server.ts)
     export let data;
-    usersStore.set(data.users);
+    friendsStore.set(data.friends);
     profileStore.set(data.profile);
     sessionIdStore.set(data.sessionId);
+    searchResultsStore.set(data.friends);
 
-    // Get the profile from the data, also subscribe to the userIdStore to listen for profile changes.
-    let profile: User = data.profile as User;
-    profileStore.subscribe((value) => {
-        profile = data.users.find((user) => user._id === value._id)!;
-    })
+    onMount(() => {
 
-    /**
-     * Client
-     * Connect to Server with Client and store it in the clientStore for use in other components.
-     */
-    const client = new Client();
-    messagesStore.set([]);
-    if(!client.isConnected())
-    {
-        clientStore.set(client);
-        const friendId = $page.url.pathname.split("/messages/")[1];
-        if(friendId && friendId !== "droid"){
-            client.connect(friendId);
+        /**
+         * WebSocket
+         * Connect to Server with Client and store it in the chatSocketStore for use in other components.
+         */
+        const chatSocket = new ChatSocket();
+        messagesStore.set([]);
+        if(!chatSocket.isConnected())
+        {
+            const messagesParams = $page.url.pathname.split("/messages/");
+            const friendId = messagesParams.length > 1 ? messagesParams[1] : "";
+            console.log("burada", messagesParams, friendId);
+            chatSocket.connect(get(sessionIdStore), get(profileStore)._id, friendId);
+            chatSocketStore.set(chatSocket);
         }
-    }
 
-    // Listen to messages from friend and also store the last messages.
-    if(client.isConnected())
-    {
-        client.getSocket().addEventListener("message", (event) => {
-            let message = JSON.parse(event.data);
-            if(message.type === MessageType.NewMessage || message.type === MessageType.CurrentMessages)
-                messagesStore.update((messages) => [...messages, ...(message.type === MessageType.CurrentMessages ? message.data : [message.data])]);
-        });
-    }
+        // Listen to messages from friend and also store the last messages.
+        if(chatSocket.isConnected())
+        {
+            chatSocket.getSocket().removeEventListener("message", updateIncomingMessages);
+            chatSocket.getSocket().addEventListener("message", updateIncomingMessages);
+        }
+
+        /**
+         * Update messages store with incoming messages.
+         */
+        function updateIncomingMessages(event: MessageEvent) {
+            let message: { type: MessageType, data: Message | Message[] } = JSON.parse(event.data);
+            console.log("new incoming message: ", message);
+            if (message.type === MessageType.NewRoomMessage || message.type === MessageType.NewExternalMessage && (message.data as Message).senderId === chatSocket.getChattingFriendId()) {
+                console.log("ama buraya geliyor olması lazım:", message);
+                messagesStore.update((messages) => [
+                    ...messages,
+                    ...[(message.data as Message)]
+                ]);
+            } else if (message.type === MessageType.AllRoomMessages) {
+                messagesStore.update((messages) => [
+                    ...messages,
+                    ...(message.data as Message[])
+                ]);
+            }
+
+            if (message.type === MessageType.NewRoomMessage || message.type === MessageType.NewExternalMessage) {
+                console.log("ve buraya geliyor da olması lazım:", message);
+                searchResultsStore.update((friends) => {
+                    return friends.map((friend) => {
+                        const messageData = message.data as Message;
+                        if (friend._id === messageData.senderId || friend._id === messageData.receiverId) {
+                            friend.lastMessage = {
+                                senderId: messageData.senderId,
+                                sentAt: messageData.sentAt,
+                                content: messageData.content
+                            }
+                        }
+                        return friend;
+                    })
+                })
+            } else if (message.type === MessageType.LastMessagesFromFriends) {
+                searchResultsStore.update((friends) => {
+                    return friends.map((friend) => {
+                        (message.data as Message[]).forEach((message: Message) => {
+                            if (friend._id === message.senderId || friend._id === message.receiverId) {
+                                friend.lastMessage = {
+                                    senderId: message.senderId,
+                                    sentAt: message.sentAt,
+                                    content: message.content
+                                }
+                            }
+                        })
+                        return friend;
+                    })
+                })
+            }
+        }
+    })
 </script>
 
 <main class="{data.theme}">
     <Navbar theme="{data.theme}"/>
-    <Sidebar profile="{profile}" users="{data.users}"/>
+    <Sidebar/>
 
     <!-- Content -->
     <slot/>
