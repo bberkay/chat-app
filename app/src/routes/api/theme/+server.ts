@@ -2,11 +2,11 @@ export async function POST({ request, cookies }: {request: Request, cookies: any
 {
     try
     {
-        // Get the body from the request
-        const currentTheme = cookies.get("theme");
+        // Gte the theme from body
+        const body = await request.json();
 
         // Set the profile cookie to the selected user
-        cookies.set('theme', currentTheme === "dark" ? "light" : "dark", { path: '/' });
+        cookies.set('theme', body.theme, { path: '/' });
 
         // Return a 200 response
         return new Response("Theme changed successfully.", {

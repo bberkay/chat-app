@@ -41,7 +41,7 @@ export class ApiRequestHandler
      */
     private static createSessionId(): Response
     {
-        return this.formatResponse(this._sessionManager.create());
+        return this.formatResponse(this._sessionManager.create(), false);
     }
 
     /**
@@ -85,7 +85,7 @@ export class ApiRequestHandler
     /**
      * Format the response to be sent to the client.
      */
-    private static formatResponse(data: any = null): Response
+    private static formatResponse(data: any, stringify: boolean = true): Response
     {
         if (data instanceof Array) {
             data.map((user: any) => {
@@ -95,6 +95,6 @@ export class ApiRequestHandler
             });
         }
 
-        return new Response(JSON.stringify(data), { status: 200 });
+        return new Response(stringify ? JSON.stringify(data) : data, { status: 200 });
     }
 }

@@ -6,6 +6,7 @@
     import MessageForm from "$lib/components/Chat/MessageForm.svelte";
     import FriendMessage from "$lib/components/Chat/FriendMessage.svelte";
     import MyMessage from "$lib/components/Chat/MyMessage.svelte";
+    import Alert from "$lib/components/Utils/Alert.svelte";
 
     // Data from +page.server.ts
     export let data;
@@ -43,6 +44,7 @@
 
 <section id="chat">
     <FriendHeader name="{data.friend.name}" avatar="{data.friend.avatar}"/>
+    <Alert message="Messages sent in the demo will not be saved to the MongoDB database."/>
     <div id="messages">
         <div class="loading">
             <span class = "loader"></span>

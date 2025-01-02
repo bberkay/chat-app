@@ -203,7 +203,7 @@
     #session-modal .session-modal-alert{
         display:flex;
         padding: 0.8em;
-        background-color: var(--info-color);
+        background-color: var(--info-bg-color);
         color: var(--info-text-color);
         border-radius: 5px;
         border: 1px solid var(--info-border-color);
