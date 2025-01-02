@@ -83,8 +83,10 @@ const server = Bun.serve<{ sessionId: string, userId: string, personalChannel: s
         async message(ws: ServerWebSocket<{ sessionId: string, userId: string, personalChannel: string }>, message: string | Buffer): Promise<void>
         {
             try{
-                // Send message to user itself.
                 const data: Message = JSON.parse(message as string);
+                data.sentAt = new Date();
+
+                // Send message to user itself.
                 ws.send(JSON.stringify({type: MessageType.NewRoomMessage, data: data}));
                 console.log(createSimpleLog(`Publishing message to personal room[${ws.data.personalChannel}]`, ws.data.sessionId));
 
@@ -93,7 +95,7 @@ const server = Bun.serve<{ sessionId: string, userId: string, personalChannel: s
                 ws.publish(receiverPersonalChannel, JSON.stringify({type: MessageType.NewExternalMessage, data: data}));
                 console.log(createSimpleLog(`Publishing message to friend personal room[${receiverPersonalChannel}]`, ws.data.sessionId));
 
-                //await MongoController.saveMessage(data.sessionId, data.senderId, data.receiverId, data.content);
+                await MongoController.saveMessage(data.sessionId, data.senderId, data.receiverId, data.content, data.sentAt);
             }catch(e){
                 console.error(e);
                 ws.close(WsCloseCodes.InternalError, createSimpleLog(`Unexpected error while handling message.`, ws.data.sessionId));

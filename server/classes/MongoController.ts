@@ -208,7 +208,8 @@ export class MongoController {
         sessionId: string | ObjectId,
         senderId: string,
         receiverId: string,
-        message: string
+        message: string,
+        sentAt: Date
     ): Promise<any> {
         return await this.client
             .db(this.dbName)
@@ -218,7 +219,7 @@ export class MongoController {
                 senderId: senderId,
                 receiverId: receiverId,
                 content: message,
-                sentAt: new Date(),
+                sentAt: sentAt
             });
     }
 }
