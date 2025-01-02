@@ -1,9 +1,7 @@
-import {Server} from "$lib/classes/Server";
-import type { User } from "$lib/types";
-import { get } from "svelte/store";
-import { profileStore, sessionIdStore, usersStore } from "$lib/stores";
+import { ChatApiService } from "$lib/classes/ChatApiService";
+import type { User, Friend } from "$lib/types";
 
-export async function load({ cookies }: {cookies: any}): Promise<{theme: "dark" | "light", users: User[], sessionId: string, profile: User}>
+export async function load({ cookies }: {cookies: any}): Promise<{theme: "dark" | "light", friends: Friend[], sessionId: string, profile: User}>
 {
     /**
      * Theme
@@ -16,15 +14,10 @@ export async function load({ cookies }: {cookies: any}): Promise<{theme: "dark" 
     }
 
     /**
-     * Users
-     * Get the users from the server.
+     * Friends
+     * Get the friends from the server.
      */
-    let users: User[] = get(usersStore);
-    if(!users || users.length === 0)
-    {
-        users = await Server.getUsersWithDroid();
-        usersStore.set(users);
-    }
+    let friends: Friend[] = await ChatApiService.getUsersWithDroid();
 
     /**
      * Profile
@@ -33,11 +26,11 @@ export async function load({ cookies }: {cookies: any}): Promise<{theme: "dark" 
     let profile = cookies.get('profile') ? JSON.parse(cookies.get('profile')) : undefined;
     if (!profile)
     {
-        if(get(usersStore).length === 0) throw new Error('No users found for using as default profile.');
-        profile = get(usersStore)[0];
+        if(friends.length === 0) throw new Error('No users found for using as default profile.');
+        profile = friends[0];
         cookies.set('profile', JSON.stringify(profile), { path: '/' });
     }
-    profileStore.set(profile);
+    friends = friends.filter(friend => friend._id !== profile._id);
 
     /**
      * Session ID
@@ -46,16 +39,15 @@ export async function load({ cookies }: {cookies: any}): Promise<{theme: "dark" 
     let sessionId = cookies.get('sessionId');
     if (!sessionId)
     {
-        sessionId = await Server.getSessionId();
+        sessionId = await ChatApiService.createSessionId();
         cookies.set('sessionId', sessionId, { path: '/' });
     }
-    sessionIdStore.set(sessionId);
 
     // Return the data
     return {
-        users: get(usersStore),
-        profile: get(profileStore),
-        sessionId: get(sessionIdStore),
-        theme: cookies.get('theme')
+        friends,
+        profile,
+        sessionId,
+        theme
     };
 }
