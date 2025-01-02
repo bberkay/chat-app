@@ -1,42 +1,36 @@
 /* Theme Colors */
-main{
-    --bg-color: #FFFFFF;
-    --text-color: #2A2D31;
-    --front-color: #F3F5F7;
-    --scrollbar-thumb-color: #808080;
-    --front-bright-color: #F9FAFB;
-    --border-color: #E5E8EA;
-    --outline-color: #D1D5D8;
-    --accent-color: #4274c2;
-    --info-color: #CFF4FC;
-    --info-border-color: #9EEAF9;
-    --info-text-color: #055160;
-    --error-color: #F8D7DA;
-    --error-border-color: #F1AEB5;
-    --error-text-color: #68272F;
-    --success-color: #D1E7DD;
-    --success-border-color: #A3CFBB;
-    --success-text-color: #0A3622;
+:root{
+    & body {
+        color-scheme: light dark;
+    }
+
+    & body[data-color-scheme="light"] {
+        color-scheme: light;
+    }
+
+    & body[data-color-scheme="dark"] {
+        color-scheme: dark;
+    }
 }
 
-main.dark{
-    --bg-color: #0F1012;
-    --text-color: #CFCFD2;
-    --scrollbar-thumb-color: #808080;
-    --front-color: #131517;
-    --front-bright-color: #373B41;
-    --border-color: #1A1C1F;
-    --outline-color: #2A2D31;
-    --accent-color: #144a9a;
-    --info-color: #032830;
-    --info-border-color: #087990;
-    --info-text-color: #6EDFF6;
-    --error-color: #2C0B0E;
-    --error-border-color: #842029;
-    --error-text-color: #EA868F;
-    --success-color: #051B11;
-    --success-border-color: #0F5132;
-    --success-text-color: #6AA98B;
+body{
+    --bg-color: light-dark(#FFFFFF, #0F1012);
+    --text-color: light-dark(#2A2D31, #CFCFD2);
+    --front-color: light-dark(#F3F5F7, #131517);
+    --front-bright-color: light-dark(#F9FAFB, #373B41);
+    --border-color: light-dark(#E5E8EA, #1A1C1F);
+    --outline-color: light-dark(#D1D5D8, #2A2D31);
+    --accent-color: light-dark(#4274c2, #144a9a);
+    --info-bg-color: light-dark(#CFF4FC, #032830);
+    --info-border-color: light-dark(#9EEAF9, #087990);
+    --info-text-color: light-dark(#055160, #6EDFF6);
+    --error-color: light-dark(#F8D7DA, #2C0B0E);
+    --error-border-color: light-dark(#F1AEB5, #842029);
+    --error-text-color: light-dark(#68272F, #EA868F);
+    --success-color: light-dark(#D1E7DD, #051B11);
+    --success-border-color: light-dark(#A3CFBB, #0F5132);
+    --success-text-color: light-dark(#0A3622, #6AA98B);
+    --scrollbar-thumb-color: light-dark(#808080, #808080);
 }
 
 /* General */
