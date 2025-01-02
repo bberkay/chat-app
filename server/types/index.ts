@@ -2,8 +2,10 @@
  * Enum for the type of the message that is sent to the WebSocket server.
  */
 export enum MessageType{
-    CurrentMessages = "CurrentMessages",
-    NewMessage = "NewMessage"
+    AllRoomMessages = "AllRoomMessages",
+    NewRoomMessage = "NewRoomMessage",
+    NewExternalMessage = "NewExternalMessage",
+    LastMessagesFromFriends = "LastMessagesFromFriends"
 }
 
 /**
@@ -13,8 +15,9 @@ export enum ApiOperation{
     GetUsers = "get-users",
     GetUser = "get-user",
     GetLastMessage = "get-last-message",
+    GetLastMessages = "get-last-messages",
     SearchUsers = "search-users",
-    GetSessionId = "get-session-id",
+    CreateSessionId = "create-session-id",
     CheckSessionId = "check-session-id"
 }
 
@@ -22,12 +25,12 @@ export enum ApiOperation{
  *  Type for the data that is sent in the message
  */
 export type Message = {
-    _id?: string;
+    _id: string;
     sessionId: string;
     senderId: string;
     receiverId: string;
     content: string;
-    sentDate: Date;
+    sentAt: Date;
 }
 
 /**
@@ -38,5 +41,4 @@ export interface User {
     _id: string;
     name: string;
     avatar: string;
-    lastMessage?: string;
 }
