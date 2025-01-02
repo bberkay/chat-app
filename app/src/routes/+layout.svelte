@@ -32,7 +32,6 @@
      * use in other components.
      */
     function setupChatSocket() {
-        console.log("Setting up chatSocket: ", get(sessionIdStore));
         messagesStore.set([]);
         const messagesParams = $page.url.pathname.split("/messages/");
         const friendId = messagesParams.length > 1 ? messagesParams[1] : "";
@@ -58,7 +57,7 @@
     function updateIncomingMessages(event: MessageEvent) {
         let message: { type: MessageType; data: Message | Message[] } =
             JSON.parse(event.data);
-        console.log("Incoming message: ", message);
+
         // Convert string dates to Date objects
         if (message.data instanceof Array) {
             message.data = message.data.map((msg: Message) => {
