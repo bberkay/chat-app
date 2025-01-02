@@ -6,8 +6,9 @@ import type { Droid } from '$lib/types';
 export const droid: Droid = {
     _id: "droid",
     name: "C-3P0",
-    avatar: "https://i.ibb.co/DgCBV68/c-3po.jpg",
+    avatar: "c-3po.jpg",
     lastMessage: {
+        senderId: "droid",
         sentAt: new Date(),
         content: "Start a conversation"
     },

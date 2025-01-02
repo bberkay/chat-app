@@ -5,7 +5,7 @@
 
 <div class = "friend-message">
     <div class="message-avatar">
-        <img src="{friendAvatar}" alt="Avatar">
+        <img src="/images/avatar/{friendAvatar}" alt="Avatar">
     </div>
     <div class="message-content">
         <span>{message}</span>
@@ -35,4 +35,3 @@
         margin-right: 10px;
     }
 </style>
-

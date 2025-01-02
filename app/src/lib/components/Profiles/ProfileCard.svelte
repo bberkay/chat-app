@@ -18,7 +18,7 @@
 
 <div class="profile-card">
     <div class="profile-image">
-        <img src="{user.avatar}" alt="">
+        <img src="/images/avatar/{user.avatar}" alt="selectable person">
     </div>
     <div class="profile-info">
         <span>{user.name}</span>

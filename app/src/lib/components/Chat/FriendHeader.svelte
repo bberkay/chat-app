@@ -7,7 +7,7 @@
 <div id = "friend-header">
     <div id="friend-info">
         <div id="friend-avatar">
-            <img src="{avatar}" alt="Avatar">
+            <img src="/images/avatar/{avatar}" alt="Avatar">
         </div>
         <div id="friend-name">
             <span>{name}</span>
