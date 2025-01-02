@@ -1,6 +1,7 @@
 <script lang="ts">
-    import { searchResultsStore, usersStore, profileStore } from "$lib/stores";
+    import { searchResultsStore, friendsStore } from "$lib/stores";
     import { get } from "svelte/store";
+    import type { Friend } from "$lib/types";
 
     let search: string = "";
 
@@ -10,12 +11,21 @@
     async function searchPerson(): Promise<void>
     {
         const response = await fetch(`/api/search?name=${search}`);
-        const data = await response.json();
-        searchResultsStore.set(data);
+        let data = await response.json();
+        searchResultsStore.set(data.map((friend: Friend) => {
+            const friendFromStore = get(friendsStore).find((f: Friend) => f._id === friend._id);
+            if(friendFromStore && friendFromStore.lastMessage)
+                friend.lastMessage = friendFromStore.lastMessage;
+            return friend;
+        }));
     }
 
     // Search person if search string is at least 3 characters long
-    $: if(search.length >= 3) { searchPerson() } else { searchResultsStore.set(get(usersStore).filter(user => user._id !== get(profileStore)._id)) }
+    $: if(search.length >= 3) {
+        searchPerson()
+    } else {
+        searchResultsStore.set(get(friendsStore))
+    }
 </script>
 
 <div id="search">
@@ -30,10 +40,11 @@
     }
 
     #search form {
+        height: 60px;
         display:flex;
         justify-content:center;
         align-items:center;
-        padding:1rem 1rem 0.84rem 1rem;
+        padding:0 1rem 0rem 1rem;
         border-bottom:2px solid var(--border-color);
     }
 
