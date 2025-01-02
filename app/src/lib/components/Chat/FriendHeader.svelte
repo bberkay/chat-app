@@ -18,24 +18,23 @@
 <style>
     #friend-header{
         width:100%;
-        padding:0.5rem 0;
         background-color: var(--front-color);
         color: var(--text-color);
         border-bottom:2px solid var(--border-color);
     }
 
     #friend-info{
-        height:100%;
+        height:60px;
         display:flex;
         flex-direction:row;
         align-items:center;
         justify-content:flex-start;
-        padding-top:0.2rem;
         padding-left:1rem;
     }
 
     #friend-avatar{
         margin-right: 1rem;
+        margin-top: 5px;
     }
 
     #friend-avatar img{
