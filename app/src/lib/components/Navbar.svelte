@@ -56,6 +56,14 @@
         border-right: 1px solid var(--border-color);
     }
 
+    nav a:first-child{
+        height: 60px;
+        padding-bottom:0!important;
+        padding-top:0!important;
+        display:flex;
+        align-items:center;
+    }
+
     nav a, nav button{
         border:none;
         text-align: center;
