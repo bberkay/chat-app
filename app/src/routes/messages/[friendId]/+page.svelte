@@ -16,6 +16,7 @@
      * to the chat room of the current friend and user.
      */
     onMount(() => {
+
         if(data.friend._id === "droid")
         {
             // Get the first message from droid
@@ -24,7 +25,8 @@
                 {
                     senderId: "droid",
                     receiverId: data.profile._id,
-                    content: `Hi, I'm ${data.friend.name}! I will send you a random message every time when you send me a message.`
+                    content: `Hi, I'm ${data.friend.name}! I will send you a random message every time when you send me a message.`,
+                    sentAt: new Date()
                 }
             ]);
         }
