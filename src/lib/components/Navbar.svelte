@@ -62,7 +62,7 @@
         </button>
     </div>
     <div class = "navbar-avatar">
-        <img src="/images/avatar/{get(profileStore)!.avatar}" alt="profile">
+        <img src="/images/avatar/{get(profileStore).avatar}" alt="profile">
     </div>
 </nav>
 
