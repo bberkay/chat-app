@@ -38,7 +38,6 @@
         <FriendCard friend="{friend}"/>
     {/each}
     <Profile/>
-    <span class = "hide"></span>
 </section>
 
 <style>
@@ -48,10 +47,5 @@
         border-right: 1px solid var(--border-color);
         position:relative;
         display: block;
-
-        &.hide {
-            display:none!important;
-            border-right: 0 !important;
-        }
     }
 </style>
