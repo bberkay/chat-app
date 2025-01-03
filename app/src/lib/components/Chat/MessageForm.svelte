@@ -67,7 +67,6 @@
                 messagesStore.update((messages) => [
                     ...messages,
                     {
-                        sessionId: get(sessionIdStore),
                         senderId: friend._id,
                         receiverId: profile._id,
                         content: (friend as Droid).readyMessages[Math.floor(Math.random() * (friend as Droid).readyMessages.length)],
