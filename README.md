@@ -1,5 +1,5 @@
 <h1 align = "center">Simple Chat App with SvelteKit</h1>
-<p>This is <code>main</code> branch, you can also check <code><a href="https://github.com/bberkay/chat-app/tree/svelte-4">svelte-4</a></code> branch to see svelte 4 version. Live Demo (The site may open slowly because I deployed the project to a free hosting server. To avoid problems that may arise due to a slow connection and to be able to use features that are not available in the demo, I recommend that you download the project to your machine and try it.)/p>
+<p>This is <code>main</code> branch, you can also check <code><a href="https://github.com/bberkay/chat-app/tree/svelte-4">svelte-4</a></code> branch to see svelte 4 version. <a href="https://chat-app-omega-brown.vercel.app/">Live Demo</a> (The site may open slowly because I deployed the project to a free hosting server. To avoid problems that may arise due to a slow connection and to be able to use features that are not available in the demo, I recommend that you download the project to your machine and try it.)/p>
 <h3>Table of Contents</h3>
 <ol>
   <li><a href="#introduction">Introduction</a></li>
