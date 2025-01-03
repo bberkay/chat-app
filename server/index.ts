@@ -95,7 +95,7 @@ const server = Bun.serve<{ sessionId: string, userId: string, personalChannel: s
                 ws.publish(receiverPersonalChannel, JSON.stringify({type: MessageType.NewExternalMessage, data: data}));
                 console.log(createSimpleLog(`Publishing message to friend personal room[${receiverPersonalChannel}]`, ws.data.sessionId));
 
-                await MongoController.saveMessage(data.sessionId, data.senderId, data.receiverId, data.content, data.sentAt);
+                //await MongoController.saveMessage(data.sessionId, data.senderId, data.receiverId, data.content, data.sentAt);
             }catch(e){
                 console.error(e);
                 ws.close(WsCloseCodes.InternalError, createSimpleLog(`Unexpected error while handling message.`, ws.data.sessionId));
