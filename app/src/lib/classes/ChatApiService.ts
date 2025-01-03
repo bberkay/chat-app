@@ -8,11 +8,19 @@ import { PUBLIC_SERVER_ADDRESS as SERVER_ADDRESS } from "$env/static/public";
 export class ChatApiService
 {
     /**
+     * Get data from the server by using the api.
+     */
+    private static async fetch(endpoint: string): Promise<Response>
+    {
+        return fetch(`${SERVER_ADDRESS}/api/${endpoint}`, { method: "GET" });
+    }
+
+    /**
      * Create a Session ID for chatting with the friend.
      */
     public static async createSessionId(): Promise<string>
     {
-        return fetch(`${SERVER_ADDRESS}/api/create-session-id`).then(res => res.text());
+        return ChatApiService.fetch("create-session-id").then(res => res.text());
     }
 
     /**
@@ -20,7 +28,7 @@ export class ChatApiService
      */
     public static async checkSessionId(id: string): Promise<boolean>
     {
-        return fetch(`${SERVER_ADDRESS}/api/check-session-id/${id}`).then(res => res.json()) as Promise<boolean>;
+        return ChatApiService.fetch(`check-session-id/${id}`).then(res => res.json()) as Promise<boolean>;
     }
 
     /**
@@ -28,7 +36,7 @@ export class ChatApiService
      */
     public static async getUsers(): Promise<User[]>
     {
-        return fetch(`${SERVER_ADDRESS}/api/get-users`).then((res) => res.json()) as Promise<User[]>;
+        return ChatApiService.fetch("get-users").then(res => res.json()) as Promise<User[]>;
     }
 
     /**
@@ -44,7 +52,7 @@ export class ChatApiService
      */
     public static async getUserById(id: string): Promise<User | undefined>
     {
-        return fetch(`${SERVER_ADDRESS}/api/get-user/${id}`).then(res => res.json()) as Promise<User | undefined>;
+        return ChatApiService.fetch(`get-user/${id}`).then(res => res.json()) as Promise<User | undefined>;
     }
 
     /**
@@ -52,6 +60,6 @@ export class ChatApiService
      */
     public static async searchUsersByName(name: string): Promise<User[] | undefined>
     {
-        return fetch(`${SERVER_ADDRESS}/api/search-users/${name}`).then(res => res.json()) as Promise<User[] | undefined>;
+        return ChatApiService.fetch(`search-users/${name}`).then(res => res.json()) as Promise<User[] | undefined>;
     }
 }

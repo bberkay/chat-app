@@ -3,7 +3,6 @@ import type { Server, ServerWebSocket } from "bun";
 import { MongoController } from "./classes/MongoController";
 import { ApiRequestHandler } from "./classes/ApiRequestHandler.ts";
 import { createSimpleLog, generatePersonalChannelId } from "./utils";
-import { ALLOWED_ORIGINS } from "./constants";
 
 MongoController.connect();
 
@@ -13,24 +12,12 @@ const WsCloseCodes = {
 }
 
 /**
- * Check if the origin is allowed to connect.
- */
-function isOriginAllowed(req: Request): boolean {
-    const origin = req.headers.get("origin") || "";
-    if (!origin) return false;
-    return ALLOWED_ORIGINS.includes(origin);
-}
-
-/**
  * Create a WebSocket server that listens on /chat/:senderId/:receiverId.
  * @example /chat/1/2
  */
 const server = Bun.serve<{ sessionId: string, userId: string, personalChannel: string, friendId?: string }>({
     async fetch(req: Request, server: Server): Promise<Response | undefined>
     {
-        if (!isOriginAllowed(req))
-            return new Response("Invalid origin.", { status: 403 });
-
         const url = new URL(req.url);
 
         /**
