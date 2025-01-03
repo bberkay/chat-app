@@ -1,31 +1,29 @@
 <script lang="ts">
     import { onMount } from "svelte"
-    import { searchResultsStore, messagesStore } from '$lib/stores';
+    import { SharedStore } from '$lib/stores/shared.svelte';
     import Search from '$lib/components/Sidebar/Search.svelte';
     import Profile from '$lib/components/Sidebar/Profile.svelte';
     import FriendCard from '$lib/components/Sidebar/FriendCard.svelte';
-    import type { Message } from "$lib/types";
     import { sortFriendsByLastMessage } from "$lib/utils";
-    import { get } from "svelte/store";
 
     /**
      * Responsive Sidebar
      */
     onMount(() => {
         document.querySelector('#sidebar .loading')?.remove();
-        sortFriendsByLastMessage(get(searchResultsStore));
+        sortFriendsByLastMessage(SharedStore.searchResults);
     })
 
     /**
      * Messages
      * Sort friends by last message when a new message is received.
      */
-    messagesStore.subscribe((messages: Message[]) => {
-        if(messages.length === 0)
+    $effect(() => {
+        if(SharedStore.messages.length === 0)
             return;
 
-        sortFriendsByLastMessage(get(searchResultsStore));
-    })
+        sortFriendsByLastMessage(SharedStore.searchResults);
+    });
 </script>
 
 <section id="sidebar">
@@ -34,8 +32,8 @@
         <span class = "loader"></span>
         <span>Loading...</span>
     </div>
-    {#each $searchResultsStore as friend}
-        <FriendCard friend="{friend}"/>
+    {#each SharedStore.searchResults as friend}
+        <FriendCard friend={friend}/>
     {/each}
     <Profile/>
 </section>
