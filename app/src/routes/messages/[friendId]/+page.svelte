@@ -53,7 +53,7 @@
 
 <section id="chat">
     <FriendHeader name={data.friend.name} avatar={data.friend.avatar}/>
-    <Alert message="Messages sent in the demo will not be saved to the MongoDB database."/>
+    <Alert message="Messages sent in the demo will not be saved to the MongoDB database. So messages will be lost when you refresh the page."/>
     <div id="messages">
         <div class="loading">
             <span class = "loader"></span>
