@@ -65,6 +65,9 @@ export class ChatSocket{
      */
     public disconnect(): void
     {
+        if(!this.socket)
+            return;
+
         this.socket.close();
     }
 }
