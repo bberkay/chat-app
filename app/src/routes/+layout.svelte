@@ -1,5 +1,6 @@
 <script lang="ts">
-    import { type Message, MessageType } from "$lib/types";
+    import { MessageType } from "$lib/types";
+    import type { Message, User, Friend } from "$lib/types";
     import { ChatSocket } from "$lib/classes/ChatSocket";
     import { page } from "$app/stores";
     import { get } from "svelte/store";
@@ -16,7 +17,7 @@
     import { sortFriendsByLastMessage } from "$lib/utils";
 
     // Data from the server(+layout.server.ts)
-    export let data;
+    export let data: {theme: "dark" | "light" | "system", friends: Friend[], sessionId: string, profile: User};
     friendsStore.set(data.friends);
     profileStore.set(data.profile);
     sessionIdStore.set(data.sessionId);

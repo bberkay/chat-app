@@ -58,7 +58,7 @@
             {/if}
         {/each}
     </div>
-    <MessageForm friend="{data.friend}" profile="{data.profile}"/>
+    <MessageForm friend="{data.friend}"/>
 </section>
 
 <style>

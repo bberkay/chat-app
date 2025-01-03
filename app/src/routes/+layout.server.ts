@@ -1,7 +1,7 @@
 import { ChatApiService } from "$lib/classes/ChatApiService";
 import type { User, Friend } from "$lib/types";
 
-export async function load({ cookies }: {cookies: any}): Promise<{theme: "dark" | "light", friends: Friend[], sessionId: string, profile: User}>
+export async function load({ cookies }: {cookies: any}): Promise<{theme: "dark" | "light" | "system", friends: Friend[], sessionId: string, profile: User}>
 {
     /**
      * Theme

@@ -1,5 +1,6 @@
 <h1 align = "center">Simple Chat App with SvelteKit</h1>
-<p><a href = "https://sveltekit-bun-mongodb-live-demo-app.onrender.com">Live Demo</a> (The site may open slowly because I deployed the project to a free render account)</p>
+<p>This is svelte-4 branch, you can also check main branch to see svelte 5 version. <a href = "https://chat-app-svelte-4.vercel.app/">Live Demo</a>. (The site may open slowly because I deployed the project to a free hosting server. To avoid problems that may arise due to a slow connection and to be able to use features that are not available in the demo, I recommend that you download the project to your machine and try it.)</p>
+
 <h3>Table of Contents</h3>
 <ol>
   <li><a href="#introduction">Introduction</a></li>
@@ -43,7 +44,7 @@ MONGO_URL=<your_mongodb_url>
 PUBLIC_SERVER_ADDRESS=<http/https:your_server_host:your_server_port>
 PUBLIC_WS_ADDRESS=<ws/wss:your_server_host:your_server_port>
 ```
-   
+
 5. Run the server then client:
 ```bash
 bun run index.ts
@@ -52,4 +53,4 @@ bun --bun run dev
 ```
 
 <hr>
-<h5 align="center"><a href="mailto:berkaykayaforbusiness@outlook.com">berkaykayaforbusiness@outlook.com</a></h5> 
+<h5 align="center"><a href="mailto:berkaykayaforbusiness@outlook.com">berkaykayaforbusiness@outlook.com</a></h5>

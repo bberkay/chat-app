@@ -1,12 +1,11 @@
 <script lang="ts">
     import type { User, Friend, Droid } from "$lib/types";
-    import { messagesStore, chatSocketStore, sessionIdStore } from "$lib/stores";
+    import { messagesStore, chatSocketStore, sessionIdStore, profileStore } from "$lib/stores";
     import { get } from "svelte/store";
     import { onMount } from "svelte";
 
     // Component properties
     export let friend: Friend | Droid;
-    export let profile: User;
 
     // Current message
     let message: string;
@@ -48,7 +47,7 @@
                     // Send message to the server
                     socket.send({
                         sessionId: get(sessionIdStore),
-                        senderId: profile._id,
+                        senderId: get(profileStore)._id,
                         receiverId: friend._id,
                         content: message
                     });
@@ -68,7 +67,7 @@
                     ...messages,
                     {
                         senderId: friend._id,
-                        receiverId: profile._id,
+                        receiverId: get(profileStore)._id,
                         content: (friend as Droid).readyMessages[Math.floor(Math.random() * (friend as Droid).readyMessages.length)],
                         sentAt: new Date()
                     }
