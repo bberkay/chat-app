@@ -7,7 +7,7 @@
 
     let { friend }: Props = $props();
 
-    let lastMessage: string = $state(
+    let lastMessage: string = $derived(
         Object.hasOwn(friend, "lastMessage") && friend.lastMessage!.content
             ? friend.lastMessage!.content.length > 30
                 ? friend.lastMessage!.content.slice(0, 30) + "..."
