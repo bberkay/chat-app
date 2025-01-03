@@ -1,7 +1,11 @@
 <script lang="ts">
     import type { User } from '$lib/types';
 
-    export let user: User; // user object
+    interface Props {
+        user: User; // user object
+    }
+
+    let { user }: Props = $props();
 
     /**
      * Selects the user
@@ -22,7 +26,7 @@
     </div>
     <div class="profile-info">
         <span>{user.name}</span>
-        <button on:click={async () => { await selectUser(user) }}>Select</button>
+        <button onclick={async () => { await selectUser(user) }}>Select</button>
     </div>
 </div>
 

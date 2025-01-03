@@ -1,7 +1,12 @@
 <script lang="ts">
-    // Current chatting friend
-    export let name: string;
-    export let avatar: string;
+    
+    interface Props {
+        // Current chatting friend
+        name: string;
+        avatar: string;
+    }
+
+    let { name, avatar }: Props = $props();
 </script>
 
 <div id = "friend-header">

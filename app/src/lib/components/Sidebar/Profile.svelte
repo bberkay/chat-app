@@ -1,8 +1,8 @@
 <script lang="ts">
-    import { sessionIdStore, profileStore } from "$lib/stores";
+    import { SharedStore } from "$lib/stores/shared.svelte";
     import { onMount } from "svelte";
 
-    let isSessionModalActive = false;
+    let isSessionModalActive = $state(false);
 
     // Get all session modal elements
     onMount(() => {
@@ -40,7 +40,7 @@
             const response = await fetch(`/api/session/save?id=${sessionIdInput.value}`).then(res => res.json());
             if(response){
                 (sessionModal.querySelector(".session-modal-alert.success") as HTMLElement).style.display = "flex";
-                sessionIdStore.set(sessionIdInput.value);
+                SharedStore.sessionId = sessionIdInput.value;
             } else {
                 (sessionModal.querySelector(".session-modal-alert.error") as HTMLElement).style.display = "flex";
             }
@@ -68,12 +68,12 @@
                 <small style="margin-left:10px;">Session ID Changed</small>
             </div>
             <div style="display:flex;align-items:center;justify-content:center;">
-                <input type="text" id="session-id" minlength="24" maxlength="24" value="{$sessionIdStore}">
-                <button id = "copy-session-id" on:click={copySessionId}>
+                <input type="text" id="session-id" minlength="24" maxlength="24" value={SharedStore.sessionId}>
+                <button id = "copy-session-id" onclick={copySessionId} aria-labelledby="Copy Session ID">
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 256 256"><path d="M216,32H88a8,8,0,0,0-8,8V80H40a8,8,0,0,0-8,8V216a8,8,0,0,0,8,8H168a8,8,0,0,0,8-8V176h40a8,8,0,0,0,8-8V40A8,8,0,0,0,216,32ZM160,208H48V96H160Zm48-48H176V88a8,8,0,0,0-8-8H96V48H208Z"></path></svg>
                 </button>
                 <span class = "gap"></span>
-                <button id = "save-session-id" on:click={saveSessionId}>
+                <button id = "save-session-id" onclick={saveSessionId} aria-labelledby="Save Session ID">
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 256 256"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"></path></svg>
                 </button>
             </div>
@@ -81,11 +81,11 @@
     {/if}
     <div id = "profile-card">
         <div id = "profile-info">
-            <img src="/images/avatar/{$profileStore.avatar}" alt="profile">
-            <span><b>{$profileStore.name}</b><br><small><i>My Profile</i></small></span>
+            <img src="/images/avatar/{SharedStore.profile!.avatar}" alt="profile">
+            <span><b>{SharedStore.profile!.name}</b><br><small><i>My Profile</i></small></span>
         </div>
         <div id="profile-buttons">
-            <button id="toggle-session-modal" type="button" on:click={toggleSessionModal}>
+            <button id="toggle-session-modal" type="button" onclick={toggleSessionModal}>
                 {#if !isSessionModalActive}
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 256 256" style="--darkreader-inline-fill: #000000;" data-darkreader-inline-fill=""><path d="M160,16A80.07,80.07,0,0,0,83.91,120.78L26.34,178.34A8,8,0,0,0,24,184v40a8,8,0,0,0,8,8H72a8,8,0,0,0,8-8V208H96a8,8,0,0,0,8-8V184h16a8,8,0,0,0,5.66-2.34l9.56-9.57A80,80,0,1,0,160,16Zm0,144a63.7,63.7,0,0,1-23.65-4.51,8,8,0,0,0-8.84,1.68L116.69,168H96a8,8,0,0,0-8,8v16H72a8,8,0,0,0-8,8v16H40V187.31l58.83-58.82a8,8,0,0,0,1.68-8.84A64,64,0,1,1,160,160Zm32-84a12,12,0,1,1-12-12A12,12,0,0,1,192,76Z"></path></svg>
                 {:else}
@@ -156,7 +156,7 @@
         background-color: var(--accent-color);
     }
 
-    #profile-card-container a svg, #profile-card-container button svg{
+    #profile-card-container button svg{
         color:var(--text-color);
         width:1.5em;
         height:1.5em;

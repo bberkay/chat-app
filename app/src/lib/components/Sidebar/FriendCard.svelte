@@ -1,15 +1,27 @@
 <script lang="ts">
     import type { Friend } from "$lib/types";
 
-    export let friend: Friend;
+    interface Props {
+        friend: Friend;
+    }
 
-    let lastMessage: string;
-    $: isLastMessageSentByMe = friend.lastMessage ? friend.lastMessage.senderId !== friend._id && friend._id !== 'droid': false;
-    $: lastMessage = friend.lastMessage ? friend.lastMessage.content : "Start a Conversation";
-    $: lastMessage = lastMessage.length > 30 ? lastMessage.slice(0, 30) + "..." : lastMessage;
+    let { friend }: Props = $props();
+
+    let lastMessage: string = $state(
+        Object.hasOwn(friend, "lastMessage") && friend.lastMessage!.content
+            ? friend.lastMessage!.content.length > 30
+                ? friend.lastMessage!.content.slice(0, 30) + "..."
+                : friend.lastMessage!.content
+            : "Start a Conversation"
+    );
+    let isLastMessageSentByMe = $derived(
+        Object.hasOwn(friend, "lastMessage")
+        && friend.lastMessage!.senderId !== friend._id
+        && friend._id !== 'droid'
+    );
 </script>
 
-<button class="friend-card" on:click={() => { window.location.href = `/messages/${friend._id}` }} tabindex="0">
+<button class="friend-card" onclick={() => { window.location.href = `/messages/${friend._id}` }} tabindex="0">
     <div class="friend-avatar">
         <img src="/images/avatar/{friend.avatar}" alt="friend">
     </div>

@@ -1,5 +1,9 @@
 <script lang="ts">
-    export let message: string;
+    interface Props {
+        message: string;
+    }
+
+    let { message }: Props = $props();
 </script>
 
 <div class="alert">
@@ -9,7 +13,7 @@
         </div>
         <span>{message}</span>
     </div>
-    <button on:click={() => {document.querySelector('.alert')?.remove()}}>X</button>
+    <button onclick={() => {document.querySelector('.alert')?.remove()}}>X</button>
 </div>
 
 <style>

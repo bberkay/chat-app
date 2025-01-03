@@ -1,10 +1,9 @@
 <script lang="ts">
-    import { searchResultsStore, friendsStore } from "$lib/stores";
-    import { get } from "svelte/store";
+    import { SharedStore } from "$lib/stores/shared.svelte";
     import type { Friend } from "$lib/types";
     import { sortFriendsByLastMessage } from "$lib/utils";
 
-    let search: string = "";
+    let search: string = $state("");
 
     /**
      * Search person by name from search endpoint
@@ -13,21 +12,23 @@
     {
         const response = await fetch(`/api/search?name=${search}`);
         let data = await response.json();
-        searchResultsStore.set(data.map((friend: Friend) => {
-            const friendFromStore = get(friendsStore).find((f: Friend) => f._id === friend._id);
+        SharedStore.searchResults = data.map((friend: Friend) => {
+            const friendFromStore = SharedStore.friends.find((f: Friend) => f._id === friend._id);
             if(friendFromStore && friendFromStore.lastMessage)
                 friend.lastMessage = friendFromStore.lastMessage;
             return friend;
-        }));
+        })
     }
 
     // Search person if search string is at least 3 characters long
-    $: if(search.length >= 3) {
-        searchPerson()
-    } else {
-        searchResultsStore.set(get(friendsStore));
-        sortFriendsByLastMessage(get(searchResultsStore));
-    }
+    $effect(() => {
+        if(search.length >= 3) {
+            searchPerson()
+        } else {
+            SharedStore.searchResults = SharedStore.friends;
+            sortFriendsByLastMessage(SharedStore.searchResults);
+        }
+    });
 </script>
 
 <div id="search">

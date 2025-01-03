@@ -1,30 +1,37 @@
 <script lang="ts">
-    import { type Message, MessageType } from "$lib/types";
+    import { type Message, MessageType, type Friend, type User } from "$lib/types";
     import { ChatSocket } from "$lib/classes/ChatSocket";
-    import { page } from "$app/stores";
-    import { get } from "svelte/store";
-    import { chatSocketStore, messagesStore } from "$lib/stores";
+    import { page } from "$app/state";
+    import { SharedStore } from "$lib/stores/shared.svelte";
     import Navbar from "$lib/components/Navbar.svelte";
     import Sidebar from "$lib/components/Sidebar.svelte";
-    import {
-        profileStore,
-        sessionIdStore,
-        friendsStore,
-        searchResultsStore,
-    } from "$lib/stores";
     import { onMount } from "svelte";
     import { sortFriendsByLastMessage } from "$lib/utils";
 
-    // Data from the server(+layout.server.ts)
-    export let data;
-    friendsStore.set(data.friends);
-    profileStore.set(data.profile);
-    sessionIdStore.set(data.sessionId);
-    searchResultsStore.set(data.friends);
+
+    interface Props {
+        // Data from the server(+layout.server.ts)
+        data: {
+            theme: "dark" | "light",
+            friends: Friend[],
+            sessionId: string,
+            profile: User
+        };
+        children?: import('svelte').Snippet;
+    }
+
+    let { data, children }: Props = $props();
+    SharedStore.friends = data.friends;
+    SharedStore.profile = data.profile;
+    SharedStore.sessionId = data.sessionId;
+    SharedStore.searchResults = data.friends;
 
     let chatSocket = new ChatSocket();
     onMount(() => {
-        sessionIdStore.subscribe(setupChatSocket);
+        $effect(() => {
+            SharedStore.sessionId; // Trigger reactivity
+            setupChatSocket();
+        });
     });
 
     /**
@@ -32,15 +39,15 @@
      * use in other components.
      */
     function setupChatSocket() {
-        messagesStore.set([]);
-        const messagesParams = $page.url.pathname.split("/messages/");
+        SharedStore.messages = [];
+        const messagesParams = page.url.pathname.split("/messages/");
         const friendId = messagesParams.length > 1 ? messagesParams[1] : "";
         chatSocket.connect(
-            get(sessionIdStore),
-            get(profileStore)._id,
+            SharedStore.sessionId,
+            SharedStore.profile!._id,
             friendId
         );
-        chatSocketStore.set(chatSocket);
+        SharedStore.chatSocket = chatSocket;
 
         // Listen to messages from friend and also store the last messages.
         chatSocket
@@ -84,15 +91,15 @@
                 (message.data as Message).senderId ===
                     chatSocket.getChattingFriendId())
         ) {
-            messagesStore.update((messages) => [
-                ...messages,
+            SharedStore.messages = [
+                ...SharedStore.messages,
                 ...[message.data as Message],
-            ]);
+            ];
         } else if (message.type === MessageType.AllRoomMessages) {
-            messagesStore.update((messages) => [
-                ...messages,
+            SharedStore.messages = [
+                ...SharedStore.messages,
                 ...(message.data as Message[]),
-            ]);
+            ];
         }
 
         // Update searchResultsStore
@@ -100,8 +107,8 @@
             message.type === MessageType.NewRoomMessage ||
             message.type === MessageType.NewExternalMessage
         ) {
-            searchResultsStore.update((friends) => {
-                return friends.map((friend) => {
+            SharedStore.searchResults = SharedStore.searchResults.map(
+                (friend) => {
                     const messageData = message.data as Message;
                     if (
                         friend._id === messageData.senderId ||
@@ -114,11 +121,11 @@
                         };
                     }
                     return friend;
-                });
-            });
+                }
+            );
         } else if (message.type === MessageType.LastMessagesFromFriends) {
-            searchResultsStore.update((friends) => {
-                return friends.map((friend) => {
+            SharedStore.searchResults = SharedStore.searchResults.map(
+                (friend) => {
                     (message.data as Message[]).forEach((message: Message) => {
                         if (
                             friend._id === message.senderId ||
@@ -132,11 +139,11 @@
                         }
                     });
                     return friend;
-                });
-            });
+                }
+            );
         }
 
-        sortFriendsByLastMessage(get(searchResultsStore));
+        sortFriendsByLastMessage(SharedStore.searchResults);
     }
 </script>
 
@@ -145,7 +152,7 @@
     <Sidebar />
 
     <!-- Content -->
-    <slot />
+    {@render children?.()}
     <!-- Content End -->
 </main>
 

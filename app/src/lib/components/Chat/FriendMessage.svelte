@@ -1,6 +1,10 @@
 <script lang="ts">
-    export let friendAvatar: string;
-    export let message: string;
+    interface Props {
+        friendAvatar: string;
+        message: string;
+    }
+
+    let { friendAvatar, message }: Props = $props();
 </script>
 
 <div class = "friend-message">

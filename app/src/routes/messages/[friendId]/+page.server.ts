@@ -1,8 +1,8 @@
 import { ChatApiService } from '$lib/classes/ChatApiService';
-import type { User } from '$lib/types';
+import type { User, Friend } from '$lib/types';
 import { droid } from '$lib/classes/Droid';
 
-export async function load({ params, cookies }: { params: { friendId: string }, cookies: any }): Promise<{profile: User, friend: User}>
+export async function load({ params, cookies }: { params: { friendId: string }, cookies: any }): Promise<{profile: User, friend: Friend}>
 {
     let profile = cookies.get("profile");
     if (profile) profile = JSON.parse(profile);

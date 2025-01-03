@@ -1,6 +1,6 @@
 <script lang="ts">
     import ProfileCard from "$lib/components/Profiles/ProfileCard.svelte";
-    import { friendsStore } from "$lib/stores";
+    import { SharedStore } from "$lib/stores/shared.svelte";
 </script>
 
 <section id = "profiles">
@@ -9,7 +9,7 @@
         <span>You can change your current user by selecting some of the users below.</span>
     </div>
     <div id="profile-container">
-        {#each $friendsStore as user}
+        {#each SharedStore.friends as user}
             {#if user._id !== "droid"}
                 <ProfileCard user="{user}"/>
             {/if}
