@@ -25,7 +25,7 @@
             body: JSON.stringify({theme})
         });
 
-        document.documentElement.setAttribute("data-theme", theme);
+        document.body.setAttribute("data-color-scheme", theme);
     }
 
     /**
